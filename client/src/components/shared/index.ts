@@ -1,3 +1,7 @@
 export * from './Button';
 export * from './SearchBar';
 export * from './WhatsAppButton';
+export * from './FloatingBackground';
+export * from './TripCard';
+export * from './Skeleton';
+

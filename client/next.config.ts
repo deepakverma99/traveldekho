@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   compiler: {
     styledComponents: true,
   },
+  allowedDevOrigins: ['127.0.0.1', 'localhost'],
   /* config options here */
   experimental: {
     agentFeedback: true,

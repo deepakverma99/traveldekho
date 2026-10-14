@@ -1,11 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styled from 'styled-components';
-import { Smartphone, Play, ChevronDown, Menu } from 'lucide-react';
+import { Smartphone, Play, ChevronDown, Menu, X, Search } from 'lucide-react';
 import { Button, SearchBar } from '@/components/shared';
+import { LoginModal } from '@/components/Auth';
 import { colors } from '@/theme/colors';
 import { typography } from '@/theme/typography';
 
@@ -145,13 +146,32 @@ const JoinUsBtn = styled.button`
   }
 `;
 
+const MobileMenuDrawer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 1.25rem 1.5rem;
+  background-color: rgba(255, 251, 235, 0.98);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(254, 243, 199, 0.8);
+  border-bottom: 1px solid rgba(254, 243, 199, 0.8);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+`;
+
 export const Header = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
   return (
     <HeaderWrapper>
       <Container>
         <HeaderInner>
           <div className="flex-shrink-0">
-            <LogoLink href="/" title="Go to Homepage">
+            <LogoLink href="/" title="Go to Homepage" onClick={() => setIsMobileMenuOpen(false)}>
               <LogoContainer>
                 <Image
                   alt="Travel Dekho Logo"
@@ -188,18 +208,101 @@ export const Header = () => {
             </div>
 
             <div className="ml-2 relative">
-              <Button>Login</Button>
+              <Button onClick={() => setIsLoginModalOpen(true)}>Login</Button>
             </div>
           </Nav>
 
           <button
-            className="lg:hidden flex items-center justify-center h-10 w-10 bg-gray-50 rounded-xl text-gray-600 hover:bg-amber-100 hover:text-amber-600 transition-colors ml-auto relative z-[60]"
-            aria-label="Open Mobile Menu"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="lg:hidden flex items-center justify-center h-10 w-10 bg-white/80 rounded-xl text-gray-700 hover:bg-amber-100 hover:text-amber-600 transition-colors ml-auto relative z-[60] border border-amber-200/50 shadow-sm"
+            aria-label={isMobileMenuOpen ? "Close Mobile Menu" : "Open Mobile Menu"}
+            aria-expanded={isMobileMenuOpen}
           >
-            <Menu className="h-6 w-6" />
+            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </HeaderInner>
       </Container>
+
+      {/* Mobile Drawer Menu */}
+      {isMobileMenuOpen && (
+        <MobileMenuDrawer>
+          {/* Mobile Search */}
+          <form
+            action="/search"
+            method="GET"
+            onSubmit={() => setIsMobileMenuOpen(false)}
+            className="relative w-full"
+          >
+            <input
+              type="text"
+              name="q"
+              placeholder="Search your next Destination"
+              className="w-full h-11 pl-4 pr-10 text-sm rounded-xl bg-white border border-amber-200 outline-none focus:border-amber-400 font-medium text-gray-700"
+            />
+            <button
+              type="submit"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center bg-amber-400 rounded-lg text-black cursor-pointer"
+              aria-label="Search"
+            >
+              <Search className="w-3.5 h-3.5" />
+            </button>
+          </form>
+
+          {/* Mobile Navigation Links */}
+          <div className="flex flex-col gap-2 pt-1">
+            <Link
+              href="/app"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold text-gray-800 hover:bg-amber-100/70 transition-colors"
+            >
+              <Smartphone className="w-4 h-4 text-amber-500" />
+              <span>Get the App</span>
+            </Link>
+
+            <Link
+              href="/vlog"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center justify-between px-3 py-2.5 rounded-xl font-bold text-gray-800 hover:bg-amber-100/70 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <Play className="w-4 h-4 text-amber-500 fill-current" />
+                <span>Vlog</span>
+              </div>
+              <span className="px-2 py-0.5 rounded-full bg-amber-500 text-[9px] font-black uppercase text-black">
+                NEW
+              </span>
+            </Link>
+
+            <Link
+              href="/join-us"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center justify-between px-3 py-2.5 rounded-xl font-bold text-gray-800 hover:bg-amber-100/70 transition-colors"
+            >
+              <span>Join us</span>
+              <ChevronDown className="w-4 h-4 text-gray-400 -rotate-90" />
+            </Link>
+          </div>
+
+          {/* Login CTA */}
+          <div className="pt-2 border-t border-amber-200/60">
+            <Button
+              className="w-full justify-center h-11 text-sm font-bold"
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                setIsLoginModalOpen(true);
+              }}
+            >
+              Login
+            </Button>
+          </div>
+        </MobileMenuDrawer>
+      )}
+
+      {/* Login & Signup Modal */}
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+      />
     </HeaderWrapper>
   );
 };

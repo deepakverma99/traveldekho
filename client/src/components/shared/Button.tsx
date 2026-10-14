@@ -7,10 +7,16 @@ import { typography } from '@/theme/typography';
 import { ChevronRight } from 'lucide-react';
 import React from 'react';
 
-interface ButtonProps {
+export interface ButtonProps {
   children: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  showArrow?: boolean;
+  disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  id?: string;
 }
 
 const StyledButton = styled(motion.button)`
@@ -39,25 +45,48 @@ const StyledButton = styled(motion.button)`
     z-index: 0;
   }
 
-  &:hover {
+  &:hover:not(:disabled) {
     color: ${colors.white};
 
     &::before {
       transform: scaleX(1);
     }
   }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 `;
 
-export const Button = ({ children, onClick, className }: ButtonProps) => {
+export const Button = ({
+  children,
+  onClick,
+  className,
+  leftIcon,
+  rightIcon,
+  showArrow = !leftIcon && !rightIcon,
+  disabled = false,
+  type = 'button',
+  id,
+}: ButtonProps) => {
   return (
     <StyledButton
-      className={`px-8 py-2.5 text-xs uppercase tracking-widest font-bold group flex items-center gap-2 ${className || ''}`.trim()}
-      onClick={onClick}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      id={id}
+      type={type}
+      disabled={disabled}
+      className={`px-6 py-2.5 text-xs uppercase tracking-wider font-bold group flex items-center justify-center gap-2 ${className || ''}`.trim()}
+      onClick={disabled ? undefined : onClick}
+      whileHover={disabled ? undefined : { scale: 1.02 }}
+      whileTap={disabled ? undefined : { scale: 0.98 }}
     >
+      {leftIcon && <span className="relative z-10 flex items-center shrink-0">{leftIcon}</span>}
       <span className="relative z-10">{children}</span>
-      <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform relative z-10" />
+      {rightIcon && <span className="relative z-10 flex items-center shrink-0">{rightIcon}</span>}
+      {showArrow && (
+        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform relative z-10 shrink-0" />
+      )}
     </StyledButton>
   );
 };

@@ -82,10 +82,10 @@ const SearchButton = styled.button`
 
 export const SearchBar = () => {
   return (
-    <SearchContainer>
+    <SearchContainer action="/search" method="GET">
       <InputWrapper>
         <StyledInput placeholder="Search your next Destination" type="text" name="q" autoComplete="off" />
-        <SearchButton type="submit">
+        <SearchButton type="submit" aria-label="Submit Search">
           <Search className="w-4 h-4 text-gray-400" />
         </SearchButton>
       </InputWrapper>

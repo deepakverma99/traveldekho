@@ -1,21 +1,60 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #FFFBF0;
   --foreground: #171717;
+  --primary-container: #FFD133;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary-container: var(--primary-container);
+  --font-sans: var(--font-montserrat);
 }
 
+.font-permanent-marker {
+  font-family: var(--font-permanent-marker), cursive;
+}
 
+.font-caveat {
+  font-family: var(--font-caveat), cursive;
+}
+
+.font-jakarta {
+  font-family: var(--font-jakarta), "Plus Jakarta Sans", sans-serif;
+}
+
+.font-vietnam {
+  font-family: var(--font-vietnam), "Be Vietnam Pro", sans-serif;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 
 body {
-
+  background-color: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
