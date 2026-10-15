@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import {
   MapPin,
   Wallet,
@@ -14,6 +15,7 @@ import {
 } from 'lucide-react';
 import { FilterState } from './types';
 import { typography } from '@/theme/typography';
+import { colors } from '@/theme/colors';
 
 export interface SearchFilterSidebarProps {
   filters: FilterState;
@@ -37,6 +39,262 @@ const CATEGORIES = [
 const DURATIONS = ['1-3 Days', '4-7 Days', '8+ Days'];
 
 const DIFFICULTIES = ['Easy', 'Moderate', 'Challenging', 'Extreme'];
+
+const SidebarWrapper = styled.aside`
+  width: 100%;
+  background-color: ${colors.white};
+  border-radius: 1rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  padding: 1.5rem;
+  overflow: hidden;
+  height: fit-content;
+  border: 1px solid ${colors.gray[100]};
+`;
+
+const SectionContainer = styled.div<{ $hasBorderTop?: boolean }>`
+  padding-bottom: 1rem;
+  padding-top: ${({ $hasBorderTop }) => ($hasBorderTop ? '1rem' : '0')};
+  border-top: ${({ $hasBorderTop }) => ($hasBorderTop ? `1px solid ${colors.gray[100]}` : 'none')};
+`;
+
+const AccordionButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+`;
+
+const IconTitleGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+`;
+
+const SectionIconWrapper = styled.div<{ $bg: string; $color: string }>`
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.5rem;
+  background-color: ${({ $bg }) => $bg};
+  color: ${({ $color }) => $color};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+`;
+
+const SectionTitle = styled.span`
+  font-size: 14px;
+  font-weight: 800;
+  color: ${colors.charcoal};
+  font-family: ${typography.fonts.jakarta};
+`;
+
+const ChevronIcon = styled(ChevronDown)<{ $isOpen: boolean }>`
+  width: 1rem;
+  height: 1rem;
+  color: ${colors.gray[500]};
+  transition: transform 0.2s ease;
+  transform: ${({ $isOpen }) => ($isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
+`;
+
+const InputContainer = styled.div`
+  position: relative;
+  width: 100%;
+  margin-top: 1rem;
+`;
+
+const StyledTextInput = styled.input`
+  width: 100%;
+  height: 3rem;
+  padding-left: 2.5rem;
+  padding-right: 1rem;
+  background-color: ${colors.gray[50]};
+  border: 1px solid ${colors.gray[200]};
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  outline: none;
+  color: ${colors.gray[800]};
+  transition: all 0.2s ease;
+
+  &::placeholder {
+    color: ${colors.gray[400]};
+  }
+
+  &:focus {
+    border-color: ${colors.amber[400]};
+    background-color: ${colors.white};
+  }
+`;
+
+const BudgetFlex = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+`;
+
+const StyledNumberInput = styled.input`
+  width: 100%;
+  height: 2.5rem;
+  padding: 0 1rem;
+  background-color: ${colors.gray[50]};
+  border: 1px solid ${colors.gray[200]};
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  outline: none;
+  color: ${colors.gray[800]};
+  transition: all 0.2s ease;
+
+  &:focus {
+    border-color: ${colors.amber[400]};
+  }
+`;
+
+const ApplyButton = styled.button`
+  height: 2.5rem;
+  padding: 0 1rem;
+  background-color: ${colors.amber[400]};
+  color: ${colors.black};
+  font-weight: 900;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: ${colors.amber[500]};
+  }
+`;
+
+const ChipsWrap = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+`;
+
+const FilterChip = styled.button<{ $isSelected: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: ${typography.fonts.vietnam};
+
+  ${({ $isSelected }) =>
+    $isSelected
+      ? `
+    background-color: ${colors.amber[100]};
+    border: 1px solid ${colors.amber[400]};
+    color: ${colors.amber[900]};
+    font-weight: 700;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  `
+      : `
+    background-color: transparent;
+    border: 1px solid ${colors.gray[200]};
+    color: ${colors.gray[700]};
+    font-weight: 500;
+
+    &:hover {
+      background-color: ${colors.gray[50]};
+    }
+  `}
+`;
+
+const CalendarBox = styled.div`
+  width: 100%;
+  background-color: ${colors.white};
+  border-radius: 1rem;
+  border: 1px solid ${colors.gray[100]};
+  padding: 1rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  margin-top: 1rem;
+`;
+
+const CalendarHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+`;
+
+const MonthLabel = styled.span`
+  font-size: 14px;
+  font-weight: 700;
+  color: ${colors.charcoal};
+  font-family: ${typography.fonts.jakarta};
+`;
+
+const CalendarArrowBtn = styled.button`
+  padding: 0.25rem;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: ${colors.gray[500]};
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: ${colors.gray[100]};
+  }
+`;
+
+const CalendarDayButton = styled.button<{ $isSelected: boolean; $isHighlighted: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2rem;
+  font-size: 13px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: ${typography.fonts.vietnam};
+
+  ${({ $isSelected, $isHighlighted }) =>
+    $isSelected
+      ? `
+    background-color: ${colors.amber[500]};
+    color: ${colors.white};
+    font-weight: 700;
+    box-shadow: 0 0 0 2px ${colors.amber[300]};
+  `
+      : $isHighlighted
+      ? `
+    color: ${colors.amber[600]};
+    font-weight: 700;
+    box-shadow: 0 0 0 2px ${colors.amber[200]};
+    background-color: transparent;
+
+    &:hover {
+      background-color: ${colors.amber[50]};
+    }
+  `
+      : `
+    color: ${colors.charcoal};
+    background-color: transparent;
+
+    &:hover {
+      background-color: ${colors.gray[100]};
+    }
+  `}
+`;
 
 export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
   filters,
@@ -94,390 +352,307 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
   };
 
   return (
-    <aside
-      className={`w-full bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.04)] p-6 overflow-hidden h-fit border border-gray-100 ${
-        className || ''
-      }`}
-    >
+    <SidebarWrapper className={className || ''}>
       {/* 1. Destination */}
-      <div className="pb-4">
-        <button
+      <SectionContainer>
+        <AccordionButton
           type="button"
           onClick={() => toggleSection('destination')}
-          className="flex items-center justify-between w-full text-left cursor-pointer"
         >
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-red-50 text-red-500 flex items-center justify-center shrink-0">
+          <IconTitleGroup>
+            <SectionIconWrapper $bg={colors.red[50]} $color={colors.red[500]}>
               <MapPin className="w-4 h-4" />
-            </div>
-            <span
-              className="text-[14px] font-extrabold text-[#191c1d]"
-              style={{ fontFamily: typography.fonts.jakarta }}
-            >
+            </SectionIconWrapper>
+            <SectionTitle>
               Destination
-            </span>
-          </div>
-          <ChevronDown
-            className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
-              openSections.destination ? 'rotate-180' : ''
-            }`}
-          />
-        </button>
+            </SectionTitle>
+          </IconTitleGroup>
+          <ChevronIcon $isOpen={!!openSections.destination} />
+        </AccordionButton>
         {openSections.destination && (
-          <div className="mt-4">
-            <div className="relative w-full">
-              <input
-                className="w-full h-12 pl-10 pr-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold outline-none focus:border-amber-400 focus:bg-white transition-all text-gray-800 placeholder:text-gray-400"
-                placeholder="Search a city..."
-                type="text"
-                value={filters.destination}
-                onChange={(e) =>
-                  onFilterChange({ ...filters, destination: e.target.value })
-                }
-                autoComplete="off"
-                name="location"
-              />
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            </div>
-          </div>
+          <InputContainer>
+            <StyledTextInput
+              placeholder="Search a city..."
+              type="text"
+              value={filters.destination}
+              onChange={(e) =>
+                onFilterChange({ ...filters, destination: e.target.value })
+              }
+              autoComplete="off"
+              name="location"
+            />
+            <MapPin
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
+              style={{ color: colors.gray[400] }}
+            />
+          </InputContainer>
         )}
-      </div>
+      </SectionContainer>
 
       {/* 2. Budget (₹) */}
-      <div className="border-t border-gray-100 py-4">
-        <button
+      <SectionContainer $hasBorderTop>
+        <AccordionButton
           type="button"
           onClick={() => toggleSection('budget')}
-          className="flex items-center justify-between w-full text-left cursor-pointer"
         >
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+          <IconTitleGroup>
+            <SectionIconWrapper $bg={colors.green[50]} $color={colors.green[600]}>
               <Wallet className="w-4 h-4" />
-            </div>
-            <span
-              className="text-[14px] font-extrabold text-[#191c1d]"
-              style={{ fontFamily: typography.fonts.jakarta }}
-            >
+            </SectionIconWrapper>
+            <SectionTitle>
               Budget (₹)
-            </span>
-          </div>
-          <ChevronDown
-            className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
-              openSections.budget ? 'rotate-180' : ''
-            }`}
-          />
-        </button>
+            </SectionTitle>
+          </IconTitleGroup>
+          <ChevronIcon $isOpen={!!openSections.budget} />
+        </AccordionButton>
         {openSections.budget && (
-          <div className="mt-4">
-            <div className="flex items-center gap-3">
-              <input
-                placeholder="Min"
-                className="w-full h-10 px-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold outline-none focus:border-amber-400 transition-all text-gray-800"
-                type="number"
-                value={minBudgetInput}
-                onChange={(e) => setMinBudgetInput(e.target.value)}
-              />
-              <span className="text-gray-400 font-bold">-</span>
-              <input
-                placeholder="Max"
-                className="w-full h-10 px-4 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold outline-none focus:border-amber-400 transition-all text-gray-800"
-                type="number"
-                value={maxBudgetInput}
-                onChange={(e) => setMaxBudgetInput(e.target.value)}
-              />
-              <button
-                type="button"
-                onClick={handleApplyBudget}
-                className="h-10 px-4 bg-amber-400 text-black font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-amber-500 transition-colors cursor-pointer shrink-0"
-              >
-                Apply
-              </button>
-            </div>
-          </div>
+          <BudgetFlex>
+            <StyledNumberInput
+              placeholder="Min"
+              type="number"
+              value={minBudgetInput}
+              onChange={(e) => setMinBudgetInput(e.target.value)}
+            />
+            <span style={{ color: colors.gray[400], fontWeight: 700 }}>-</span>
+            <StyledNumberInput
+              placeholder="Max"
+              type="number"
+              value={maxBudgetInput}
+              onChange={(e) => setMaxBudgetInput(e.target.value)}
+            />
+            <ApplyButton type="button" onClick={handleApplyBudget}>
+              Apply
+            </ApplyButton>
+          </BudgetFlex>
         )}
-      </div>
+      </SectionContainer>
 
       {/* 3. Trip Category */}
-      <div className="border-t border-gray-100 py-4">
-        <button
+      <SectionContainer $hasBorderTop>
+        <AccordionButton
           type="button"
           onClick={() => toggleSection('category')}
-          className="flex items-center justify-between w-full text-left cursor-pointer"
         >
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center shrink-0">
+          <IconTitleGroup>
+            <SectionIconWrapper $bg={colors.amber[50]} $color={colors.amber[600]}>
               <Tags className="w-4 h-4" />
-            </div>
-            <span
-              className="text-[14px] font-extrabold text-[#191c1d]"
-              style={{ fontFamily: typography.fonts.jakarta }}
-            >
+            </SectionIconWrapper>
+            <SectionTitle>
               Trip Category
-            </span>
-          </div>
-          <ChevronDown
-            className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
-              openSections.category ? 'rotate-180' : ''
-            }`}
-          />
-        </button>
+            </SectionTitle>
+          </IconTitleGroup>
+          <ChevronIcon $isOpen={!!openSections.category} />
+        </AccordionButton>
         {openSections.category && (
-          <div className="mt-4">
-            <div className="flex flex-wrap gap-2">
-              {CATEGORIES.map((cat) => {
-                const isSelected = filters.selectedCategories.includes(cat);
-                return (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => toggleCategory(cat)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[12px] font-medium transition-colors cursor-pointer ${
-                      isSelected
-                        ? 'bg-amber-100 border-amber-400 text-amber-900 font-bold shadow-xs'
-                        : 'border-gray-200 text-gray-700 hover:bg-gray-50'
-                    }`}
-                    style={{ fontFamily: typography.fonts.vietnam }}
-                  >
-                    <span>{cat}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          <ChipsWrap>
+            {CATEGORIES.map((cat) => {
+              const isSelected = filters.selectedCategories.includes(cat);
+              return (
+                <FilterChip
+                  key={cat}
+                  type="button"
+                  onClick={() => toggleCategory(cat)}
+                  $isSelected={isSelected}
+                >
+                  <span>{cat}</span>
+                </FilterChip>
+              );
+            })}
+          </ChipsWrap>
         )}
-      </div>
+      </SectionContainer>
 
       {/* 4. Duration */}
-      <div className="border-t border-gray-100 py-4">
-        <button
+      <SectionContainer $hasBorderTop>
+        <AccordionButton
           type="button"
           onClick={() => toggleSection('duration')}
-          className="flex items-center justify-between w-full text-left cursor-pointer"
         >
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+          <IconTitleGroup>
+            <SectionIconWrapper $bg={colors.blue[50]} $color={colors.blue[600]}>
               <Clock className="w-4 h-4" />
-            </div>
-            <span
-              className="text-[14px] font-extrabold text-[#191c1d]"
-              style={{ fontFamily: typography.fonts.jakarta }}
-            >
+            </SectionIconWrapper>
+            <SectionTitle>
               Duration
-            </span>
-          </div>
-          <ChevronDown
-            className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
-              openSections.duration ? 'rotate-180' : ''
-            }`}
-          />
-        </button>
+            </SectionTitle>
+          </IconTitleGroup>
+          <ChevronIcon $isOpen={!!openSections.duration} />
+        </AccordionButton>
         {openSections.duration && (
-          <div className="mt-4">
-            <div className="flex flex-wrap gap-2">
-              {DURATIONS.map((dur) => {
-                const isSelected = filters.selectedDurations.includes(dur);
-                return (
-                  <button
-                    key={dur}
-                    type="button"
-                    onClick={() => toggleDuration(dur)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[12px] font-medium transition-colors cursor-pointer ${
-                      isSelected
-                        ? 'bg-amber-100 border-amber-400 text-amber-900 font-bold shadow-xs'
-                        : 'border-gray-200 text-gray-700 hover:bg-gray-50'
-                    }`}
-                    style={{ fontFamily: typography.fonts.vietnam }}
-                  >
-                    <span>{dur}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          <ChipsWrap>
+            {DURATIONS.map((dur) => {
+              const isSelected = filters.selectedDurations.includes(dur);
+              return (
+                <FilterChip
+                  key={dur}
+                  type="button"
+                  onClick={() => toggleDuration(dur)}
+                  $isSelected={isSelected}
+                >
+                  <span>{dur}</span>
+                </FilterChip>
+              );
+            })}
+          </ChipsWrap>
         )}
-      </div>
+      </SectionContainer>
 
       {/* 5. Difficulty */}
-      <div className="border-t border-gray-100 py-4">
-        <button
+      <SectionContainer $hasBorderTop>
+        <AccordionButton
           type="button"
           onClick={() => toggleSection('difficulty')}
-          className="flex items-center justify-between w-full text-left cursor-pointer"
         >
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-rose-50 text-rose-500 flex items-center justify-center shrink-0">
+          <IconTitleGroup>
+            <SectionIconWrapper $bg={colors.red[50]} $color={colors.red[500]}>
               <Mountain className="w-4 h-4" />
-            </div>
-            <span
-              className="text-[14px] font-extrabold text-[#191c1d]"
-              style={{ fontFamily: typography.fonts.jakarta }}
-            >
+            </SectionIconWrapper>
+            <SectionTitle>
               Difficulty
-            </span>
-          </div>
-          <ChevronDown
-            className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
-              openSections.difficulty ? 'rotate-180' : ''
-            }`}
-          />
-        </button>
+            </SectionTitle>
+          </IconTitleGroup>
+          <ChevronIcon $isOpen={!!openSections.difficulty} />
+        </AccordionButton>
         {openSections.difficulty && (
-          <div className="mt-4">
-            <div className="flex flex-wrap gap-2">
-              {DIFFICULTIES.map((diff) => {
-                const isSelected = filters.selectedDifficulties.includes(diff);
-                return (
-                  <button
-                    key={diff}
-                    type="button"
-                    onClick={() => toggleDifficulty(diff)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[12px] font-medium transition-colors cursor-pointer ${
-                      isSelected
-                        ? 'bg-amber-100 border-amber-400 text-amber-900 font-bold shadow-xs'
-                        : 'border-gray-200 text-gray-700 hover:bg-gray-50'
-                    }`}
-                    style={{ fontFamily: typography.fonts.vietnam }}
-                  >
-                    <span>{diff}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          <ChipsWrap>
+            {DIFFICULTIES.map((diff) => {
+              const isSelected = filters.selectedDifficulties.includes(diff);
+              return (
+                <FilterChip
+                  key={diff}
+                  type="button"
+                  onClick={() => toggleDifficulty(diff)}
+                  $isSelected={isSelected}
+                >
+                  <span>{diff}</span>
+                </FilterChip>
+              );
+            })}
+          </ChipsWrap>
         )}
-      </div>
+      </SectionContainer>
 
       {/* 6. Departure Date */}
-      <div className="border-t border-gray-100 py-4">
-        <button
+      <SectionContainer $hasBorderTop>
+        <AccordionButton
           type="button"
           onClick={() => toggleSection('departureDate')}
-          className="flex items-center justify-between w-full text-left cursor-pointer"
         >
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+          <IconTitleGroup>
+            <SectionIconWrapper $bg={colors.blue[50]} $color={colors.blue[500]}>
               <CalendarIcon className="w-4 h-4" />
-            </div>
-            <span
-              className="text-[14px] font-extrabold text-[#191c1d]"
-              style={{ fontFamily: typography.fonts.jakarta }}
-            >
+            </SectionIconWrapper>
+            <SectionTitle>
               Departure Date
-            </span>
-          </div>
-          <ChevronDown
-            className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
-              openSections.departureDate ? 'rotate-180' : ''
-            }`}
-          />
-        </button>
+            </SectionTitle>
+          </IconTitleGroup>
+          <ChevronIcon $isOpen={!!openSections.departureDate} />
+        </AccordionButton>
         {openSections.departureDate && (
-          <div className="mt-4">
-            <div className="w-full bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
-              {/* Calendar Month Header */}
-              <div className="flex justify-between items-center mb-4 px-2">
-                <button
-                  type="button"
-                  className="p-1 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
-                  aria-label="Previous Month"
-                >
-                  <ChevronLeft className="w-4 h-4 text-gray-500" />
-                </button>
-                <span
-                  className="text-[14px] font-bold text-[#191c1d]"
-                  style={{ fontFamily: typography.fonts.jakarta }}
-                >
-                  October 2026
-                </span>
-                <button
-                  type="button"
-                  className="p-1 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
-                  aria-label="Next Month"
-                >
-                  <ChevronRight className="w-4 h-4 text-gray-500" />
-                </button>
-              </div>
+          <CalendarBox>
+            {/* Calendar Month Header */}
+            <CalendarHeader>
+              <CalendarArrowBtn
+                type="button"
+                aria-label="Previous Month"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </CalendarArrowBtn>
+              <MonthLabel>
+                October 2026
+              </MonthLabel>
+              <CalendarArrowBtn
+                type="button"
+                aria-label="Next Month"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </CalendarArrowBtn>
+            </CalendarHeader>
 
-              {/* Day of Week Headers */}
-              <div className="grid grid-cols-7 mb-2">
-                {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
-                  <div
-                    key={d}
-                    className="text-center text-[12px] font-medium text-gray-400 py-1"
-                  >
-                    {d}
-                  </div>
-                ))}
-              </div>
+            {/* Day of Week Headers */}
+            <div className="grid grid-cols-7 mb-2">
+              {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
+                <div
+                  key={d}
+                  className="text-center text-[12px] font-medium py-1"
+                  style={{ color: colors.gray[400] }}
+                >
+                  {d}
+                </div>
+              ))}
+            </div>
 
-              {/* Day Numbers Grid */}
-              <div className="grid grid-cols-7 gap-y-1">
-                {/* Previous month leading days */}
-                {[27, 28, 29, 30].map((prevDay) => (
-                  <div
-                    key={`prev-${prevDay}`}
-                    className="flex justify-center items-center h-8 text-[13px] text-gray-300 cursor-default"
-                    style={{ fontFamily: typography.fonts.vietnam }}
-                  >
-                    {prevDay}
-                  </div>
-                ))}
+            {/* Day Numbers Grid */}
+            <div className="grid grid-cols-7 gap-y-1">
+              {/* Previous month leading days */}
+              {[27, 28, 29, 30].map((prevDay) => (
+                <div
+                  key={`prev-${prevDay}`}
+                  className="flex justify-center items-center h-8 text-[13px] cursor-default"
+                  style={{
+                    fontFamily: typography.fonts.vietnam,
+                    color: colors.gray[300],
+                  }}
+                >
+                  {prevDay}
+                </div>
+              ))}
 
-                {/* Days 1 to 13 (disabled/past) */}
-                {Array.from({ length: 13 }, (_, i) => i + 1).map((day) => (
-                  <div
-                    key={`past-${day}`}
-                    className="flex justify-center items-center h-8 text-[13px] text-gray-300 cursor-not-allowed line-through"
-                    style={{ fontFamily: typography.fonts.vietnam }}
+              {/* Days 1 to 13 (disabled/past) */}
+              {Array.from({ length: 13 }, (_, i) => i + 1).map((day) => (
+                <div
+                  key={`past-${day}`}
+                  className="flex justify-center items-center h-8 text-[13px] cursor-not-allowed line-through"
+                  style={{
+                    fontFamily: typography.fonts.vietnam,
+                    color: colors.gray[300],
+                  }}
+                >
+                  {day}
+                </div>
+              ))}
+
+              {/* Active departure days from 14 to 31 */}
+              {Array.from({ length: 18 }, (_, i) => i + 14).map((day) => {
+                const isSelected = filters.selectedDate === day;
+                const isHighlighted = day === 14;
+
+                return (
+                  <CalendarDayButton
+                    key={`day-${day}`}
+                    type="button"
+                    onClick={() =>
+                      onFilterChange({
+                        ...filters,
+                        selectedDate: isSelected ? null : day,
+                      })
+                    }
+                    $isSelected={isSelected}
+                    $isHighlighted={isHighlighted}
                   >
                     {day}
-                  </div>
-                ))}
+                  </CalendarDayButton>
+                );
+              })}
 
-                {/* Active departure days from 14 to 31 */}
-                {Array.from({ length: 18 }, (_, i) => i + 14).map((day) => {
-                  const isSelected = filters.selectedDate === day;
-                  const isHighlighted = day === 14; // Current day highlight as in HTML
-
-                  return (
-                    <button
-                      key={`day-${day}`}
-                      type="button"
-                      onClick={() =>
-                        onFilterChange({
-                          ...filters,
-                          selectedDate: isSelected ? null : day,
-                        })
-                      }
-                      className={`flex justify-center items-center h-8 text-[13px] transition-colors rounded-full cursor-pointer ${
-                        isSelected
-                          ? 'bg-amber-500 text-white font-bold ring-2 ring-amber-300 shadow-sm'
-                          : isHighlighted
-                          ? 'text-amber-600 font-bold ring-2 ring-amber-200 hover:bg-amber-50'
-                          : 'text-[#191c1d] hover:bg-gray-100'
-                      }`}
-                      style={{ fontFamily: typography.fonts.vietnam }}
-                    >
-                      {day}
-                    </button>
-                  );
-                })}
-
-                {/* Next month trailing days */}
-                {[1, 2, 3, 4, 5, 6, 7].map((nextDay) => (
-                  <div
-                    key={`next-${nextDay}`}
-                    className="flex justify-center items-center h-8 text-[13px] text-gray-300 cursor-default"
-                    style={{ fontFamily: typography.fonts.vietnam }}
-                  >
-                    {nextDay}
-                  </div>
-                ))}
-              </div>
+              {/* Next month trailing days */}
+              {[1, 2, 3, 4, 5, 6, 7].map((nextDay) => (
+                <div
+                  key={`next-${nextDay}`}
+                  className="flex justify-center items-center h-8 text-[13px] cursor-default"
+                  style={{
+                    fontFamily: typography.fonts.vietnam,
+                    color: colors.gray[300],
+                  }}
+                >
+                  {nextDay}
+                </div>
+              ))}
             </div>
-          </div>
+          </CalendarBox>
         )}
-      </div>
-    </aside>
+      </SectionContainer>
+    </SidebarWrapper>
   );
 };
+

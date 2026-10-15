@@ -1,25 +1,51 @@
 'use client';
 
 import React from 'react';
+import styled from 'styled-components';
 import { FloatingBackground } from '@/components/shared';
+import { colors } from '@/theme/colors';
+
+const AmbientContainer = styled.div`
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+`;
+
+const GlowTopLeft = styled.div`
+  position: absolute;
+  top: -8rem;
+  left: -8rem;
+  width: 24rem;
+  height: 24rem;
+  border-radius: 9999px;
+  opacity: 0.04;
+  background: radial-gradient(circle, ${colors.primaryContainer} 0%, ${colors.transparent} 70%);
+`;
+
+const GlowCenterRight = styled.div`
+  position: absolute;
+  top: 50%;
+  right: -12rem;
+  width: 500px;
+  height: 500px;
+  border-radius: 9999px;
+  opacity: 0.03;
+  background: radial-gradient(circle, ${colors.primaryContainer} 0%, ${colors.transparent} 70%);
+`;
 
 export const TripPartnerBackground: React.FC = () => {
   return (
     <>
-      {/* Ambient Radial Glow Gradients */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" aria-hidden="true">
-        <div
-          className="absolute -top-32 -left-32 w-96 h-96 rounded-full opacity-[0.04]"
-          style={{ background: 'radial-gradient(circle, #FFD133 0%, transparent 70%)' }}
-        />
-        <div
-          className="absolute top-1/2 -right-48 w-[500px] h-[500px] rounded-full opacity-[0.03]"
-          style={{ background: 'radial-gradient(circle, #FFD133 0%, transparent 70%)' }}
-        />
-      </div>
+      <AmbientContainer aria-hidden="true">
+        <GlowTopLeft />
+        <GlowCenterRight />
+      </AmbientContainer>
 
-      {/* Exact Homepage Floating Icons Background */}
+      {/* Homepage Floating Icons Background */}
       <FloatingBackground fixed />
     </>
   );
 };
+

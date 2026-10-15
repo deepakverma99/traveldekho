@@ -1,61 +1,144 @@
 'use client';
 
 import React from 'react';
+import styled from 'styled-components';
 import { CostingSlot } from './types';
 import { typography } from '@/theme/typography';
+import { colors } from '@/theme/colors';
 
 interface TripCostingSectionProps {
   costing: CostingSlot[];
 }
+
+const SectionTitle = styled.h2`
+  font-size: 1.5rem;
+  color: ${colors.gray[900]};
+  margin-bottom: 1.5rem;
+  font-family: ${typography.fonts.caveat};
+
+  @media (min-width: 640px) {
+    margin-bottom: 2rem;
+  }
+  @media (min-width: 768px) {
+    font-size: 1.875rem;
+  }
+`;
+
+const TableContainer = styled.div`
+  overflow-x: auto;
+  border-radius: 1rem;
+  border: 1px solid ${colors.gray[100]};
+  background-color: ${colors.white};
+`;
+
+const StyledTable = styled.table`
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+`;
+
+const TableHeaderRow = styled.tr`
+  background-color: ${colors.gray[50]};
+  border-bottom: 1px solid ${colors.gray[100]};
+`;
+
+const TableHeaderCell = styled.th<{ $alignRightOnMobile?: boolean }>`
+  padding: 0.875rem 1.25rem;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: ${colors.gray[400]};
+  text-align: ${({ $alignRightOnMobile }) => ($alignRightOnMobile ? 'right' : 'left')};
+
+  @media (min-width: 640px) {
+    padding: 1rem 1.5rem;
+    text-align: left;
+  }
+`;
+
+const TableBodyRow = styled.tr`
+  border-bottom: 1px solid ${colors.gray[50]};
+  transition: background-color 0.15s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: ${colors.gray[50]}80;
+  }
+`;
+
+const TableBodyCell = styled.td<{ $alignRightOnMobile?: boolean }>`
+  padding: 0.875rem 1.25rem;
+  text-align: ${({ $alignRightOnMobile }) => ($alignRightOnMobile ? 'right' : 'left')};
+
+  @media (min-width: 640px) {
+    padding: 1rem 1.5rem;
+    text-align: left;
+  }
+`;
+
+const SlotDateRange = styled.div`
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: ${colors.gray[800]};
+
+  @media (min-width: 640px) {
+    font-size: 0.875rem;
+  }
+`;
+
+const SlotLocation = styled.div`
+  font-size: 10px;
+  color: ${colors.gray[400]};
+  font-weight: 500;
+  margin-top: 0.125rem;
+`;
+
+const SlotPrice = styled.span`
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: ${colors.gray[900]};
+
+  @media (min-width: 640px) {
+    font-size: 0.875rem;
+  }
+`;
 
 export const TripCostingSection: React.FC<TripCostingSectionProps> = ({
   costing,
 }) => {
   return (
     <section>
-      <h2
-        className="text-2xl md:text-3xl text-gray-900 mb-6 sm:mb-8"
-        style={{ fontFamily: typography.fonts.caveat }}
-      >
-        Costing
-      </h2>
+      <SectionTitle>Costing</SectionTitle>
 
-      <div className="overflow-x-auto rounded-2xl border border-gray-100 bg-white">
-        <table className="w-full text-left border-collapse">
+      <TableContainer>
+        <StyledTable>
           <thead>
-            <tr className="bg-gray-50 border-b border-gray-100">
-              <th className="px-5 sm:px-6 py-3.5 sm:py-4 text-[10px] font-black uppercase tracking-widest text-gray-400">
-                Route
-              </th>
-              <th className="px-5 sm:px-6 py-3.5 sm:py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 text-right sm:text-left">
-                Price
-              </th>
-            </tr>
+            <TableHeaderRow>
+              <TableHeaderCell>Route</TableHeaderCell>
+              <TableHeaderCell $alignRightOnMobile>Price</TableHeaderCell>
+            </TableHeaderRow>
           </thead>
           <tbody>
             {costing.map((slot, index) => (
-              <tr
-                key={index}
-                className="border-b border-gray-50 last:border-b-0 hover:bg-gray-50/50 transition-colors"
-              >
-                <td className="px-5 sm:px-6 py-3.5 sm:py-4">
-                  <div className="text-xs sm:text-sm font-bold text-gray-800">
-                    {slot.dateRange}
-                  </div>
-                  <div className="text-[10px] text-gray-400 font-medium mt-0.5">
-                    {slot.location}
-                  </div>
-                </td>
-                <td className="px-5 sm:px-6 py-3.5 sm:py-4 text-right sm:text-left">
-                  <span className="text-xs sm:text-sm font-black text-gray-900">
+              <TableBodyRow key={index}>
+                <TableBodyCell>
+                  <SlotDateRange>{slot.dateRange}</SlotDateRange>
+                  <SlotLocation>{slot.location}</SlotLocation>
+                </TableBodyCell>
+                <TableBodyCell $alignRightOnMobile>
+                  <SlotPrice>
                     ₹{slot.price.toLocaleString('en-IN')}
-                  </span>
-                </td>
-              </tr>
+                  </SlotPrice>
+                </TableBodyCell>
+              </TableBodyRow>
             ))}
           </tbody>
-        </table>
-      </div>
+        </StyledTable>
+      </TableContainer>
     </section>
   );
 };

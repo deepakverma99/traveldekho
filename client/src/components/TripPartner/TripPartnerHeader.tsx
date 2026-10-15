@@ -1,101 +1,320 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
 import { Globe, LogOut, Bell, UserCheck } from 'lucide-react';
+import { colors } from '@/theme/colors';
 import { clearPartnerSession } from './utils/partnerAuth';
+import { TripPartnerLogoutModal } from './TripPartnerLogoutModal';
 
 export interface TripPartnerHeaderProps {
   username: string;
   displayName: string;
 }
 
+const HeaderRoot = styled.header`
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  height: 72px;
+  background-color: ${colors.offWhite};
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid ${colors.amber[200]}80;
+  padding: 0 1rem;
+
+  @media (min-width: 640px) {
+    padding: 0 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    padding: 0 2rem;
+  }
+`;
+
+const HeaderInner = styled.div`
+  max-width: 1600px;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+`;
+
+const LeftSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  @media (min-width: 640px) {
+    gap: 1rem;
+  }
+`;
+
+const LogoContainer = styled(Link)`
+  position: relative;
+  height: 2.25rem;
+  width: 8.5rem;
+  display: block;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.03);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+`;
+
+const PartnerBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  background-color: ${colors.amber[400]};
+  color: ${colors.black};
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 9999px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+`;
+
+const RightSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  @media (min-width: 640px) {
+    gap: 1rem;
+  }
+`;
+
+const MarketplaceLink = styled(Link)`
+  display: none;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: ${colors.gray[600]};
+  transition: color 0.2s ease, background-color 0.2s ease;
+
+  svg {
+    color: ${colors.amber[600]};
+  }
+
+  &:hover {
+    color: ${colors.black};
+    background-color: ${colors.amber[100]}80;
+  }
+
+  @media (min-width: 768px) {
+    display: inline-flex;
+  }
+`;
+
+const NotificationButton = styled(Link)`
+  position: relative;
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  color: ${colors.gray[500]};
+  transition: color 0.2s ease, background-color 0.2s ease;
+
+  &:hover {
+    color: ${colors.gray[900]};
+    background-color: ${colors.amber[100]}80;
+  }
+`;
+
+const NotificationDot = styled.span`
+  position: absolute;
+  top: 0.375rem;
+  right: 0.375rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: ${colors.amber[500]};
+  border-radius: 9999px;
+`;
+
+const ProfileContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-left: 0.5rem;
+  border-left: 1px solid ${colors.amber[200]}80;
+`;
+
+const Avatar = styled.div`
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background-color: ${colors.amber[400]};
+  color: ${colors.black};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 0.75rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  text-transform: uppercase;
+`;
+
+const ProfileInfo = styled.div`
+  display: none;
+  flex-direction: column;
+  text-align: left;
+
+  @media (min-width: 640px) {
+    display: flex;
+  }
+`;
+
+const PartnerName = styled.span`
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: ${colors.gray[900]};
+  line-height: 1.25;
+  text-transform: capitalize;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 120px;
+`;
+
+const VerifiedBadge = styled.span`
+  font-size: 10px;
+  font-weight: 700;
+  color: ${colors.green[600]};
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+`;
+
+const LogoutButton = styled.button`
+  padding: 0.5rem;
+  margin-left: 0.25rem;
+  color: ${colors.gray[400]};
+  border-radius: 0.75rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease, background-color 0.2s ease;
+
+  &:hover {
+    color: ${colors.red[600]};
+    background-color: ${colors.red[50]};
+  }
+`;
+
 export const TripPartnerHeader: React.FC<TripPartnerHeaderProps> = ({
   username,
   displayName,
 }) => {
   const router = useRouter();
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
-  const handleLogout = () => {
+  const handleConfirmLogout = () => {
     clearPartnerSession();
+    setIsLogoutModalOpen(false);
     router.push('/trip-partner/login');
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full h-[72px] bg-[#FFFBF0]/95 backdrop-blur-md border-b border-amber-100/60 px-4 sm:px-6 md:px-8">
-      <div className="max-w-[1600px] h-full mx-auto flex items-center justify-between gap-4">
-        {/* Left: Brand & Portal Badge */}
-        <div className="flex items-center gap-3 sm:gap-4">
-          <Link
-            href={`/trip-partner/${username}/dashboard`}
-            className="relative h-10 w-36 sm:h-11 sm:w-44 block transition-transform hover:scale-105 active:scale-95"
-            title="Trip Partner Dashboard"
-          >
-            <Image
-              alt="TravelDekho"
-              src="/TravelDekho-logo.png"
-              fill
-              priority
-              className="object-contain"
-              sizes="176px"
-            />
-          </Link>
-
-          <span className="hidden sm:inline-flex items-center px-3 py-1 bg-amber-400 text-black text-[10px] font-black uppercase tracking-widest rounded-full shadow-xs">
-            Trip Partner Portal
-          </span>
-        </div>
-
-        {/* Right: Actions & Partner Profile */}
-        <div className="flex items-center gap-2 sm:gap-4">
-          {/* View Website Link */}
-          <Link
-            href="/"
-            title="Visit TravelDekho Marketplace"
-            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-gray-600 hover:text-black hover:bg-amber-100/50 transition-colors"
-          >
-            <Globe className="w-3.5 h-3.5 text-amber-600" />
-            <span>View Marketplace</span>
-          </Link>
-
-          {/* Notifications Shortcut */}
-          <Link
-            href={`/trip-partner/${username}/notifications`}
-            title="View Notifications"
-            className="relative p-2 rounded-xl text-gray-500 hover:text-gray-900 hover:bg-amber-100/50 transition-colors"
-          >
-            <Bell className="w-4 h-4" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
-          </Link>
-
-          {/* Profile Pill */}
-          <div className="flex items-center gap-2 pl-2 border-l border-amber-200/50">
-            <div className="w-8 h-8 rounded-full bg-amber-400 text-black flex items-center justify-center font-black text-xs shadow-xs uppercase">
-              {displayName.charAt(0) || 'T'}
-            </div>
-
-            <div className="hidden sm:flex flex-col text-left">
-              <span className="text-xs font-black text-gray-900 leading-tight capitalize truncate max-w-[120px]">
-                {displayName}
-              </span>
-              <span className="text-[10px] font-bold text-green-600 flex items-center gap-0.5">
-                <UserCheck className="w-3 h-3" /> Verified Partner
-              </span>
-            </div>
-
-            {/* Logout Button */}
-            <button
-              onClick={handleLogout}
-              title="Log Out of Partner Portal"
-              className="p-2 ml-1 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
+    <>
+      <HeaderRoot>
+        <HeaderInner>
+          {/* Left: Brand & Portal Badge */}
+          <LeftSection>
+            <LogoContainer
+              href={`/trip-partner/${username}/dashboard`}
+              title="Trip Partner Dashboard"
             >
-              <LogOut className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </div>
-    </header>
+              <Image
+                alt="TravelDekho"
+                src="/TravelDekho-logo.png"
+                fill
+                priority
+                className="object-contain"
+                sizes="176px"
+              />
+            </LogoContainer>
+
+            <PartnerBadge>
+              Trip Partner Portal
+            </PartnerBadge>
+          </LeftSection>
+
+          {/* Right: Actions & Partner Profile */}
+          <RightSection>
+            {/* View Website Link */}
+            <MarketplaceLink
+              href="/"
+              title="Visit TravelDekho Marketplace"
+            >
+              <Globe className="w-3.5 h-3.5" />
+              <span>View Marketplace</span>
+            </MarketplaceLink>
+
+            {/* Notifications Shortcut */}
+            <NotificationButton
+              href={`/trip-partner/${username}/notifications`}
+              title="View Notifications"
+            >
+              <Bell className="w-4 h-4" />
+              <NotificationDot className="animate-pulse" />
+            </NotificationButton>
+
+            {/* Profile Pill */}
+            <ProfileContainer>
+              <Avatar>
+                {displayName.charAt(0) || 'T'}
+              </Avatar>
+
+              <ProfileInfo>
+                <PartnerName>
+                  {displayName}
+                </PartnerName>
+                <VerifiedBadge>
+                  <UserCheck className="w-3 h-3" /> Verified Partner
+                </VerifiedBadge>
+              </ProfileInfo>
+
+              {/* Logout Button */}
+              <LogoutButton
+                onClick={() => setIsLogoutModalOpen(true)}
+                title="Log Out of Partner Portal"
+                aria-label="Log Out of Partner Portal"
+              >
+                <LogOut className="w-4 h-4" />
+              </LogoutButton>
+            </ProfileContainer>
+          </RightSection>
+        </HeaderInner>
+      </HeaderRoot>
+
+      {/* Confirmation Modal */}
+      <TripPartnerLogoutModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleConfirmLogout}
+        displayName={displayName}
+      />
+    </>
   );
 };
+

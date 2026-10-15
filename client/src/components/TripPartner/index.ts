@@ -9,3 +9,4 @@ export * from './TripPartnerMobileNav';
 export * from './TripPartnerBookingChart';
 export * from './TripPartnerDashboard';
 export * from './TripPartnerLayout';
+export * from './TripPartnerLogoutModal';

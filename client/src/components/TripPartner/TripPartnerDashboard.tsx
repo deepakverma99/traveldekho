@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import styled from 'styled-components';
 import {
   Activity,
   ArrowUpRight,
@@ -13,6 +14,7 @@ import {
   ChevronRight,
   Bell,
 } from 'lucide-react';
+import { colors } from '@/theme/colors';
 import { TripPartnerBookingChart } from './TripPartnerBookingChart';
 import {
   MOCK_PARTNER_BOOKINGS,
@@ -25,226 +27,687 @@ export interface TripPartnerDashboardProps {
   displayName: string;
 }
 
+const DashboardRoot = styled.div`
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+
+  @media (min-width: 640px) {
+    padding: 2rem 1.5rem;
+  }
+  @media (min-width: 768px) {
+    padding: 3rem 1.5rem;
+  }
+`;
+
+const BannerWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2.5rem;
+  gap: 1.5rem;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+  }
+`;
+
+const PortalBadge = styled.span`
+  padding: 0.25rem 0.75rem;
+  background-color: ${colors.amber[400]};
+  color: ${colors.black};
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 9999px;
+`;
+
+const SystemLiveBadge = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 10px;
+  font-weight: 900;
+  color: ${colors.green[600]};
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+`;
+
+const Heading = styled.h1`
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: ${colors.gray[900]};
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+
+  @media (min-width: 640px) {
+    font-size: 1.875rem;
+  }
+  @media (min-width: 768px) {
+    font-size: 2.25rem;
+  }
+`;
+
+const AmberText = styled.span`
+  color: ${colors.amber[500]};
+`;
+
+const SubtitleText = styled.p`
+  color: ${colors.gray[500]};
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+`;
+
+const PostTripButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 3.5rem;
+  padding: 0.625rem 2rem;
+  background-color: ${colors.amber[400]};
+  color: ${colors.black};
+  border-radius: 9999px;
+  border: none;
+  font-weight: 900;
+  font-size: 1rem;
+  white-space: nowrap;
+  box-shadow: 0 20px 25px -5px ${colors.amber[200]}99;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: ${colors.amber[500]};
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;
+
+const StatsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+
+  @media (min-width: 768px) {
+    margin-bottom: 3rem;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+`;
+
+const StatCard = styled.div`
+  background-color: ${colors.white};
+  border: 1px solid ${colors.gray[100]};
+  border-radius: 32px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 10px 15px -3px ${colors.amber[100]}80;
+    border-color: ${colors.amber[200]};
+  }
+
+  @media (min-width: 640px) {
+    padding: 2rem;
+  }
+`;
+
+const StatIconBox = styled.div<{ $bg: string; $color: string }>`
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: ${({ $bg }) => $bg};
+  color: ${({ $color }) => $color};
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  transition: transform 0.5s ease;
+
+  ${StatCard}:hover & {
+    transform: scale(1.1);
+  }
+`;
+
+const StatLabel = styled.p`
+  font-size: 10px;
+  font-weight: 900;
+  color: ${colors.gray[400]};
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.25rem;
+`;
+
+const StatValue = styled.h3`
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: ${colors.gray[900]};
+  letter-spacing: -0.05em;
+
+  @media (min-width: 640px) {
+    font-size: 1.875rem;
+  }
+`;
+
+const BottomGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.5rem;
+  }
+`;
+
+const BookingsCard = styled.div`
+  background-color: ${colors.white};
+  border: 1px solid ${colors.gray[100]};
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (min-width: 1024px) {
+    grid-column: span 2 / span 2;
+  }
+`;
+
+const CardHeader = styled.div`
+  padding: 1.5rem;
+  border-bottom: 1px solid ${colors.gray[50]};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (min-width: 640px) {
+    padding: 2rem;
+  }
+`;
+
+const CardTitle = styled.h3`
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: ${colors.gray[900]};
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  svg {
+    color: ${colors.amber[500]};
+  }
+`;
+
+const ViewAllLink = styled(Link)`
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: ${colors.amber[600]};
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: color 0.2s ease;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const TableWrapper = styled.div`
+  overflow-x: auto;
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+`;
+
+const TableHead = styled.thead`
+  background-color: ${colors.gray[50]}80;
+`;
+
+const TableHeaderCell = styled.th<{ $alignRight?: boolean }>`
+  padding: 1.25rem 1.5rem;
+  text-align: ${({ $alignRight }) => ($alignRight ? 'right' : 'left')};
+  font-size: 10px;
+  font-weight: 900;
+  color: ${colors.gray[400]};
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+
+  @media (min-width: 640px) {
+    padding: 1.25rem 2rem;
+  }
+`;
+
+const TableBody = styled.tbody`
+  & > tr + tr {
+    border-top: 1px solid ${colors.gray[50]};
+  }
+`;
+
+const TableRow = styled.tr`
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: ${colors.gray[50]}80;
+  }
+`;
+
+const TableCell = styled.td<{ $alignRight?: boolean }>`
+  padding: 1.5rem;
+  text-align: ${({ $alignRight }) => ($alignRight ? 'right' : 'left')};
+
+  @media (min-width: 640px) {
+    padding: 1.5rem 2rem;
+  }
+`;
+
+const StatusPill = styled.span`
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background-color: ${colors.green[100]};
+  color: ${colors.green[600]};
+`;
+
+const NotificationsCard = styled.div`
+  background-color: ${colors.white};
+  border: 1px solid ${colors.gray[100]};
+  border-radius: 40px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (min-width: 640px) {
+    padding: 2rem;
+  }
+`;
+
+const NotificationsHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+`;
+
+const NotificationsTitle = styled.h4`
+  font-size: 0.875rem;
+  font-weight: 900;
+  color: ${colors.gray[900]};
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  svg {
+    color: ${colors.amber[500]};
+  }
+`;
+
+const NewBadge = styled.span`
+  background-color: ${colors.amber[100]};
+  color: ${colors.amber[600]};
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  margin-left: 0.5rem;
+`;
+
+const NotifList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  flex: 1;
+  margin-right: -0.5rem;
+
+  &::-webkit-scrollbar {
+    width: 0.375rem;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${colors.gray[200]};
+    border-radius: 9999px;
+  }
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: ${colors.gray[300]};
+  }
+`;
+
+const NotifItem = styled(Link)`
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 1.5rem;
+  cursor: pointer;
+  border: 1px solid ${colors.amber[100]}80;
+  background-color: ${colors.amber[50]}66;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: ${colors.amber[50]};
+    border-color: ${colors.amber[200]};
+  }
+`;
+
+const NotifIconBox = styled.div`
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  background-color: ${colors.green[50]};
+  color: ${colors.green[500]};
+`;
+
+const NotifUnreadDot = styled.div`
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  width: 0.875rem;
+  height: 0.875rem;
+  background-color: ${colors.amber[500]};
+  border-radius: 9999px;
+  border: 3px solid ${colors.white};
+`;
+
+const ViewAllNotifBtn = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.875rem;
+  border-radius: 1rem;
+  background-color: ${colors.gray[50]};
+  font-size: 10px;
+  font-weight: 900;
+  color: ${colors.gray[900]};
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  svg {
+    color: ${colors.amber[500]};
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    background-color: ${colors.amber[50]};
+    color: ${colors.amber[600]};
+
+    svg {
+      transform: scale(1.1);
+    }
+  }
+`;
+
 export const TripPartnerDashboard: React.FC<TripPartnerDashboardProps> = ({
   username,
   displayName,
 }) => {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-12">
+    <DashboardRoot>
       {/* Top Banner / Welcome Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+      <BannerWrapper>
         <div className="space-y-2">
           <div className="flex items-center gap-3">
-            <span className="px-3 py-1 bg-amber-400 text-black text-[10px] font-black uppercase tracking-widest rounded-full">
+            <PortalBadge>
               Trip Partner Portal
-            </span>
-            <span className="flex items-center gap-1 text-[10px] font-black text-green-600 uppercase tracking-widest">
+            </PortalBadge>
+            <SystemLiveBadge>
               <Activity className="w-3 h-3" /> System Live
-            </span>
+            </SystemLiveBadge>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 tracking-tight uppercase">
-            Hello, <span className="text-amber-500">{displayName}!</span>
-          </h1>
-          <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">
+          <Heading>
+            Hello, <AmberText>{displayName}!</AmberText>
+          </Heading>
+          <SubtitleText>
             Manage your trips and track your growth
-          </p>
+          </SubtitleText>
         </div>
 
         <div className="flex items-center gap-3">
           <Link href={`/trip-partner/${username}/trips/new`}>
-            <button className="py-2.5 bg-amber-400 hover:bg-amber-500 text-black rounded-full transition-all duration-200 hover:shadow-md active:scale-95 flex items-center justify-center gap-2 whitespace-nowrap h-14 px-8 font-black text-base shadow-xl shadow-amber-200 cursor-pointer">
-              Post New Trip <ArrowUpRight className="ml-2 w-5 h-5" />
-            </button>
+            <PostTripButton>
+              <span>Post New Trip</span>
+              <ArrowUpRight className="w-5 h-5" />
+            </PostTripButton>
           </Link>
         </div>
-      </div>
+      </BannerWrapper>
 
       {/* 4 Stat Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-10 md:mb-12">
+      <StatsGrid>
         {/* Total Revenue */}
-        <div className="bg-white border border-gray-100 rounded-[32px] p-6 sm:p-8 shadow-sm hover:shadow-lg hover:shadow-amber-100/50 hover:border-amber-200 transition-all duration-300 group">
-          <div className="flex justify-between items-start mb-6">
-            <div className="p-4 rounded-2xl bg-green-100 text-green-600 group-hover:scale-110 transition-transform duration-500">
-              <DollarSign className="w-6 h-6" />
-            </div>
-          </div>
-          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+        <StatCard>
+          <StatIconBox $bg={colors.green[100]} $color={colors.green[600]}>
+            <DollarSign className="w-6 h-6" />
+          </StatIconBox>
+          <StatLabel>
             Total Revenue
-          </p>
-          <h3 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tighter">
+          </StatLabel>
+          <StatValue>
             ₹{MOCK_PARTNER_STATS.totalRevenue.toLocaleString()}
-          </h3>
-        </div>
+          </StatValue>
+        </StatCard>
 
         {/* Total Bookings */}
-        <div className="bg-white border border-gray-100 rounded-[32px] p-6 sm:p-8 shadow-sm hover:shadow-lg hover:shadow-amber-100/50 hover:border-amber-200 transition-all duration-300 group">
-          <div className="flex justify-between items-start mb-6">
-            <div className="p-4 rounded-2xl bg-blue-100 text-blue-600 group-hover:scale-110 transition-transform duration-500">
-              <Users className="w-6 h-6" />
-            </div>
-          </div>
-          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+        <StatCard>
+          <StatIconBox $bg={colors.blue[100]} $color={colors.blue[600]}>
+            <Users className="w-6 h-6" />
+          </StatIconBox>
+          <StatLabel>
             Total Bookings
-          </p>
-          <h3 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tighter">
+          </StatLabel>
+          <StatValue>
             {MOCK_PARTNER_STATS.totalBookings}
-          </h3>
-        </div>
+          </StatValue>
+        </StatCard>
 
         {/* Active Trips */}
-        <div className="bg-white border border-gray-100 rounded-[32px] p-6 sm:p-8 shadow-sm hover:shadow-lg hover:shadow-amber-100/50 hover:border-amber-200 transition-all duration-300 group">
-          <div className="flex justify-between items-start mb-6">
-            <div className="p-4 rounded-2xl bg-amber-100 text-amber-600 group-hover:scale-110 transition-transform duration-500">
-              <Layers className="w-6 h-6" />
-            </div>
-          </div>
-          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+        <StatCard>
+          <StatIconBox $bg={colors.amber[100]} $color={colors.amber[600]}>
+            <Layers className="w-6 h-6" />
+          </StatIconBox>
+          <StatLabel>
             Active Trips
-          </p>
-          <h3 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tighter">
+          </StatLabel>
+          <StatValue>
             {MOCK_PARTNER_STATS.activeTrips}
-          </h3>
-        </div>
+          </StatValue>
+        </StatCard>
 
         {/* Avg Rating */}
-        <div className="bg-white border border-gray-100 rounded-[32px] p-6 sm:p-8 shadow-sm hover:shadow-lg hover:shadow-amber-100/50 hover:border-amber-200 transition-all duration-300 group">
-          <div className="flex justify-between items-start mb-6">
-            <div className="p-4 rounded-2xl bg-purple-100 text-purple-600 group-hover:scale-110 transition-transform duration-500">
-              <Star className="w-6 h-6" />
-            </div>
-          </div>
-          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+        <StatCard>
+          <StatIconBox $bg={colors.purple[100]} $color={colors.purple[600]}>
+            <Star className="w-6 h-6" />
+          </StatIconBox>
+          <StatLabel>
             Avg Rating
-          </p>
-          <h3 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tighter">
+          </StatLabel>
+          <StatValue>
             {MOCK_PARTNER_STATS.avgRating}
-          </h3>
-        </div>
-      </div>
+          </StatValue>
+        </StatCard>
+      </StatsGrid>
 
       {/* Booking Volume Chart */}
       <TripPartnerBookingChart />
 
       {/* 2 Columns: Recent Bookings & Notifications */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-10">
+      <BottomGrid>
         {/* Recent Bookings Table (2 cols) */}
-        <div className="lg:col-span-2 bg-white border border-gray-100 rounded-[40px] overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
-          <div className="p-6 sm:p-8 border-b border-gray-50 flex items-center justify-between">
-            <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight flex items-center gap-3">
-              <TrendingUp className="w-6 h-6 text-amber-500" /> Recent Bookings
-            </h3>
-            <Link
-              className="text-xs font-black text-amber-600 uppercase tracking-widest hover:underline flex items-center gap-1"
-              href={`/trip-partner/${username}/bookings`}
-            >
-              View All <ChevronRight className="w-4 h-4" />
-            </Link>
-          </div>
+        <BookingsCard>
+          <CardHeader>
+            <CardTitle>
+              <TrendingUp className="w-6 h-6" /> Recent Bookings
+            </CardTitle>
+            <ViewAllLink href={`/trip-partner/${username}/bookings`}>
+              <span>View All</span> <ChevronRight className="w-4 h-4" />
+            </ViewAllLink>
+          </CardHeader>
 
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-gray-50/50">
-                  <th className="px-6 sm:px-8 py-5 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                    Traveler
-                  </th>
-                  <th className="px-6 sm:px-8 py-5 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                    Trip
-                  </th>
-                  <th className="px-6 sm:px-8 py-5 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                    Status
-                  </th>
-                  <th className="px-6 sm:px-8 py-5 text-right text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                    Amount
-                  </th>
+          <TableWrapper>
+            <Table>
+              <TableHead>
+                <tr>
+                  <TableHeaderCell>Traveler</TableHeaderCell>
+                  <TableHeaderCell>Trip</TableHeaderCell>
+                  <TableHeaderCell>Status</TableHeaderCell>
+                  <TableHeaderCell $alignRight>Amount</TableHeaderCell>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
+              </TableHead>
+              <TableBody>
                 {MOCK_PARTNER_BOOKINGS.map((booking) => (
-                  <tr key={booking.id} className="hover:bg-gray-50/50 transition-colors">
-                    <td className="px-6 sm:px-8 py-6">
+                  <TableRow key={booking.id}>
+                    <TableCell>
                       <div className="flex flex-col">
-                        <span className="text-sm font-black text-gray-900 uppercase leading-none">
+                        <span
+                          className="text-sm font-black uppercase leading-none"
+                          style={{ color: colors.gray[900] }}
+                        >
                           {booking.travelerName}
                         </span>
-                        <span className="text-[10px] font-bold text-gray-400 mt-1">
+                        <span
+                          className="text-[10px] font-bold mt-1"
+                          style={{ color: colors.gray[400] }}
+                        >
                           {booking.travelerEmail}
                         </span>
                       </div>
-                    </td>
-                    <td className="px-6 sm:px-8 py-6 text-sm font-bold text-gray-600">
-                      {booking.tripTitle}
-                    </td>
-                    <td className="px-6 sm:px-8 py-6">
-                      <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-green-100 text-green-600">
-                        {booking.status}
+                    </TableCell>
+                    <TableCell>
+                      <span
+                        className="text-sm font-bold"
+                        style={{ color: colors.gray[600] }}
+                      >
+                        {booking.tripTitle}
                       </span>
-                    </td>
-                    <td className="px-6 sm:px-8 py-6 text-right text-sm font-black text-gray-900">
-                      ₹{booking.amount.toLocaleString()}
-                    </td>
-                  </tr>
+                    </TableCell>
+                    <TableCell>
+                      <StatusPill>
+                        {booking.status}
+                      </StatusPill>
+                    </TableCell>
+                    <TableCell $alignRight>
+                      <span
+                        className="text-sm font-black"
+                        style={{ color: colors.gray[900] }}
+                      >
+                        ₹{booking.amount.toLocaleString()}
+                      </span>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+              </TableBody>
+            </Table>
+          </TableWrapper>
+        </BookingsCard>
 
         {/* Notifications Card (1 col) */}
-        <div className="space-y-8">
-          <div className="bg-white border border-gray-100 rounded-[40px] p-6 sm:p-8 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col h-[500px]">
-            <div className="flex items-center justify-between mb-6">
-              <h4 className="text-sm font-black text-gray-900 uppercase tracking-widest flex items-center gap-2">
-                <Bell className="w-5 h-5 text-amber-500" /> Notifications
-                <span className="bg-amber-100 text-amber-600 px-3 py-1 rounded-full text-[10px] font-black tracking-widest ml-2">
-                  5 NEW
-                </span>
-              </h4>
-            </div>
+        <div>
+          <NotificationsCard>
+            <NotificationsHeader>
+              <NotificationsTitle>
+                <Bell className="w-5 h-5" /> Notifications
+                <NewBadge>5 NEW</NewBadge>
+              </NotificationsTitle>
+            </NotificationsHeader>
 
-            <div className="space-y-3 overflow-y-auto pr-2 flex-1 -mr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-300">
+            <NotifList>
               {MOCK_PARTNER_NOTIFICATIONS.map((notif) => (
-                <Link
+                <NotifItem
                   key={notif.id}
                   href={`/trip-partner/${username}/notifications`}
-                  className="flex gap-4 p-4 rounded-3xl transition-all cursor-pointer group border bg-amber-50/40 border-amber-100/50 hover:bg-amber-50 hover:border-amber-200"
                 >
                   <div className="flex-shrink-0 relative mt-1">
-                    <div className="w-10 h-10 rounded-2xl flex items-center justify-center shadow-sm bg-green-50 text-green-500">
+                    <NotifIconBox>
                       <DollarSign className="w-5 h-5" />
-                    </div>
-                    <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-amber-500 rounded-full border-[3px] border-white animate-pulse" />
+                    </NotifIconBox>
+                    <NotifUnreadDot className="animate-pulse" />
                   </div>
                   <div className="flex-1 min-w-0 flex flex-col justify-center">
                     <div className="flex justify-between items-start gap-2 mb-1">
-                      <p className="text-[11px] uppercase tracking-wider truncate font-black text-gray-900">
+                      <p
+                        className="text-[11px] uppercase tracking-wider truncate font-black"
+                        style={{ color: colors.gray[900] }}
+                      >
                         {notif.title}
                       </p>
-                      <span className="text-[9px] font-bold text-gray-400 whitespace-nowrap uppercase mt-0.5">
+                      <span
+                        className="text-[9px] font-bold whitespace-nowrap uppercase mt-0.5"
+                        style={{ color: colors.gray[400] }}
+                      >
                         {notif.date}
                       </span>
                     </div>
-                    <p className="text-xs leading-relaxed line-clamp-2 font-bold text-gray-600">
+                    <p
+                      className="text-xs leading-relaxed line-clamp-2 font-bold"
+                      style={{ color: colors.gray[600] }}
+                    >
                       {notif.description}
                     </p>
                   </div>
-                </Link>
+                </NotifItem>
               ))}
-            </div>
+            </NotifList>
 
-            <div className="pt-6 mt-2 border-t border-gray-50">
-              <Link
-                className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl bg-gray-50 text-[10px] font-black text-gray-900 uppercase tracking-widest hover:bg-amber-50 hover:text-amber-600 transition-colors group"
-                href={`/trip-partner/${username}/notifications`}
-              >
-                View All Notifications{' '}
-                <ArrowUpRight className="w-4 h-4 text-amber-500 group-hover:scale-110 transition-transform" />
-              </Link>
+            <div
+              className="pt-6 mt-2"
+              style={{ borderTop: `1px solid ${colors.gray[50]}` }}
+            >
+              <ViewAllNotifBtn href={`/trip-partner/${username}/notifications`}>
+                <span>View All Notifications</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </ViewAllNotifBtn>
             </div>
-          </div>
+          </NotificationsCard>
         </div>
-      </div>
-    </div>
+      </BottomGrid>
+    </DashboardRoot>
   );
 };
+

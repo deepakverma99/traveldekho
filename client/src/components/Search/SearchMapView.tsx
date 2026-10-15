@@ -3,13 +3,221 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import styled from 'styled-components';
 import { MapPin, Calendar, ArrowRight, X } from 'lucide-react';
 import { TripItem } from './types';
 import { typography } from '@/theme/typography';
+import { colors } from '@/theme/colors';
 
 export interface SearchMapViewProps {
   trips: TripItem[];
 }
+
+const MapRoot = styled.div`
+  position: relative;
+  width: 100%;
+  height: 600px;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  border: 1px solid ${colors.gray[200]};
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  background-color: ${colors.gray[100]};
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: 768px) {
+    height: 700px;
+  }
+`;
+
+const MapBackground = styled.div`
+  position: absolute;
+  inset: 0;
+  background-color: #e5e3df;
+  overflow: hidden;
+`;
+
+const MapSvg = styled.svg`
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.35;
+`;
+
+const PinsOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  padding: 2rem;
+  pointer-events: none;
+
+  @media (min-width: 640px) {
+    padding: 3rem;
+  }
+`;
+
+const PinWrapper = styled.div<{ $top: string; $left: string }>`
+  position: absolute;
+  top: ${({ $top }) => $top};
+  left: ${({ $left }) => $left};
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  cursor: pointer;
+`;
+
+const PinPill = styled.div<{ $isSelected: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  ${({ $isSelected }) =>
+    $isSelected
+      ? `
+    background-color: ${colors.black};
+    color: ${colors.white};
+    box-shadow: 0 0 0 4px ${colors.primaryContainer};
+  `
+      : `
+    background-color: ${colors.white};
+    color: ${colors.gray[900]};
+    border: 1px solid ${colors.gray[200]};
+
+    &:hover {
+      background-color: ${colors.primaryContainer};
+    }
+  `}
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
+const FloatingCardContainer = styled.div`
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  z-index: 30;
+
+  @media (min-width: 768px) {
+    left: auto;
+    right: 2rem;
+    width: 360px;
+  }
+`;
+
+const FloatingCard = styled.div`
+  background-color: ${colors.white};
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid ${colors.gray[200]};
+  position: relative;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.375rem;
+  border-radius: 9999px;
+  background-color: ${colors.gray[100]};
+  color: ${colors.gray[500]};
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  z-index: 10;
+
+  &:hover {
+    background-color: ${colors.gray[200]};
+  }
+`;
+
+const CardFlex = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+`;
+
+const PreviewImage = styled.div`
+  position: relative;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  flex-shrink: 0;
+  background-color: ${colors.gray[100]};
+`;
+
+const CardDetails = styled.div`
+  flex: 1;
+  min-width: 0;
+  padding-right: 1.5rem;
+`;
+
+const DestinationLabel = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 11px;
+  color: ${colors.amber[600]};
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+`;
+
+const CardTitle = styled.h4`
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: ${colors.charcoal};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 0.25rem;
+  font-family: ${typography.fonts.jakarta};
+`;
+
+const DurationText = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: ${colors.gray[500]};
+  margin-bottom: 0.5rem;
+`;
+
+const BottomRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const PriceText = styled.span`
+  font-weight: 800;
+  font-size: 0.875rem;
+  color: ${colors.gray[900]};
+`;
+
+const ViewLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: ${colors.amber[600]};
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: ${colors.black};
+  }
+`;
 
 export const SearchMapView: React.FC<SearchMapViewProps> = ({ trips }) => {
   const [selectedTrip, setSelectedTrip] = useState<TripItem | null>(
@@ -17,14 +225,11 @@ export const SearchMapView: React.FC<SearchMapViewProps> = ({ trips }) => {
   );
 
   return (
-    <div className="relative w-full h-[600px] md:h-[700px] rounded-3xl overflow-hidden border border-gray-200 shadow-md bg-stone-100 flex flex-col">
+    <MapRoot>
       {/* Map Graphic Background Simulation */}
-      <div className="absolute inset-0 bg-[#e5e3df] overflow-hidden">
+      <MapBackground>
         {/* SVG Topographic / Roads styling pattern */}
-        <svg
-          className="absolute inset-0 w-full h-full opacity-35"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+        <MapSvg xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern
               id="map-grid"
@@ -35,10 +240,10 @@ export const SearchMapView: React.FC<SearchMapViewProps> = ({ trips }) => {
               <path
                 d="M 60 0 L 0 0 0 60"
                 fill="none"
-                stroke="#cbd5e1"
+                stroke={colors.gray[300]}
                 strokeWidth="1"
               />
-              <circle cx="30" cy="30" r="1.5" fill="#94a3b8" />
+              <circle cx="30" cy="30" r="1.5" fill={colors.gray[400]} />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#map-grid)" />
@@ -53,14 +258,14 @@ export const SearchMapView: React.FC<SearchMapViewProps> = ({ trips }) => {
           <path
             d="M 100 -50 Q 300 300 700 380 T 1400 700"
             fill="none"
-            stroke="#fde68a"
+            stroke={colors.amber[200]}
             strokeWidth="3"
             strokeDasharray="6 6"
           />
-        </svg>
+        </MapSvg>
 
         {/* Map Interactive Pins */}
-        <div className="absolute inset-0 p-8 sm:p-12 pointer-events-none">
+        <PinsOverlay>
           {trips.map((trip, idx) => {
             // Distribute pins across the map area
             const positions = [
@@ -77,89 +282,78 @@ export const SearchMapView: React.FC<SearchMapViewProps> = ({ trips }) => {
             const isSelected = selectedTrip?.id === trip.id;
 
             return (
-              <div
+              <PinWrapper
                 key={trip.id}
-                style={{ top: pos.top, left: pos.left }}
-                className="absolute pointer-events-auto -translate-x-1/2 -translate-y-1/2 group z-20 cursor-pointer"
+                $top={pos.top}
+                $left={pos.left}
                 onClick={() => setSelectedTrip(trip)}
               >
-                <div
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-bold text-xs shadow-lg transition-all duration-300 transform group-hover:scale-110 ${
-                    isSelected
-                      ? 'bg-black text-white ring-4 ring-[#FFD133]'
-                      : 'bg-white text-gray-900 border border-gray-200 hover:bg-[#FFD133]'
-                  }`}
-                >
+                <PinPill $isSelected={isSelected}>
                   <MapPin
-                    className={`w-3.5 h-3.5 ${
-                      isSelected ? 'text-[#FFD133]' : 'text-red-500'
-                    }`}
+                    className="w-3.5 h-3.5"
+                    style={{
+                      color: isSelected ? colors.primaryContainer : colors.red[500],
+                    }}
                   />
                   <span>{trip.destination}</span>
                   <span className="text-[11px] font-black opacity-80">
                     ₹{trip.price}
                   </span>
-                </div>
-              </div>
+                </PinPill>
+              </PinWrapper>
             );
           })}
-        </div>
-      </div>
+        </PinsOverlay>
+      </MapBackground>
 
       {/* Selected Trip Floating Card on Map */}
       {selectedTrip && (
-        <div className="absolute bottom-6 left-6 right-6 md:left-auto md:right-8 md:w-[360px] z-30">
-          <div className="bg-white rounded-2xl p-4 shadow-2xl border border-gray-200 relative animate-fade-in-up">
-            <button
+        <FloatingCardContainer>
+          <FloatingCard className="animate-fade-in-up">
+            <CloseButton
               type="button"
               onClick={() => setSelectedTrip(null)}
-              className="absolute top-3 right-3 p-1.5 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 transition-colors z-10"
               aria-label="Close Preview"
             >
               <X className="w-4 h-4" />
-            </button>
+            </CloseButton>
 
-            <div className="flex gap-4 items-center">
-              <div className="relative w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-gray-100">
+            <CardFlex>
+              <PreviewImage>
                 <Image
                   src={selectedTrip.image}
                   alt={selectedTrip.title}
                   fill
                   className="object-cover"
                 />
-              </div>
+              </PreviewImage>
 
-              <div className="flex-1 min-w-0 pr-6">
-                <div className="flex items-center gap-1 text-[11px] text-amber-600 font-bold mb-1">
+              <CardDetails>
+                <DestinationLabel>
                   <MapPin className="w-3 h-3" />
                   <span>{selectedTrip.destination}</span>
-                </div>
-                <h4
-                  className="font-bold text-sm text-[#191c1d] truncate mb-1"
-                  style={{ fontFamily: typography.fonts.jakarta }}
-                >
+                </DestinationLabel>
+                <CardTitle>
                   {selectedTrip.title}
-                </h4>
-                <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
+                </CardTitle>
+                <DurationText>
                   <Calendar className="w-3 h-3" />
                   <span>{selectedTrip.duration}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="font-extrabold text-sm text-gray-900">
+                </DurationText>
+                <BottomRow>
+                  <PriceText>
                     ₹{selectedTrip.price.toLocaleString('en-IN')}
-                  </span>
-                  <Link
-                    href={`/trips/${selectedTrip.slug}`}
-                    className="flex items-center gap-1 text-xs font-bold text-amber-600 hover:text-black transition-colors"
-                  >
-                    View Trip <ArrowRight className="w-3 h-3" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+                  </PriceText>
+                  <ViewLink href={`/trips/${selectedTrip.slug}`}>
+                    <span>View Trip</span> <ArrowRight className="w-3 h-3" />
+                  </ViewLink>
+                </BottomRow>
+              </CardDetails>
+            </CardFlex>
+          </FloatingCard>
+        </FloatingCardContainer>
       )}
-    </div>
+    </MapRoot>
   );
 };
+

@@ -1,50 +1,122 @@
 'use client';
 
 import React from 'react';
+import styled from 'styled-components';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ShieldCheck } from 'lucide-react';
 import { TripPartner } from './types';
+import { colors } from '@/theme/colors';
 
 interface TripPartnerCardProps {
   partner: TripPartner;
 }
 
+const CardContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: ${colors.gray[50]};
+  border: 1px solid ${colors.gray[100]};
+  padding: 0.75rem 1.25rem 0.75rem 0.75rem;
+  border-radius: 1rem;
+  width: fit-content;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+
+  &:hover {
+    background-color: ${colors.gray[100]}CC;
+  }
+`;
+
+const PartnerLogoBox = styled.div`
+  position: relative;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: ${colors.white};
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid ${colors.gray[100]};
+  overflow: hidden;
+  flex-shrink: 0;
+
+  img {
+    object-fit: contain;
+    padding: 0.375rem;
+    transition: transform 0.2s ease;
+  }
+
+  ${CardContainer}:hover & img {
+    transform: scale(1.05);
+  }
+`;
+
+const ManagedByLabel = styled.p`
+  font-size: 9px;
+  font-weight: 900;
+  color: ${colors.gray[400]};
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+`;
+
+const PartnerName = styled.p`
+  font-weight: 800;
+  color: ${colors.gray[900]};
+  font-size: 0.875rem;
+  letter-spacing: -0.01em;
+  text-transform: capitalize;
+  transition: color 0.15s ease;
+
+  ${CardContainer}:hover & {
+    color: ${colors.amber[600]};
+  }
+`;
+
+const VerifiedBadge = styled.div`
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background-color: ${colors.green[50]};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+`;
+
 export const TripPartnerCard: React.FC<TripPartnerCardProps> = ({ partner }) => {
   return (
     <section>
       <Link href={`/trip-partners/${partner.slug}`}>
-        <div className="flex items-center gap-4 bg-gray-50 border border-gray-100 p-3 pr-5 rounded-2xl w-fit hover:bg-gray-100/80 transition-colors cursor-pointer group shadow-2xs">
-          <div className="relative w-10 h-10 bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden shrink-0">
+        <CardContainer>
+          <PartnerLogoBox>
             <Image
               src={partner.logo}
               alt={partner.name}
               fill
               sizes="40px"
-              className="object-contain p-1.5 group-hover:scale-105 transition-transform"
             />
-          </div>
+          </PartnerLogoBox>
 
-          <div className="flex-1 min-w-0">
-            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">
-              Managed by
-            </p>
-            <p className="font-extrabold text-gray-900 text-sm tracking-tight capitalize group-hover:text-amber-600 transition-colors">
-              {partner.name}
-            </p>
+          <div style={{ flex: '1', minWidth: 0 }}>
+            <ManagedByLabel>Managed by</ManagedByLabel>
+            <PartnerName>{partner.name}</PartnerName>
           </div>
 
           {partner.isVerified && (
-            <div className="flex items-center gap-2">
-              <div
-                className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center shrink-0"
-                title="Scout Verified Partner"
-              >
-                <ShieldCheck className="w-4 h-4 text-green-600" />
-              </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <VerifiedBadge title="Scout Verified Partner">
+                <ShieldCheck
+                  style={{
+                    width: '1rem',
+                    height: '1rem',
+                    color: colors.green[600],
+                  }}
+                />
+              </VerifiedBadge>
             </div>
           )}
-        </div>
+        </CardContainer>
       </Link>
     </section>
   );

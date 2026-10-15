@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, Suspense } from 'react';
+import styled from 'styled-components';
+import { colors } from '@/theme/colors';
 import { TripPartnerHeader } from './TripPartnerHeader';
 import { TripPartnerSidebar } from './TripPartnerSidebar';
 import { TripPartnerMobileNav } from './TripPartnerMobileNav';
@@ -11,6 +13,56 @@ export interface TripPartnerLayoutProps {
   username: string;
 }
 
+const LayoutRoot = styled.div`
+  min-height: 100vh;
+  background-color: ${colors.cream};
+  display: flex;
+  width: 100%;
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  flex: 1;
+  width: 100%;
+  min-height: 100vh;
+`;
+
+const SidebarFallback = styled.div`
+  width: 16rem;
+  height: 100vh;
+  display: none;
+  background-color: ${colors.offWhite};
+  border-right: 1px solid ${colors.amber[200]}80;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
+`;
+
+const MainWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 100vh;
+`;
+
+const MainContent = styled.main`
+  flex-grow: 1;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding-bottom: 6rem;
+
+  @media (min-width: 768px) {
+    padding-bottom: 3rem;
+  }
+`;
+
 export const TripPartnerLayout: React.FC<TripPartnerLayoutProps> = ({
   children,
   username,
@@ -19,19 +71,21 @@ export const TripPartnerLayout: React.FC<TripPartnerLayoutProps> = ({
   const displayName = partner?.displayName || formatPartnerDisplayName(username);
 
   return (
-    <div className="min-h-screen bg-[#FFFBF0] flex flex-col">
-      <TripPartnerHeader username={username} displayName={displayName} />
-      <div className="flex flex-1 max-w-[1600px] w-full mx-auto">
-        <Suspense fallback={<div className="w-64 hidden md:flex" />}>
+    <LayoutRoot>
+      <ContentContainer>
+        <Suspense fallback={<SidebarFallback />}>
           <TripPartnerSidebar username={username} />
         </Suspense>
-        <main className="flex-grow w-full overflow-hidden pb-24 md:pb-12">
-          {children}
-        </main>
-      </div>
+        <MainWrapper>
+          <TripPartnerHeader username={username} displayName={displayName} />
+          <MainContent>
+            {children}
+          </MainContent>
+        </MainWrapper>
+      </ContentContainer>
       <Suspense fallback={null}>
         <TripPartnerMobileNav username={username} />
       </Suspense>
-    </div>
+    </LayoutRoot>
   );
 };

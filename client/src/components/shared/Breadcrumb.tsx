@@ -2,8 +2,10 @@
 
 import React from 'react';
 import Link from 'next/link';
+import styled from 'styled-components';
 import { ChevronRight, Home } from 'lucide-react';
 import { typography } from '@/theme/typography';
+import { colors } from '@/theme/colors';
 
 export interface BreadcrumbItem {
   label: string;
@@ -17,56 +19,117 @@ export interface BreadcrumbProps {
   showHomeIcon?: boolean;
 }
 
+const Nav = styled.nav`
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-family: ${typography.fonts.jakarta};
+
+  @media (min-width: 640px) {
+    font-size: 0.875rem;
+  }
+`;
+
+const List = styled.ol`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+
+  @media (min-width: 640px) {
+    gap: 0.5rem;
+  }
+`;
+
+const Item = styled.li`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+
+  @media (min-width: 640px) {
+    gap: 0.5rem;
+  }
+`;
+
+const Separator = styled(ChevronRight)`
+  width: 0.875rem;
+  height: 0.875rem;
+  color: ${colors.gray[400]};
+  flex-shrink: 0;
+  user-select: none;
+`;
+
+const CurrentPage = styled.span`
+  font-weight: 700;
+  color: ${colors.amber[600]};
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+
+  svg {
+    width: 0.875rem;
+    height: 0.875rem;
+    color: ${colors.amber[600]};
+  }
+`;
+
+const BreadcrumbLink = styled(Link)`
+  font-weight: 500;
+  color: ${colors.gray[500]};
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  transition: color 0.2s ease;
+  text-decoration: none;
+
+  svg {
+    width: 0.875rem;
+    height: 0.875rem;
+    color: ${colors.gray[400]};
+    transition: color 0.2s ease;
+  }
+
+  &:hover {
+    color: ${colors.amber[600]};
+
+    svg {
+      color: ${colors.amber[600]};
+    }
+  }
+`;
+
 export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   items,
   className = '',
   showHomeIcon = true,
 }) => {
   return (
-    <nav
-      aria-label="Breadcrumb"
-      className={`flex items-center text-xs sm:text-sm ${className}`}
-      style={{ fontFamily: typography.fonts.jakarta }}
-    >
-      <ol className="flex items-center flex-wrap gap-1.5 sm:gap-2">
+    <Nav aria-label="Breadcrumb" className={className}>
+      <List>
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
           const isHome = index === 0 && showHomeIcon;
 
           return (
-            <li key={index} className="inline-flex items-center gap-1.5 sm:gap-2">
-              {index > 0 && (
-                <ChevronRight
-                  className="w-3.5 h-3.5 text-gray-400 shrink-0 select-none"
-                  aria-hidden="true"
-                />
-              )}
+            <Item key={index}>
+              {index > 0 && <Separator aria-hidden="true" />}
 
               {isLast || !item.href ? (
-                <span
-                  aria-current="page"
-                  className="font-bold text-amber-600 inline-flex items-center gap-1.5"
-                >
-                  {isHome && (item.icon || <Home className="w-3.5 h-3.5 text-amber-600" />)}
+                <CurrentPage aria-current="page">
+                  {isHome && (item.icon || <Home />)}
                   <span>{item.label}</span>
-                </span>
+                </CurrentPage>
               ) : (
-                <Link
-                  href={item.href}
-                  className="font-medium text-gray-500 hover:text-amber-600 transition-colors inline-flex items-center gap-1.5 group"
-                >
-                  {isHome && (
-                    item.icon || (
-                      <Home className="w-3.5 h-3.5 text-gray-400 group-hover:text-amber-600 transition-colors" />
-                    )
-                  )}
+                <BreadcrumbLink href={item.href}>
+                  {isHome && (item.icon || <Home />)}
                   <span>{item.label}</span>
-                </Link>
+                </BreadcrumbLink>
               )}
-            </li>
+            </Item>
           );
         })}
-      </ol>
-    </nav>
+      </List>
+    </Nav>
   );
 };
+

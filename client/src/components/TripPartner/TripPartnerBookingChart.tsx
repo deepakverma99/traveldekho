@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import styled from 'styled-components';
+import { colors } from '@/theme/colors';
 
 interface ChartPoint {
   day: string;
@@ -16,6 +18,95 @@ const DEFAULT_DATA: ChartPoint[] = [
   { day: 'Sat', count: 4 },
   { day: 'Sun', count: 2 },
 ];
+
+const ChartCard = styled.div`
+  margin-bottom: 3rem;
+  background-color: ${colors.white};
+  border: 1px solid ${colors.gray[100]};
+  border-radius: 40px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (min-width: 640px) {
+    padding: 2.5rem;
+  }
+`;
+
+const HeaderRow = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    align-items: center;
+  }
+`;
+
+const Title = styled.h3`
+  font-size: 1.25rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  color: ${colors.gray[900]};
+
+  @media (min-width: 640px) {
+    font-size: 1.5rem;
+  }
+`;
+
+const Highlight = styled.span`
+  color: ${colors.amber[500]};
+`;
+
+const Subtitle = styled.p`
+  font-size: 10px;
+  font-weight: 900;
+  color: ${colors.gray[400]};
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-top: 0.25rem;
+`;
+
+const LegendRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const LegendItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const LegendDot = styled.div<{ $color: string }>`
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+  background-color: ${({ $color }) => $color};
+`;
+
+const LegendText = styled.span`
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: ${colors.gray[400]};
+`;
+
+const SvgContainer = styled.div`
+  width: 100%;
+  position: relative;
+  overflow: visible;
+`;
 
 export const TripPartnerBookingChart: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -61,32 +152,32 @@ export const TripPartnerBookingChart: React.FC = () => {
   const areaPath = `${linePath} L ${points[points.length - 1].x},${paddingTop + chartHeight} L ${points[0].x},${paddingTop + chartHeight} Z`;
 
   return (
-    <div className="mb-12 bg-white border border-gray-100 rounded-[40px] p-6 sm:p-10 shadow-sm hover:shadow-lg transition-all duration-300">
+    <ChartCard>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+      <HeaderRow>
         <div>
-          <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-gray-900">
-            Booking <span className="text-amber-500">Volume</span>
-          </h3>
-          <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mt-1">
+          <Title>
+            Booking <Highlight>Volume</Highlight>
+          </Title>
+          <Subtitle>
             Real-time performance analytics
-          </p>
+          </Subtitle>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-amber-500" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Reserved</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-gray-200" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Drafts</span>
-          </div>
-        </div>
-      </div>
+        <LegendRow>
+          <LegendItem>
+            <LegendDot $color={colors.amber[500]} />
+            <LegendText>Reserved</LegendText>
+          </LegendItem>
+          <LegendItem>
+            <LegendDot $color={colors.gray[200]} />
+            <LegendText>Drafts</LegendText>
+          </LegendItem>
+        </LegendRow>
+      </HeaderRow>
 
       {/* SVG Responsive Chart */}
-      <div className="w-full relative overflow-visible">
+      <SvgContainer>
         <svg
           role="img"
           aria-label="Booking Volume Chart"
@@ -95,11 +186,11 @@ export const TripPartnerBookingChart: React.FC = () => {
         >
           <defs>
             <linearGradient id="gradient-bookings" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#f59e0b" stopOpacity="0.35" />
-              <stop offset="95%" stopColor="#f59e0b" stopOpacity="0.0" />
+              <stop offset="5%" stopColor={colors.amber[500]} stopOpacity="0.35" />
+              <stop offset="95%" stopColor={colors.amber[500]} stopOpacity="0.0" />
             </linearGradient>
             <filter id="shadow-bookings" height="130%">
-              <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#f59e0b" floodOpacity="0.25" />
+              <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor={colors.amber[500]} floodOpacity="0.25" />
             </filter>
           </defs>
 
@@ -113,14 +204,14 @@ export const TripPartnerBookingChart: React.FC = () => {
                   y1={y}
                   x2={width - paddingRight}
                   y2={y}
-                  stroke="#f1f5f9"
+                  stroke={colors.gray[100]}
                   strokeDasharray="4 4"
                   strokeWidth="1.5"
                 />
                 <text
                   x={paddingLeft - 14}
                   y={y + 4}
-                  fill="#94a3b8"
+                  fill={colors.gray[400]}
                   fontSize="12"
                   fontWeight="600"
                   textAnchor="end"
@@ -138,7 +229,7 @@ export const TripPartnerBookingChart: React.FC = () => {
           <path
             d={linePath}
             fill="none"
-            stroke="#f59e0b"
+            stroke={colors.amber[500]}
             strokeWidth="3.5"
             strokeLinecap="round"
             filter="url(#shadow-bookings)"
@@ -163,8 +254,8 @@ export const TripPartnerBookingChart: React.FC = () => {
                     cx={pt.x}
                     cy={pt.y}
                     r="8"
-                    fill="#fef3c7"
-                    stroke="#f59e0b"
+                    fill={colors.amber[100]}
+                    stroke={colors.amber[500]}
                     strokeWidth="2"
                     className="animate-ping"
                   />
@@ -175,8 +266,8 @@ export const TripPartnerBookingChart: React.FC = () => {
                   cx={pt.x}
                   cy={pt.y}
                   r={isHovered ? '6' : '4.5'}
-                  fill="#ffffff"
-                  stroke="#f59e0b"
+                  fill={colors.white}
+                  stroke={colors.amber[500]}
                   strokeWidth="3"
                   className="transition-all duration-200"
                 />
@@ -185,7 +276,7 @@ export const TripPartnerBookingChart: React.FC = () => {
                 <text
                   x={pt.x}
                   y={height - 10}
-                  fill={isHovered ? '#1e293b' : '#64748b'}
+                  fill={isHovered ? colors.gray[800] : colors.gray[500]}
                   fontSize="12"
                   fontWeight={isHovered ? '800' : '600'}
                   textAnchor="middle"
@@ -203,13 +294,13 @@ export const TripPartnerBookingChart: React.FC = () => {
                       width="84"
                       height="26"
                       rx="8"
-                      fill="#191c1d"
+                      fill={colors.charcoal}
                       className="shadow-lg"
                     />
                     <text
                       x="0"
                       y="5"
-                      fill="#ffffff"
+                      fill={colors.white}
                       fontSize="11"
                       fontWeight="700"
                       textAnchor="middle"
@@ -222,7 +313,8 @@ export const TripPartnerBookingChart: React.FC = () => {
             );
           })}
         </svg>
-      </div>
-    </div>
+      </SvgContainer>
+    </ChartCard>
   );
 };
+

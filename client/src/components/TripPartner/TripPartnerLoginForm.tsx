@@ -9,6 +9,86 @@ import { colors } from '@/theme/colors';
 import { typography } from '@/theme/typography';
 import { extractUsernameFromEmail, savePartnerSession } from './utils/partnerAuth';
 
+const FormRoot = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+const SuccessAlert = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background-color: ${colors.green[50]};
+  border: 1px solid ${colors.green[100]};
+  color: ${colors.green[700]};
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 0.75rem;
+`;
+
+const SuccessIcon = styled(CheckCircle2)`
+  width: 1rem;
+  height: 1rem;
+  color: ${colors.green[600]};
+  flex-shrink: 0;
+`;
+
+const InputWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
+const StyledInput = styled.input<{ $hasRightIcon?: boolean }>`
+  width: 100%;
+  background-color: ${colors.gray[100]};
+  border: 2px solid ${colors.transparent};
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  padding-right: ${({ $hasRightIcon }) => ($hasRightIcon ? '3rem' : '1.25rem')};
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: ${colors.gray[900]};
+  outline: none;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  font-family: ${typography.fonts.sans};
+
+  &::placeholder {
+    color: ${colors.gray[400]};
+  }
+
+  &:hover {
+    border-color: ${colors.gray[300]};
+  }
+
+  &:focus {
+    border-color: ${colors.primaryContainer};
+    box-shadow: 0 0 0 4px ${colors.primaryContainer}33;
+  }
+`;
+
+const ToggleVisibilityBtn = styled.button`
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: ${colors.gray[400]};
+  padding: 0.25rem;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: ${colors.black};
+  }
+`;
+
 const SearchSubmitButton = styled(motion.button)`
   width: 100%;
   border-radius: 0.75rem;
@@ -90,17 +170,16 @@ export const TripPartnerLoginForm: React.FC = () => {
   };
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
+    <FormRoot onSubmit={handleSubmit}>
       {isSuccess && (
-        <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 text-green-700 text-xs font-bold rounded-xl animate-fade-in-up">
-          <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />
+        <SuccessAlert className="animate-fade-in-up">
+          <SuccessIcon />
           <span>Login successful! Redirecting to partner dashboard...</span>
-        </div>
+        </SuccessAlert>
       )}
 
       <div>
-        <input
-          className="w-full bg-[#f4f5f7] border-2 border-transparent hover:border-gray-300 focus:border-[#FFD133] focus:ring-4 focus:ring-[#FFD133]/20 rounded-xl py-4 px-5 text-sm font-bold text-gray-900 placeholder:text-gray-400 outline-none transition-all shadow-sm"
+        <StyledInput
           placeholder="Trip Partner Email"
           type="email"
           required
@@ -112,9 +191,9 @@ export const TripPartnerLoginForm: React.FC = () => {
         />
       </div>
 
-      <div className="relative">
-        <input
-          className="w-full bg-[#f4f5f7] border-2 border-transparent hover:border-gray-300 focus:border-[#FFD133] focus:ring-4 focus:ring-[#FFD133]/20 rounded-xl py-4 px-5 pr-12 text-sm font-bold text-gray-900 placeholder:text-gray-400 outline-none transition-all shadow-sm"
+      <InputWrapper>
+        <StyledInput
+          $hasRightIcon
           placeholder="Trip Partner Password"
           type={showPassword ? 'text' : 'password'}
           required
@@ -123,10 +202,9 @@ export const TripPartnerLoginForm: React.FC = () => {
           autoComplete="current-password"
           aria-label="Trip Partner Password"
         />
-        <button
+        <ToggleVisibilityBtn
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-colors cursor-pointer p-1"
           aria-label={showPassword ? 'Hide password' : 'Show password'}
         >
           {showPassword ? (
@@ -134,8 +212,8 @@ export const TripPartnerLoginForm: React.FC = () => {
           ) : (
             <Eye className="w-4 h-4" aria-hidden="true" />
           )}
-        </button>
-      </div>
+        </ToggleVisibilityBtn>
+      </InputWrapper>
 
       <SearchSubmitButton
         type="submit"
@@ -152,6 +230,7 @@ export const TripPartnerLoginForm: React.FC = () => {
           <span>SECURE LOGIN</span>
         )}
       </SearchSubmitButton>
-    </form>
+    </FormRoot>
   );
 };
+

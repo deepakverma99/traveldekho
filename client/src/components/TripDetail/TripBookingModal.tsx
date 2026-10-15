@@ -1,9 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import { X, CheckCircle, Calendar, Users, ShieldCheck, ArrowRight } from 'lucide-react';
 import { TripDetail, DateSlot } from './types';
 import { typography } from '@/theme/typography';
+import { colors } from '@/theme/colors';
 
 interface TripBookingModalProps {
   trip: TripDetail;
@@ -12,6 +14,152 @@ interface TripBookingModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+`;
+
+const Backdrop = styled.div`
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: opacity 0.2s ease;
+`;
+
+const ModalCard = styled.div`
+  position: relative;
+  background-color: ${colors.white};
+  border-radius: 1.5rem;
+  max-width: 32rem;
+  width: 100%;
+  padding: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid ${colors.gray[100]};
+  z-index: 10;
+  overflow: hidden;
+
+  @media (min-width: 640px) {
+    padding: 2rem;
+  }
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  padding: 0.5rem;
+  border-radius: 9999px;
+  background-color: ${colors.gray[100]};
+  color: ${colors.gray[500]};
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: ${colors.gray[200]};
+  }
+`;
+
+const ReservationBadge = styled.span`
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: ${colors.amber[600]};
+  background-color: ${colors.amber[50]};
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  border: 1px solid ${colors.amber[200]}80;
+`;
+
+const ModalTitle = styled.h3`
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: ${colors.gray[900]};
+  margin-top: 0.5rem;
+  letter-spacing: -0.01em;
+  font-family: ${typography.fonts.jakarta};
+`;
+
+const BookingInfoPill = styled.div`
+  background-color: ${colors.gray[50]};
+  border-radius: 1rem;
+  padding: 1rem;
+  border: 1px solid ${colors.gray[100]};
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const CalendarSquare = styled.div`
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.75rem;
+  background-color: ${colors.amber[100]};
+  color: ${colors.amber[700]};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+`;
+
+const FormInput = styled.input`
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid ${colors.gray[200]};
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: ${colors.gray[900]};
+  outline: none;
+  transition: border-color 0.15s ease;
+
+  &:focus {
+    border-color: ${colors.amber[400]};
+  }
+`;
+
+const FormLabel = styled.label`
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: ${colors.gray[700]};
+  margin-bottom: 0.375rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+`;
+
+const CheckoutButton = styled.button`
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.875rem 1rem;
+  background-color: ${colors.amber[400]};
+  color: ${colors.gray[900]};
+  font-weight: 800;
+  border-radius: 0.75rem;
+  border: none;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: ${colors.black};
+    color: ${colors.white};
+  }
+`;
 
 export const TripBookingModal: React.FC<TripBookingModalProps> = ({
   trip,
@@ -35,157 +183,189 @@ export const TripBookingModal: React.FC<TripBookingModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <ModalOverlay>
       {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
-        onClick={onClose}
-        aria-hidden="true"
-      />
+      <Backdrop onClick={onClose} aria-hidden="true" />
 
       {/* Modal Card */}
-      <div className="relative bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 z-10 overflow-hidden animate-fade-in-up">
+      <ModalCard className="animate-fade-in-up">
         {/* Close Button */}
-        <button
+        <CloseButton
           type="button"
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 transition-colors cursor-pointer"
           aria-label="Close booking modal"
         >
-          <X className="w-4 h-4" />
-        </button>
+          <X style={{ width: '1rem', height: '1rem' }} />
+        </CloseButton>
 
         {!isSuccess ? (
           <div>
-            <div className="mb-6">
-              <span className="text-[10px] font-black uppercase tracking-widest text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200/50">
-                Confirm Reservation
-              </span>
-              <h3
-                className="text-2xl font-black text-gray-900 mt-2 tracking-tight"
-                style={{ fontFamily: typography.fonts.jakarta }}
-              >
-                {trip.title}
-              </h3>
+            <div style={{ marginBottom: '1.5rem' }}>
+              <ReservationBadge>Confirm Reservation</ReservationBadge>
+              <ModalTitle>{trip.title}</ModalTitle>
             </div>
 
             {/* Selected Booking Info Pill */}
-            <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100 mb-6 flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-                  <Calendar className="w-4 h-4" />
-                </div>
+            <BookingInfoPill>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+                <CalendarSquare>
+                  <Calendar style={{ width: '1rem', height: '1rem' }} />
+                </CalendarSquare>
                 <div>
-                  <p className="text-xs font-bold text-gray-900">
+                  <p style={{ fontSize: '0.75rem', fontWeight: 700, color: colors.gray[900] }}>
                     {selectedSlot.date}
                   </p>
-                  <p className="text-[11px] text-gray-500 font-medium">
+                  <p style={{ fontSize: '11px', color: colors.gray[500], fontWeight: 500 }}>
                     {trip.duration}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-purple-600" />
-                <span className="text-xs font-black text-gray-900">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Users style={{ width: '1rem', height: '1rem', color: colors.purple[600] }} />
+                <span style={{ fontSize: '0.75rem', fontWeight: 900, color: colors.gray[900] }}>
                   {travellers} {travellers === 1 ? 'Traveller' : 'Travellers'}
                 </span>
               </div>
-            </div>
+            </BookingInfoPill>
 
             {/* Booking Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">
-                  Full Name
-                </label>
-                <input
+                <FormLabel>Full Name</FormLabel>
+                <FormInput
                   type="text"
                   required
                   placeholder="e.g. Deepak Verma"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-hidden focus:border-amber-400 text-sm font-medium transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">
-                  Email Address
-                </label>
-                <input
+                <FormLabel>Email Address</FormLabel>
+                <FormInput
                   type="email"
                   required
                   placeholder="e.g. traveller@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-hidden focus:border-amber-400 text-sm font-medium transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">
-                  Phone Number
-                </label>
-                <input
+                <FormLabel>Phone Number</FormLabel>
+                <FormInput
                   type="tel"
                   required
                   placeholder="+91 98765 43210"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-hidden focus:border-amber-400 text-sm font-medium transition-colors"
                 />
               </div>
 
               {/* Price Breakdown */}
-              <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
+              <div
+                style={{
+                  paddingTop: '0.75rem',
+                  borderTop: `1px solid ${colors.gray[100]}`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
                 <div>
-                  <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                  <p
+                    style={{
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      color: colors.gray[400],
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
                     Total Payable Amount
                   </p>
-                  <p className="text-2xl font-black text-gray-900">
+                  <p style={{ fontSize: '1.5rem', fontWeight: 900, color: colors.gray[900] }}>
                     ₹{totalAmount.toLocaleString('en-IN')}
                   </p>
                 </div>
-                <div className="flex items-center gap-1.5 text-xs text-green-700 bg-green-50 px-3 py-1.5 rounded-full border border-green-100">
-                  <ShieldCheck className="w-4 h-4" />
-                  <span className="font-bold">Scout Protected</span>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.375rem',
+                    fontSize: '0.75rem',
+                    color: colors.green[700],
+                    backgroundColor: colors.green[50],
+                    padding: '0.375rem 0.75rem',
+                    borderRadius: '9999px',
+                    border: `1px solid ${colors.green[100]}`,
+                  }}
+                >
+                  <ShieldCheck style={{ width: '1rem', height: '1rem' }} />
+                  <span style={{ fontWeight: 700 }}>Scout Protected</span>
                 </div>
               </div>
 
-              <button
-                type="submit"
-                className="w-full mt-2 py-3.5 bg-amber-400 hover:bg-black hover:text-white text-gray-900 font-extrabold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
-              >
+              <CheckoutButton type="submit">
                 <span>Proceed to Secure Checkout</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+                <ArrowRight style={{ width: '1rem', height: '1rem' }} />
+              </CheckoutButton>
             </form>
           </div>
         ) : (
-          <div className="text-center py-6">
-            <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
-              <CheckCircle className="w-8 h-8" />
+          <div style={{ textAlign: 'center', paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
+            <div
+              style={{
+                width: '4rem',
+                height: '4rem',
+                backgroundColor: colors.green[100],
+                color: colors.green[600],
+                borderRadius: '9999px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1rem',
+              }}
+              className="animate-bounce"
+            >
+              <CheckCircle style={{ width: '2rem', height: '2rem' }} />
             </div>
             <h3
-              className="text-2xl font-black text-gray-900 mb-2"
-              style={{ fontFamily: typography.fonts.jakarta }}
+              style={{
+                fontSize: '1.5rem',
+                fontWeight: 900,
+                color: colors.gray[900],
+                marginBottom: '0.5rem',
+                fontFamily: typography.fonts.jakarta,
+              }}
             >
               Booking Request Received!
             </h3>
-            <p className="text-sm text-gray-600 mb-6 leading-relaxed">
-              Thank you, <span className="font-bold text-gray-900">{name}</span>! Our certified Scout Captain will contact you via WhatsApp / Phone at <span className="font-bold text-gray-900">{phone}</span> with your itinerary details and confirmation voucher.
+            <p style={{ fontSize: '0.875rem', color: colors.gray[600], marginBottom: '1.5rem', lineHeight: 1.625 }}>
+              Thank you, <span style={{ fontWeight: 700, color: colors.gray[900] }}>{name}</span>! Our certified Scout Captain will contact you via WhatsApp / Phone at <span style={{ fontWeight: 700, color: colors.gray[900] }}>{phone}</span> with your itinerary details and confirmation voucher.
             </p>
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-3 bg-amber-400 hover:bg-amber-500 text-black font-extrabold text-sm rounded-xl transition-all cursor-pointer"
+              style={{
+                padding: '0.75rem 1.5rem',
+                backgroundColor: colors.amber[400],
+                color: colors.black,
+                fontWeight: 800,
+                fontSize: '0.875rem',
+                borderRadius: '0.75rem',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'background-color 0.15s ease',
+              }}
             >
               Back to Trip Details
             </button>
           </div>
         )}
-      </div>
-    </div>
+      </ModalCard>
+    </ModalOverlay>
   );
 };
