@@ -11,8 +11,6 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Filter as FilterIcon,
-  RotateCcw,
 } from 'lucide-react';
 import { FilterState } from './types';
 import { typography } from '@/theme/typography';
@@ -20,7 +18,8 @@ import { typography } from '@/theme/typography';
 export interface SearchFilterSidebarProps {
   filters: FilterState;
   onFilterChange: (filters: FilterState) => void;
-  onResetFilters: () => void;
+  onResetFilters?: () => void;
+  className?: string;
 }
 
 const CATEGORIES = [
@@ -42,7 +41,7 @@ const DIFFICULTIES = ['Easy', 'Moderate', 'Challenging', 'Extreme'];
 export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
   filters,
   onFilterChange,
-  onResetFilters,
+  className,
 }) => {
   const [minBudgetInput, setMinBudgetInput] = useState<string>(
     filters.minBudget ? filters.minBudget.toString() : ''
@@ -94,49 +93,23 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
     });
   };
 
-  const hasActiveFilters =
-    filters.destination !== '' ||
-    filters.minBudget !== null ||
-    filters.maxBudget !== null ||
-    filters.selectedCategories.length > 0 ||
-    filters.selectedDurations.length > 0 ||
-    filters.selectedDifficulties.length > 0 ||
-    filters.selectedDate !== null;
-
   return (
-    <aside className="w-full lg:w-[400px] shrink-0 bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.04)] p-6 overflow-hidden h-fit border border-gray-100">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-2">
-          <FilterIcon className="w-5 h-5 text-blue-500" />
-          <h2
-            className="text-[16px] font-extrabold text-[#191c1d]"
-            style={{ fontFamily: typography.fonts.jakarta }}
-          >
-            Filters
-          </h2>
-        </div>
-        {hasActiveFilters && (
-          <button
-            type="button"
-            onClick={onResetFilters}
-            className="flex items-center gap-1 text-xs font-bold text-amber-600 hover:text-black transition-colors"
-          >
-            <RotateCcw className="w-3 h-3" />
-            Reset all
-          </button>
-        )}
-      </div>
-
+    <aside
+      className={`w-full bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.04)] p-6 overflow-hidden h-fit border border-gray-100 ${
+        className || ''
+      }`}
+    >
       {/* 1. Destination */}
-      <div className="border-t border-gray-100 py-4">
+      <div className="pb-4">
         <button
           type="button"
           onClick={() => toggleSection('destination')}
           className="flex items-center justify-between w-full text-left cursor-pointer"
         >
-          <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-red-500" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-red-50 text-red-500 flex items-center justify-center shrink-0">
+              <MapPin className="w-4 h-4" />
+            </div>
             <span
               className="text-[14px] font-extrabold text-[#191c1d]"
               style={{ fontFamily: typography.fonts.jakarta }}
@@ -177,8 +150,10 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
           onClick={() => toggleSection('budget')}
           className="flex items-center justify-between w-full text-left cursor-pointer"
         >
-          <div className="flex items-center gap-2">
-            <Wallet className="w-4 h-4 text-green-500" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <Wallet className="w-4 h-4" />
+            </div>
             <span
               className="text-[14px] font-extrabold text-[#191c1d]"
               style={{ fontFamily: typography.fonts.jakarta }}
@@ -229,8 +204,10 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
           onClick={() => toggleSection('category')}
           className="flex items-center justify-between w-full text-left cursor-pointer"
         >
-          <div className="flex items-center gap-2">
-            <Tags className="w-4 h-4 text-orange-400" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center shrink-0">
+              <Tags className="w-4 h-4" />
+            </div>
             <span
               className="text-[14px] font-extrabold text-[#191c1d]"
               style={{ fontFamily: typography.fonts.jakarta }}
@@ -277,8 +254,10 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
           onClick={() => toggleSection('duration')}
           className="flex items-center justify-between w-full text-left cursor-pointer"
         >
-          <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-indigo-500" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+              <Clock className="w-4 h-4" />
+            </div>
             <span
               className="text-[14px] font-extrabold text-[#191c1d]"
               style={{ fontFamily: typography.fonts.jakarta }}
@@ -325,8 +304,10 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
           onClick={() => toggleSection('difficulty')}
           className="flex items-center justify-between w-full text-left cursor-pointer"
         >
-          <div className="flex items-center gap-2">
-            <Mountain className="w-4 h-4 text-red-400" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-rose-50 text-rose-500 flex items-center justify-center shrink-0">
+              <Mountain className="w-4 h-4" />
+            </div>
             <span
               className="text-[14px] font-extrabold text-[#191c1d]"
               style={{ fontFamily: typography.fonts.jakarta }}
@@ -373,8 +354,10 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
           onClick={() => toggleSection('departureDate')}
           className="flex items-center justify-between w-full text-left cursor-pointer"
         >
-          <div className="flex items-center gap-2">
-            <CalendarIcon className="w-4 h-4 text-blue-500" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+              <CalendarIcon className="w-4 h-4" />
+            </div>
             <span
               className="text-[14px] font-extrabold text-[#191c1d]"
               style={{ fontFamily: typography.fonts.jakarta }}

@@ -4,3 +4,5 @@ export * from './shared';
 export * from './Home';
 export * from './Auth';
 export * from './Search';
+export * from './TripDetail';
+export * from './TripPartner';

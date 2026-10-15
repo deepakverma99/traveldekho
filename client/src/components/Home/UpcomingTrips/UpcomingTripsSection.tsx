@@ -200,8 +200,8 @@ export const UpcomingTripsSection: React.FC = () => {
 
           {/* Horizontal Scroll Track */}
           <ScrollTrack ref={trackRef}>
-            {upcomingTripsData.map((trip) => (
-              <TripCard key={trip.id} trip={trip} />
+            {upcomingTripsData.map((trip, idx) => (
+              <TripCard key={trip.id} trip={trip} priority={idx < 4} />
             ))}
           </ScrollTrack>
         </div>

@@ -1,10 +1,10 @@
 export const typography = {
   fonts: {
     sans: 'var(--font-montserrat), "Montserrat", sans-serif',
+    montserrat: 'var(--font-montserrat), "Montserrat", sans-serif',
     jakarta: 'var(--font-jakarta), "Plus Jakarta Sans", sans-serif',
     caveat: 'var(--font-caveat), cursive',
     vietnam: 'var(--font-vietnam), "Be Vietnam Pro", sans-serif',
-    permanentMarker: 'var(--font-permanent-marker), cursive',
     serif: 'font-serif',
   },
   sizes: {

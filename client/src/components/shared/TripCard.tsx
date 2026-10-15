@@ -109,9 +109,10 @@ const TagBadge = styled.span<{ $variant?: 'amber' | 'blue' | 'gray' }>`
 
 export interface TripCardProps {
   trip: TripItem;
+  priority?: boolean;
 }
 
-export const TripCard: React.FC<TripCardProps> = ({ trip }) => {
+export const TripCard: React.FC<TripCardProps> = ({ trip, priority = false }) => {
   const [isLiked, setIsLiked] = useState<boolean>(false);
 
   return (
@@ -125,6 +126,8 @@ export const TripCard: React.FC<TripCardProps> = ({ trip }) => {
             fill
             sizes="(max-width: 640px) 235px, 280px"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
+            priority={priority}
+            loading={priority ? 'eager' : undefined}
           />
 
           {/* Free Goodies Badge */}

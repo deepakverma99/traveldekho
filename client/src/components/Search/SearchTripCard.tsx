@@ -9,9 +9,10 @@ import { typography } from '@/theme/typography';
 
 export interface SearchTripCardProps {
   trip: TripItem;
+  priority?: boolean;
 }
 
-export const SearchTripCard: React.FC<SearchTripCardProps> = ({ trip }) => {
+export const SearchTripCard: React.FC<SearchTripCardProps> = ({ trip, priority = false }) => {
   const [isLiked, setIsLiked] = useState<boolean>(false);
 
   return (
@@ -29,6 +30,8 @@ export const SearchTripCard: React.FC<SearchTripCardProps> = ({ trip }) => {
             fill
             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 300px"
             className="object-cover transition duration-500 group-hover:scale-105 opacity-100"
+            priority={priority}
+            loading={priority ? 'eager' : undefined}
           />
 
           {/* Free Goodies Badge */}

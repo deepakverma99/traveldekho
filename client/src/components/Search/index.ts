@@ -1,4 +1,3 @@
-export * from './SearchHero';
 export * from './SearchTopBar';
 export * from './SearchFilterSidebar';
 export * from './SearchTripCard';

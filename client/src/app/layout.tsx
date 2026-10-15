@@ -1,5 +1,6 @@
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
-import { Montserrat, Plus_Jakarta_Sans, Caveat, Be_Vietnam_Pro, Permanent_Marker } from "next/font/google";
+import { Montserrat, Plus_Jakarta_Sans, Caveat, Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
 import { Header, Footer } from "@/components";
 import { StyledComponentsRegistry } from "@/lib";
@@ -23,13 +24,7 @@ const beVietnamPro = Be_Vietnam_Pro({
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   variable: "--font-vietnam",
-});
 
-const permanentMarker = Permanent_Marker({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-permanent-marker",
-  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -107,13 +102,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${montserrat.variable} ${plusJakartaSans.variable} ${caveat.variable} ${beVietnamPro.variable} ${permanentMarker.variable} h-full antialiased`}
+      className={`${montserrat.variable} ${plusJakartaSans.variable} ${caveat.variable} ${beVietnamPro.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <StyledComponentsRegistry>
-          <Header />
+          <Suspense fallback={<div className="h-[72px] sm:h-[80px]" />}>
+            <Header />
+          </Suspense>
           {children}
-          <Footer />
+          <Suspense fallback={null}>
+            <Footer />
+          </Suspense>
         </StyledComponentsRegistry>
       </body>
     </html>

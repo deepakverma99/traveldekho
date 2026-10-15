@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import styled from 'styled-components';
 import {
@@ -121,9 +122,14 @@ const BottomBar = styled.div`
   padding: 1.25rem 1.5rem;
 `;
 
-export const Footer: React.FC = () => {
+const FooterContent: React.FC = () => {
+  const pathname = usePathname();
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
+
+  if (pathname?.startsWith('/trip-partner')) {
+    return null;
+  }
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -340,5 +346,13 @@ export const Footer: React.FC = () => {
         </div>
       </BottomBar>
     </FooterWrapper>
+  );
+};
+
+export const Footer: React.FC = () => {
+  return (
+    <Suspense fallback={null}>
+      <FooterContent />
+    </Suspense>
   );
 };

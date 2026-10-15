@@ -30,6 +30,7 @@ export const HeroImage: React.FC = () => {
             src="/heroimage.png"
             fill
             priority
+            loading="eager"
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 60vw, 55vw"
             className="object-contain lg:object-right object-center drop-shadow-[0_35px_35px_rgba(0,0,0,0.25)] mix-blend-multiply"
           />
