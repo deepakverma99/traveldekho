@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, Suspense } from 'react';
+import React, { Suspense } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
@@ -13,6 +13,17 @@ import {
   Mail,
   Lock,
 } from 'lucide-react';
+import {
+  useAppDispatch,
+  useAppSelector,
+  selectNewsletterEmail,
+  selectIsNewsletterSubscribed,
+  selectNewsletterLoading,
+  selectCanSubmitNewsletter,
+  setNewsletterEmail,
+  subscribeStart,
+  subscribeSuccess,
+} from '@/redux';
 import { FOOTER_POLICIES, PAYMENT_METHODS, CURRENT_YEAR } from './footerData';
 import { colors } from '@/theme/colors';
 import { typography } from '@/theme/typography';
@@ -115,6 +126,13 @@ const ContactIconBox = styled.div`
   }
 `;
 
+const SubscribedFeedback = styled.p`
+  color: ${colors.amber[400]};
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+`;
+
 const BottomBar = styled.div`
   border-top: 1px solid ${colors.gray[800]};
   background-color: ${colors.black};
@@ -124,8 +142,11 @@ const BottomBar = styled.div`
 
 const FooterContent: React.FC = () => {
   const pathname = usePathname();
-  const [email, setEmail] = useState('');
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const dispatch = useAppDispatch();
+  const email = useAppSelector(selectNewsletterEmail);
+  const isSubscribed = useAppSelector(selectIsNewsletterSubscribed);
+  const isLoading = useAppSelector(selectNewsletterLoading);
+  const canSubmit = useAppSelector(selectCanSubmitNewsletter);
 
   if (pathname?.startsWith('/trip-partner')) {
     return null;
@@ -133,9 +154,9 @@ const FooterContent: React.FC = () => {
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim()) {
-      setIsSubscribed(true);
-      setEmail('');
+    if (canSubmit) {
+      dispatch(subscribeStart());
+      dispatch(subscribeSuccess());
     }
   };
 
@@ -223,22 +244,22 @@ const FooterContent: React.FC = () => {
                   <NewsletterInput
                     type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => dispatch(setNewsletterEmail(e.target.value))}
                     placeholder="ENTER YOUR EMAIL"
                     aria-label="Email address for exclusive deals"
                     required
                   />
-                  <NewsletterSubmitButton type="submit" disabled={!email.trim()}>
+                  <NewsletterSubmitButton type="submit" disabled={!canSubmit || isLoading}>
                     <div className="flex items-center gap-2">
-                      Join
+                      {isLoading ? 'Joining...' : 'Join'}
                       <Send className="w-3 h-3" aria-hidden="true" />
                     </div>
                   </NewsletterSubmitButton>
                 </div>
                 {isSubscribed && (
-                  <p className="text-amber-400 text-xs font-semibold mt-2">
+                  <SubscribedFeedback>
                     Thank you for subscribing!
-                  </p>
+                  </SubscribedFeedback>
                 )}
               </form>
             </div>

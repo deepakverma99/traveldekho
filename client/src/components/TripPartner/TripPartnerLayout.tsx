@@ -1,17 +1,20 @@
 'use client';
 
-import React, { useState, Suspense } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import styled from 'styled-components';
 import { colors } from '@/theme/colors';
 import { TripPartnerHeader } from './TripPartnerHeader';
 import { TripPartnerSidebar } from './TripPartnerSidebar';
-import { TripPartnerMobileNav } from './TripPartnerMobileNav';
-import { getStoredPartner, formatPartnerDisplayName } from './utils/partnerAuth';
+import { formatPartnerDisplayName } from './utils/partnerAuth';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import {
+  initializePartnerSession,
+  selectCurrentPartner,
+} from '@/redux/slices/tripPartnerSlice';
 
-export interface TripPartnerLayoutProps {
-  children: React.ReactNode;
-  username: string;
-}
+import { type TripPartnerLayoutProps } from './types/';
+
+export type { TripPartnerLayoutProps };
 
 const LayoutRoot = styled.div`
   min-height: 100vh;
@@ -37,7 +40,7 @@ const SidebarFallback = styled.div`
   position: sticky;
   top: 0;
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     display: flex;
   }
 `;
@@ -47,7 +50,9 @@ const MainWrapper = styled.div`
   flex-direction: column;
   flex: 1;
   min-width: 0;
+  width: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
 `;
 
 const MainContent = styled.main`
@@ -55,8 +60,9 @@ const MainContent = styled.main`
   width: 100%;
   max-width: 1600px;
   margin: 0 auto;
-  overflow: hidden;
-  padding-bottom: 6rem;
+  min-width: 0;
+  overflow-x: hidden;
+  padding-bottom: 2.5rem;
 
   @media (min-width: 768px) {
     padding-bottom: 3rem;
@@ -67,8 +73,14 @@ export const TripPartnerLayout: React.FC<TripPartnerLayoutProps> = ({
   children,
   username,
 }) => {
-  const [partner] = useState(() => getStoredPartner(username));
-  const displayName = partner?.displayName || formatPartnerDisplayName(username);
+  const dispatch = useAppDispatch();
+  const currentPartner = useAppSelector(selectCurrentPartner);
+
+  useEffect(() => {
+    dispatch(initializePartnerSession(username));
+  }, [username, dispatch]);
+
+  const displayName = currentPartner?.displayName || formatPartnerDisplayName(username);
 
   return (
     <LayoutRoot>
@@ -83,9 +95,6 @@ export const TripPartnerLayout: React.FC<TripPartnerLayoutProps> = ({
           </MainContent>
         </MainWrapper>
       </ContentContainer>
-      <Suspense fallback={null}>
-        <TripPartnerMobileNav username={username} />
-      </Suspense>
     </LayoutRoot>
   );
 };

@@ -1,4 +1,5 @@
 export * from './types';
+export * from './data';
 export * from './utils/partnerAuth';
 export * from './TripPartnerBackground';
 export * from './TripPartnerLoginForm';
@@ -10,3 +11,6 @@ export * from './TripPartnerBookingChart';
 export * from './TripPartnerDashboard';
 export * from './TripPartnerLayout';
 export * from './TripPartnerLogoutModal';
+export * from './TripPartnerStatCard';
+export * from './TripPartnerMyTrips';
+export * from './TripPartnerTripCard';

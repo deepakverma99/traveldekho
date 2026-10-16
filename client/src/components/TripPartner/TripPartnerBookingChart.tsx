@@ -3,37 +3,30 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { colors } from '@/theme/colors';
-
-interface ChartPoint {
-  day: string;
-  count: number;
-}
-
-const DEFAULT_DATA: ChartPoint[] = [
-  { day: 'Mon', count: 2 },
-  { day: 'Tue', count: 3 },
-  { day: 'Wed', count: 1 },
-  { day: 'Thu', count: 4 },
-  { day: 'Fri', count: 3 },
-  { day: 'Sat', count: 4 },
-  { day: 'Sun', count: 2 },
-];
+import { useAppSelector } from '@/redux/hooks';
+import { selectPartnerBookingTrends } from '@/redux/slices/tripPartnerSlice';
 
 const ChartCard = styled.div`
-  margin-bottom: 3rem;
   background-color: ${colors.white};
-  border: 1px solid ${colors.gray[100]};
-  border-radius: 40px;
-  padding: 1.5rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+  border: 1px solid ${colors.gray[200]};
+  border-radius: 1rem;
+  padding: 1.125rem 1.25rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+  transition: all 0.25s ease;
 
   &:hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 25px -5px ${colors.amber[100]}80, 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    border-color: ${colors.amber[200]};
   }
 
   @media (min-width: 640px) {
-    padding: 2.5rem;
+    padding: 1.5rem 1.75rem;
   }
 `;
 
@@ -41,24 +34,24 @@ const HeaderRow = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 
-  @media (min-width: 640px) {
+  @media (min-width: 480px) {
     flex-direction: row;
     align-items: center;
   }
 `;
 
 const Title = styled.h3`
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
   color: ${colors.gray[900]};
 
   @media (min-width: 640px) {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 `;
 
@@ -104,30 +97,37 @@ const LegendText = styled.span`
 
 const SvgContainer = styled.div`
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  align-items: center;
 `;
 
 export const TripPartnerBookingChart: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const bookingTrends = useAppSelector(selectPartnerBookingTrends);
 
-  // SVG dimensions
-  const width = 1000;
-  const height = 280;
-  const paddingLeft = 50;
-  const paddingRight = 30;
-  const paddingTop = 20;
-  const paddingBottom = 40;
+  // SVG dimensions - compact & responsive
+  const width = 800;
+  const height = 240;
+  const paddingLeft = 40;
+  const paddingRight = 24;
+  const paddingTop = 16;
+  const paddingBottom = 32;
 
   const chartWidth = width - paddingLeft - paddingRight;
   const chartHeight = height - paddingTop - paddingBottom;
 
-  const maxVal = 4;
+  const maxVal = Math.max(4, ...bookingTrends.map((d) => d.count));
   const yTicks = [0, 1, 2, 3, 4];
 
   // Calculate coordinates for each point
-  const points = DEFAULT_DATA.map((d, i) => {
-    const x = paddingLeft + (i / (DEFAULT_DATA.length - 1)) * chartWidth;
+  const points = bookingTrends.map((d, i) => {
+    const divisor = bookingTrends.length > 1 ? bookingTrends.length - 1 : 1;
+    const x = paddingLeft + (i / divisor) * chartWidth;
     const y = paddingTop + chartHeight - (d.count / maxVal) * chartHeight;
     return { x, y, ...d };
   });

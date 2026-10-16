@@ -4,6 +4,7 @@ import { Montserrat, Plus_Jakarta_Sans, Caveat, Be_Vietnam_Pro } from "next/font
 import "./globals.css";
 import { Header, Footer } from "@/components";
 import { StyledComponentsRegistry } from "@/lib";
+import { StoreProvider } from "@/redux/StoreProvider";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -105,15 +106,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${montserrat.variable} ${plusJakartaSans.variable} ${caveat.variable} ${beVietnamPro.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <StyledComponentsRegistry>
-          <Suspense fallback={<div className="h-[72px] sm:h-[80px]" />}>
-            <Header />
-          </Suspense>
-          {children}
-          <Suspense fallback={null}>
-            <Footer />
-          </Suspense>
-        </StyledComponentsRegistry>
+        <StoreProvider>
+          <StyledComponentsRegistry>
+            <Suspense fallback={<div className="h-[72px] sm:h-[80px]" />}>
+              <Header />
+            </Suspense>
+            {children}
+            <Suspense fallback={null}>
+              <Footer />
+            </Suspense>
+          </StyledComponentsRegistry>
+        </StoreProvider>
       </body>
     </html>
   );

@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useCarouselScroll } from '@/redux';
 import { VibeCard } from './VibeCard';
 import { mockVibeData } from './mockVibeData';
 import { typography } from '@/theme/typography';
@@ -84,40 +85,8 @@ const ScrollTrack = styled.div`
 `;
 
 export const VibeWithUsSection: React.FC = () => {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState<boolean>(false);
-  const [canScrollRight, setCanScrollRight] = useState<boolean>(true);
-
-  const checkScrollState = useCallback(() => {
-    if (!trackRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = trackRef.current;
-    const hasOverflow = scrollWidth > clientWidth + 6;
-    setCanScrollLeft(scrollLeft > 10);
-    setCanScrollRight(hasOverflow && scrollLeft + clientWidth < scrollWidth - 10);
-  }, []);
-
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-
-    checkScrollState();
-    track.addEventListener('scroll', checkScrollState, { passive: true });
-    window.addEventListener('resize', checkScrollState);
-
-    return () => {
-      track.removeEventListener('scroll', checkScrollState);
-      window.removeEventListener('resize', checkScrollState);
-    };
-  }, [checkScrollState]);
-
-  const handleScroll = (direction: 'left' | 'right') => {
-    if (!trackRef.current) return;
-    const scrollAmount = trackRef.current.clientWidth * 0.75;
-    trackRef.current.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth',
-    });
-  };
+  const { trackRef, canScrollLeft, canScrollRight, handleScroll } =
+    useCarouselScroll('vibe-with-us');
 
   return (
     <SectionWrapper id="vibe-with-us-section">

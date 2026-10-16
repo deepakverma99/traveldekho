@@ -1,24 +1,10 @@
 import { TripItem } from '@/components/shared';
-
-export type SortOption =
-  | 'newest'
-  | 'price-asc'
-  | 'price-desc'
-  | 'duration-asc'
-  | 'duration-desc';
-
-export type ViewMode = 'grid' | 'map';
-
-export interface FilterState {
-  searchQuery: string;
-  destination: string;
-  minBudget: number | null;
-  maxBudget: number | null;
-  selectedCategories: string[];
-  selectedDurations: string[];
-  selectedDifficulties: string[];
-  selectedDate: number | null; // day of current month or null
-}
+export type {
+  SortOption,
+  ViewMode,
+  FilterState,
+  SearchState,
+} from '@/redux/slices/searchSlice';
 
 export interface SearchTripsProps {
   initialQuery?: string;
@@ -26,3 +12,4 @@ export interface SearchTripsProps {
 }
 
 export type { TripItem };
+

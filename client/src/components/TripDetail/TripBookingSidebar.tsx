@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import {
   Calendar,
@@ -16,6 +16,22 @@ import {
 } from 'lucide-react';
 import { TripDetail } from './types';
 import { TripBookingModal } from './TripBookingModal';
+import {
+  useAppDispatch,
+  useAppSelector,
+  selectUser,
+  selectSelectedSlotId,
+  selectTravellers,
+  selectSelectedMonth,
+  selectIsMonthDropdownOpen,
+  setSelectedSlotId,
+  incrementTravellers,
+  decrementTravellers,
+  setSelectedMonth,
+  toggleMonthDropdown,
+  openBookingModal,
+  initializeTripDetail,
+} from '@/redux';
 import { colors } from '@/theme/colors';
 
 interface TripBookingSidebarProps {
@@ -234,13 +250,25 @@ const ForecastItem = styled.div`
 `;
 
 export const TripBookingSidebar: React.FC<TripBookingSidebarProps> = ({ trip }) => {
-  const [selectedSlotId, setSelectedSlotId] = useState<string>(
-    trip.dateSlots[0]?.id || ''
-  );
-  const [travellers, setTravellers] = useState<number>(1);
-  const [selectedMonth, setSelectedMonth] = useState<string>('All Months');
-  const [isMonthDropdownOpen, setIsMonthDropdownOpen] = useState(false);
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
+  const reduxSelectedSlotId = useAppSelector(selectSelectedSlotId);
+  const travellers = useAppSelector(selectTravellers);
+  const selectedMonth = useAppSelector(selectSelectedMonth);
+  const isMonthDropdownOpen = useAppSelector(selectIsMonthDropdownOpen);
+
+  useEffect(() => {
+    dispatch(
+      initializeTripDetail({
+        defaultSlotId: trip.dateSlots[0]?.id,
+        user,
+      })
+    );
+  }, [trip.dateSlots, user, dispatch]);
+
+  const selectedSlotId = reduxSelectedSlotId || trip.dateSlots[0]?.id || '';
+  const selectedSlot =
+    trip.dateSlots.find((s) => s.id === selectedSlotId) || trip.dateSlots[0];
 
   const months = ['All Months', ...Array.from(new Set(trip.dateSlots.map((s) => s.month)))];
 
@@ -249,11 +277,12 @@ export const TripBookingSidebar: React.FC<TripBookingSidebarProps> = ({ trip }) 
       ? trip.dateSlots
       : trip.dateSlots.filter((s) => s.month === selectedMonth);
 
-  const selectedSlot =
-    trip.dateSlots.find((s) => s.id === selectedSlotId) || trip.dateSlots[0];
-
   const handleTravellersChange = (delta: number) => {
-    setTravellers((prev) => Math.max(1, Math.min(20, prev + delta)));
+    if (delta > 0) {
+      dispatch(incrementTravellers());
+    } else {
+      dispatch(decrementTravellers());
+    }
   };
 
   const renderWeatherIcon = (icon: string, className = 'w-4 h-4') => {
@@ -300,7 +329,7 @@ export const TripBookingSidebar: React.FC<TripBookingSidebarProps> = ({ trip }) 
           <div style={{ position: 'relative' }}>
             <MonthFilterButton
               type="button"
-              onClick={() => setIsMonthDropdownOpen(!isMonthDropdownOpen)}
+              onClick={() => dispatch(toggleMonthDropdown())}
             >
               <span>{selectedMonth}</span>
               <ChevronDown style={{ width: '0.75rem', height: '0.75rem' }} />
@@ -313,10 +342,7 @@ export const TripBookingSidebar: React.FC<TripBookingSidebarProps> = ({ trip }) 
                     key={m}
                     type="button"
                     $isActive={selectedMonth === m}
-                    onClick={() => {
-                      setSelectedMonth(m);
-                      setIsMonthDropdownOpen(false);
-                    }}
+                    onClick={() => dispatch(setSelectedMonth(m))}
                   >
                     {m}
                   </MonthDropdownItem>
@@ -334,7 +360,7 @@ export const TripBookingSidebar: React.FC<TripBookingSidebarProps> = ({ trip }) 
               <SlotOptionCard
                 key={slot.id}
                 $isSelected={isSelected}
-                onClick={() => setSelectedSlotId(slot.id)}
+                onClick={() => dispatch(setSelectedSlotId(slot.id))}
                 className="group"
               >
                 <div>
@@ -414,7 +440,7 @@ export const TripBookingSidebar: React.FC<TripBookingSidebarProps> = ({ trip }) 
         {/* Book Now Button */}
         <BookNowButton
           type="button"
-          onClick={() => setIsBookingModalOpen(true)}
+          onClick={() => dispatch(openBookingModal())}
         >
           Book Now
         </BookNowButton>
@@ -507,15 +533,7 @@ export const TripBookingSidebar: React.FC<TripBookingSidebarProps> = ({ trip }) 
       </WeatherCard>
 
       {/* Booking Checkout Modal */}
-      {selectedSlot && (
-        <TripBookingModal
-          trip={trip}
-          selectedSlot={selectedSlot}
-          travellers={travellers}
-          isOpen={isBookingModalOpen}
-          onClose={() => setIsBookingModalOpen(false)}
-        />
-      )}
+      <TripBookingModal trip={trip} />
     </SidebarContainer>
   );
 };

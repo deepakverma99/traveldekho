@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { Button, SearchBar } from '@/components/shared';
 import { LoginModal } from '@/components/Auth';
+import { useAppDispatch, openLoginModal } from '@/redux';
 import { colors } from '@/theme/colors';
 import { typography } from '@/theme/typography';
 
@@ -171,8 +172,8 @@ const useIsMounted = () => {
 const HeaderContent = () => {
   const pathname = usePathname();
   const isMounted = useIsMounted();
+  const dispatch = useAppDispatch();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -246,7 +247,7 @@ const HeaderContent = () => {
             </div>
 
             <div className="ml-2 relative">
-              <Button onClick={() => setIsLoginModalOpen(true)}>Login</Button>
+              <Button onClick={() => dispatch(openLoginModal())}>Login</Button>
             </div>
           </Nav>
 
@@ -405,7 +406,7 @@ const HeaderContent = () => {
                   <button
                     onClick={() => {
                       setIsMobileMenuOpen(false);
-                      setIsLoginModalOpen(true);
+                      dispatch(openLoginModal());
                     }}
                     className="flex items-center justify-center h-16 w-full bg-amber-400 hover:bg-amber-500 text-gray-900 rounded-2xl font-bold uppercase tracking-[0.2em] text-[10px] shadow-lg transition-all duration-300 cursor-pointer active:scale-98"
                   >
@@ -419,10 +420,7 @@ const HeaderContent = () => {
         )}
 
       {/* Login & Signup Modal */}
-      <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
-      />
+      <LoginModal />
     </HeaderWrapper>
   );
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
@@ -8,6 +8,19 @@ import { Eye, EyeOff, Loader2, CheckCircle2 } from 'lucide-react';
 import { colors } from '@/theme/colors';
 import { typography } from '@/theme/typography';
 import { extractUsernameFromEmail, savePartnerSession } from './utils/partnerAuth';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import {
+  selectPartnerLoginEmail,
+  selectPartnerLoginPassword,
+  selectPartnerLoginShowPassword,
+  selectPartnerLoginLoading,
+  selectPartnerLoginSuccess,
+  setPartnerLoginEmail,
+  setPartnerLoginPassword,
+  togglePartnerLoginShowPassword,
+  partnerLoginStart,
+  partnerLoginSuccess,
+} from '@/redux/slices/tripPartnerSlice';
 
 const FormRoot = styled.form`
   display: flex;
@@ -144,25 +157,25 @@ const SearchSubmitButton = styled(motion.button)`
 
 export const TripPartnerLoginForm: React.FC = () => {
   const router = useRouter();
-  const [email, setEmail] = useState('travellr@gmail.com');
-  const [password, setPassword] = useState('travellr@123');
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const dispatch = useAppDispatch();
+  const email = useAppSelector(selectPartnerLoginEmail);
+  const password = useAppSelector(selectPartnerLoginPassword);
+  const showPassword = useAppSelector(selectPartnerLoginShowPassword);
+  const isLoading = useAppSelector(selectPartnerLoginLoading);
+  const isSuccess = useAppSelector(selectPartnerLoginSuccess);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
 
-    setIsLoading(true);
+    dispatch(partnerLoginStart());
 
     // Development mode: extract username prefix and save session
     const username = extractUsernameFromEmail(email);
-    savePartnerSession({ email, username });
+    const partnerUser = savePartnerSession({ email, username });
 
     setTimeout(() => {
-      setIsLoading(false);
-      setIsSuccess(true);
+      dispatch(partnerLoginSuccess(partnerUser));
       setTimeout(() => {
         router.push(`/trip-partner/${username}/dashboard`);
       }, 350);
@@ -185,7 +198,7 @@ export const TripPartnerLoginForm: React.FC = () => {
           required
           autoFocus
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => dispatch(setPartnerLoginEmail(e.target.value))}
           autoComplete="email"
           aria-label="Trip Partner Email"
         />
@@ -198,13 +211,13 @@ export const TripPartnerLoginForm: React.FC = () => {
           type={showPassword ? 'text' : 'password'}
           required
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => dispatch(setPartnerLoginPassword(e.target.value))}
           autoComplete="current-password"
           aria-label="Trip Partner Password"
         />
         <ToggleVisibilityBtn
           type="button"
-          onClick={() => setShowPassword(!showPassword)}
+          onClick={() => dispatch(togglePartnerLoginShowPassword())}
           aria-label={showPassword ? 'Hide password' : 'Show password'}
         >
           {showPassword ? (

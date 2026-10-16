@@ -4,12 +4,13 @@ import React from 'react';
 import styled from 'styled-components';
 import { LayoutGrid, Map as MapIcon } from 'lucide-react';
 import { ViewMode } from './types';
+import { useAppDispatch, useAppSelector, selectViewMode, setViewMode } from '@/redux';
 import { typography } from '@/theme/typography';
 import { colors } from '@/theme/colors';
 
 export interface SearchTopBarProps {
-  viewMode: ViewMode;
-  onViewModeChange: (mode: ViewMode) => void;
+  viewMode?: ViewMode;
+  onViewModeChange?: (mode: ViewMode) => void;
   description?: string;
 }
 
@@ -100,38 +101,45 @@ const ToggleButton = styled.button<{ $active: boolean }>`
 `;
 
 export const SearchTopBar: React.FC<SearchTopBarProps> = ({
-  viewMode,
+  viewMode: propViewMode,
   onViewModeChange,
   description = 'Explore scout-verified trips, offbeat trails, and authentic Himalayan journeys across India.',
 }) => {
+  const dispatch = useAppDispatch();
+  const reduxViewMode = useAppSelector(selectViewMode);
+  const currentViewMode = propViewMode ?? reduxViewMode;
+
+  const handleModeChange = (mode: ViewMode) => {
+    if (onViewModeChange) {
+      onViewModeChange(mode);
+    } else {
+      dispatch(setViewMode(mode));
+    }
+  };
+
   return (
     <TopBarRoot>
       <FlexContainer>
         <div>
           <Heading>
-            All Upcoming{' '}
-            <Highlight>Adventures</Highlight>
+            All Upcoming <Highlight>Adventures</Highlight>
           </Heading>
-          {description && (
-            <Description>
-              {description}
-            </Description>
-          )}
+          {description && <Description>{description}</Description>}
         </div>
 
         {/* View Toggle (Grid / Map) */}
         <ToggleContainer>
           <ToggleButton
             type="button"
-            onClick={() => onViewModeChange('grid')}
-            $active={viewMode === 'grid'}
+            onClick={() => handleModeChange('grid')}
+            $active={currentViewMode === 'grid'}
           >
             <LayoutGrid className="w-4 h-4" /> Grid
           </ToggleButton>
           <ToggleButton
             type="button"
-            onClick={() => onViewModeChange('map')}
-            $active={viewMode === 'map'}
+            onClick={() => handleModeChange('map')}
+            $active={currentViewMode === 'map'}
           >
             <MapIcon className="w-4 h-4" /> Map
           </ToggleButton>
@@ -140,4 +148,5 @@ export const SearchTopBar: React.FC<SearchTopBarProps> = ({
     </TopBarRoot>
   );
 };
+
 

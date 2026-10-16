@@ -8,6 +8,4 @@ export interface DestinationItem {
 
 export interface DestinationCardProps {
   destination: DestinationItem;
-  onSaveToggle?: (id: string, isSaved: boolean) => void;
-  isSaved?: boolean;
 }

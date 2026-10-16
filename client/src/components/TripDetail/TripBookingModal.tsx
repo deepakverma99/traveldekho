@@ -1,18 +1,31 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { X, CheckCircle, Calendar, Users, ShieldCheck, ArrowRight } from 'lucide-react';
 import { TripDetail, DateSlot } from './types';
+import {
+  useAppDispatch,
+  useAppSelector,
+  selectIsBookingModalOpen,
+  selectTravellers,
+  selectBookingForm,
+  selectIsBookingSuccess,
+  selectResolvedSlot,
+  setBookingFormField,
+  submitBookingSuccess,
+  closeBookingModal,
+  resetBookingModal,
+} from '@/redux';
 import { typography } from '@/theme/typography';
 import { colors } from '@/theme/colors';
 
-interface TripBookingModalProps {
+export interface TripBookingModalProps {
   trip: TripDetail;
-  selectedSlot: DateSlot;
-  travellers: number;
-  isOpen: boolean;
-  onClose: () => void;
+  selectedSlot?: DateSlot;
+  travellers?: number;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 const ModalOverlay = styled.div`
@@ -163,36 +176,55 @@ const CheckoutButton = styled.button`
 
 export const TripBookingModal: React.FC<TripBookingModalProps> = ({
   trip,
-  selectedSlot,
-  travellers,
-  isOpen,
+  selectedSlot: propSlot,
+  travellers: propTravellers,
+  isOpen: propIsOpen,
   onClose,
 }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [isSuccess, setIsSuccess] = useState(false);
+  const dispatch = useAppDispatch();
+  const reduxIsOpen = useAppSelector(selectIsBookingModalOpen);
+  const reduxTravellers = useAppSelector(selectTravellers);
+  const reduxSlot = useAppSelector((state) => selectResolvedSlot(state, trip.dateSlots));
+  const bookingForm = useAppSelector(selectBookingForm);
+  const isSuccess = useAppSelector(selectIsBookingSuccess);
 
-  if (!isOpen) return null;
+  const effectiveIsOpen = propIsOpen ?? reduxIsOpen;
+  const effectiveSlot = propSlot ?? reduxSlot ?? trip.dateSlots[0];
+  const effectiveTravellers = propTravellers ?? reduxTravellers;
 
-  const totalAmount = selectedSlot.price * travellers;
+  if (!effectiveIsOpen || !effectiveSlot) return null;
+
+  const totalAmount = effectiveSlot.price * effectiveTravellers;
+
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      dispatch(closeBookingModal());
+    }
+  };
+
+  const handleBackToDetails = () => {
+    handleClose();
+    dispatch(resetBookingModal());
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSuccess(true);
+    dispatch(submitBookingSuccess());
   };
 
   return (
     <ModalOverlay>
       {/* Backdrop */}
-      <Backdrop onClick={onClose} aria-hidden="true" />
+      <Backdrop onClick={handleClose} aria-hidden="true" />
 
       {/* Modal Card */}
       <ModalCard className="animate-fade-in-up">
         {/* Close Button */}
         <CloseButton
           type="button"
-          onClick={onClose}
+          onClick={handleClose}
           aria-label="Close booking modal"
         >
           <X style={{ width: '1rem', height: '1rem' }} />
@@ -213,7 +245,7 @@ export const TripBookingModal: React.FC<TripBookingModalProps> = ({
                 </CalendarSquare>
                 <div>
                   <p style={{ fontSize: '0.75rem', fontWeight: 700, color: colors.gray[900] }}>
-                    {selectedSlot.date}
+                    {effectiveSlot.date}
                   </p>
                   <p style={{ fontSize: '11px', color: colors.gray[500], fontWeight: 500 }}>
                     {trip.duration}
@@ -224,7 +256,7 @@ export const TripBookingModal: React.FC<TripBookingModalProps> = ({
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Users style={{ width: '1rem', height: '1rem', color: colors.purple[600] }} />
                 <span style={{ fontSize: '0.75rem', fontWeight: 900, color: colors.gray[900] }}>
-                  {travellers} {travellers === 1 ? 'Traveller' : 'Travellers'}
+                  {effectiveTravellers} {effectiveTravellers === 1 ? 'Traveller' : 'Travellers'}
                 </span>
               </div>
             </BookingInfoPill>
@@ -237,8 +269,12 @@ export const TripBookingModal: React.FC<TripBookingModalProps> = ({
                   type="text"
                   required
                   placeholder="e.g. Deepak Verma"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={bookingForm.name}
+                  onChange={(e) =>
+                    dispatch(
+                      setBookingFormField({ field: 'name', value: e.target.value })
+                    )
+                  }
                 />
               </div>
 
@@ -248,8 +284,12 @@ export const TripBookingModal: React.FC<TripBookingModalProps> = ({
                   type="email"
                   required
                   placeholder="e.g. traveller@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={bookingForm.email}
+                  onChange={(e) =>
+                    dispatch(
+                      setBookingFormField({ field: 'email', value: e.target.value })
+                    )
+                  }
                 />
               </div>
 
@@ -259,8 +299,12 @@ export const TripBookingModal: React.FC<TripBookingModalProps> = ({
                   type="tel"
                   required
                   placeholder="+91 98765 43210"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  value={bookingForm.phone}
+                  onChange={(e) =>
+                    dispatch(
+                      setBookingFormField({ field: 'phone', value: e.target.value })
+                    )
+                  }
                 />
               </div>
 
@@ -344,11 +388,11 @@ export const TripBookingModal: React.FC<TripBookingModalProps> = ({
               Booking Request Received!
             </h3>
             <p style={{ fontSize: '0.875rem', color: colors.gray[600], marginBottom: '1.5rem', lineHeight: 1.625 }}>
-              Thank you, <span style={{ fontWeight: 700, color: colors.gray[900] }}>{name}</span>! Our certified Scout Captain will contact you via WhatsApp / Phone at <span style={{ fontWeight: 700, color: colors.gray[900] }}>{phone}</span> with your itinerary details and confirmation voucher.
+              Thank you, <span style={{ fontWeight: 700, color: colors.gray[900] }}>{bookingForm.name || 'Traveler'}</span>! Our certified Scout Captain will contact you via WhatsApp / Phone at <span style={{ fontWeight: 700, color: colors.gray[900] }}>{bookingForm.phone || 'your registered number'}</span> with your itinerary details and confirmation voucher.
             </p>
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleBackToDetails}
               style={{
                 padding: '0.75rem 1.5rem',
                 backgroundColor: colors.amber[400],

@@ -1,11 +1,20 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { typography } from '@/theme/typography';
 import { colors } from '@/theme/colors';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  useAppDispatch,
+  useAppSelector,
+  selectActiveGalleryIndex,
+  openGalleryPhoto,
+  closeGalleryPhoto,
+  nextGalleryPhoto,
+  prevGalleryPhoto,
+} from '@/redux';
 
 interface TripGallerySectionProps {
   gallery: string[];
@@ -136,32 +145,25 @@ const LightboxNavButton = styled.button<{ $position: 'close' | 'prev' | 'next' }
 export const TripGallerySection: React.FC<TripGallerySectionProps> = ({
   gallery,
 }) => {
-  const [activePhotoIndex, setActivePhotoIndex] = useState<number | null>(null);
+  const dispatch = useAppDispatch();
+  const activePhotoIndex = useAppSelector(selectActiveGalleryIndex);
 
   const handleOpenPhoto = (index: number) => {
-    setActivePhotoIndex(index);
+    dispatch(openGalleryPhoto(index));
   };
 
   const handleClosePhoto = () => {
-    setActivePhotoIndex(null);
+    dispatch(closeGalleryPhoto());
   };
 
   const handlePrev = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (activePhotoIndex !== null) {
-      setActivePhotoIndex((prev) =>
-        prev === 0 ? gallery.length - 1 : (prev as number) - 1
-      );
-    }
+    dispatch(prevGalleryPhoto(gallery.length));
   };
 
   const handleNext = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (activePhotoIndex !== null) {
-      setActivePhotoIndex((prev) =>
-        prev === gallery.length - 1 ? 0 : (prev as number) + 1
-      );
-    }
+    dispatch(nextGalleryPhoto(gallery.length));
   };
 
   return (

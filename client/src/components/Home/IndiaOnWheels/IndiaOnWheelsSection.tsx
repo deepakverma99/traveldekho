@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useCarouselScroll } from '@/redux';
 import { DestinationCard } from './DestinationCard';
 import { destinationsData } from './destinationsData';
 import { colors } from '@/theme/colors';
@@ -176,39 +177,8 @@ const GridFlow = styled.div`
 `;
 
 export const IndiaOnWheelsSection: React.FC = () => {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState<boolean>(false);
-  const [canScrollRight, setCanScrollRight] = useState<boolean>(true);
-
-  const checkScrollState = useCallback(() => {
-    if (!trackRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = trackRef.current;
-    setCanScrollLeft(scrollLeft > 10);
-    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 10);
-  }, []);
-
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-
-    checkScrollState();
-    track.addEventListener('scroll', checkScrollState, { passive: true });
-    window.addEventListener('resize', checkScrollState);
-
-    return () => {
-      track.removeEventListener('scroll', checkScrollState);
-      window.removeEventListener('resize', checkScrollState);
-    };
-  }, [checkScrollState]);
-
-  const handleScroll = (direction: 'left' | 'right') => {
-    if (!trackRef.current) return;
-    const scrollAmount = trackRef.current.clientWidth * 0.75;
-    trackRef.current.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth',
-    });
-  };
+  const { trackRef, canScrollLeft, canScrollRight, handleScroll } =
+    useCarouselScroll('india-on-wheels');
 
   return (
     <SectionWrapper id="india-on-wheels-section">

@@ -1,17 +1,22 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/navigation';
 import { LogOut, X } from 'lucide-react';
 import { colors } from '@/theme/colors';
 import { typography } from '@/theme/typography';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import {
+  selectIsPartnerLogoutModalOpen,
+  selectCurrentPartner,
+  closePartnerLogoutModal,
+  partnerLogout,
+} from '@/redux/slices/tripPartnerSlice';
 
-export interface TripPartnerLogoutModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  displayName?: string;
-}
+import { type TripPartnerLogoutModalProps } from './types/';
+
+export type { TripPartnerLogoutModalProps };
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -156,24 +161,49 @@ const ConfirmLogoutButton = styled.button`
 `;
 
 export const TripPartnerLogoutModal: React.FC<TripPartnerLogoutModalProps> = ({
-  isOpen,
-  onClose,
-  onConfirm,
-  displayName,
+  isOpen: propIsOpen,
+  onClose: propOnClose,
+  onConfirm: propOnConfirm,
+  displayName: propDisplayName,
 }) => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const reduxIsOpen = useAppSelector(selectIsPartnerLogoutModalOpen);
+  const currentPartner = useAppSelector(selectCurrentPartner);
+
+  const isOpen = propIsOpen !== undefined ? propIsOpen : reduxIsOpen;
+  const displayName = propDisplayName || currentPartner?.displayName;
+
+  const handleClose = useCallback(() => {
+    if (propOnClose) {
+      propOnClose();
+    } else {
+      dispatch(closePartnerLogoutModal());
+    }
+  }, [propOnClose, dispatch]);
+
+  const handleConfirm = useCallback(() => {
+    if (propOnConfirm) {
+      propOnConfirm();
+    } else {
+      dispatch(partnerLogout());
+      router.push('/trip-partner/login');
+    }
+  }, [propOnConfirm, dispatch, router]);
+
   // Handle Escape key
   useEffect(() => {
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        handleClose();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, handleClose]);
 
   // Lock body scroll
   useEffect(() => {
@@ -191,9 +221,9 @@ export const TripPartnerLogoutModal: React.FC<TripPartnerLogoutModalProps> = ({
 
   return (
     <ModalOverlay>
-      <Backdrop onClick={onClose} aria-hidden="true" />
+      <Backdrop onClick={handleClose} aria-hidden="true" />
       <ModalCard className="animate-fade-in-up" role="dialog" aria-modal="true" aria-labelledby="logout-title">
-        <CloseButton type="button" onClick={onClose} aria-label="Close modal">
+        <CloseButton type="button" onClick={handleClose} aria-label="Close modal">
           <X className="w-4 h-4" />
         </CloseButton>
 
@@ -208,10 +238,10 @@ export const TripPartnerLogoutModal: React.FC<TripPartnerLogoutModalProps> = ({
         </ModalDescription>
 
         <ButtonRow>
-          <CancelButton type="button" onClick={onClose}>
+          <CancelButton type="button" onClick={handleClose}>
             Cancel
           </CancelButton>
-          <ConfirmLogoutButton type="button" onClick={onConfirm}>
+          <ConfirmLogoutButton type="button" onClick={handleConfirm}>
             <LogOut className="w-3.5 h-3.5" />
             <span>Log Out</span>
           </ConfirmLogoutButton>

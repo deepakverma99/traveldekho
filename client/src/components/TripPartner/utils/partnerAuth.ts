@@ -1,4 +1,4 @@
-import { TripPartnerUser, TripPartnerBooking, TripPartnerNotification, TripPartnerStats } from '../types';
+import type { TripPartnerUser } from '../types';
 
 const STORAGE_KEY = 'traveldekho_trip_partner';
 
@@ -80,90 +80,9 @@ export function clearPartnerSession(): void {
   }
 }
 
-export const MOCK_PARTNER_STATS: TripPartnerStats = {
-  totalRevenue: 21600,
-  totalBookings: 24,
-  activeTrips: 2,
-  avgRating: 0,
-};
+export {
+  MOCK_PARTNER_STATS,
+  MOCK_PARTNER_BOOKINGS,
+  MOCK_PARTNER_NOTIFICATIONS,
+} from '../data';
 
-export const MOCK_PARTNER_BOOKINGS: TripPartnerBooking[] = [
-  {
-    id: 'b-1',
-    travelerName: 'pranaw',
-    travelerEmail: 'guest_7011371292@traveldekho.local',
-    tripTitle: 'The Kausani story 2.0',
-    status: 'booked',
-    amount: 5400,
-  },
-  {
-    id: 'b-2',
-    travelerName: 'Deepak',
-    travelerEmail: 'guest_9891413535@traveldekho.local',
-    tripTitle: 'The Kausani story 2.0',
-    status: 'booked',
-    amount: 5400,
-  },
-  {
-    id: 'b-3',
-    travelerName: 'Deepak',
-    travelerEmail: 'guest_9140506902@traveldekho.local',
-    tripTitle: 'The Kausani story 2.0',
-    status: 'booked',
-    amount: 5400,
-  },
-  {
-    id: 'b-4',
-    travelerName: 'travellr times',
-    travelerEmail: 'travellr@gmail.com',
-    tripTitle: 'The Kausani story 2.0',
-    status: 'booked',
-    amount: 5400,
-  },
-  {
-    id: 'b-5',
-    travelerName: 'Guest User',
-    travelerEmail: 'guest_9389848494@traveldekho.local',
-    tripTitle: 'The Kausani story 2.0',
-    status: 'booked',
-    amount: 5400,
-  },
-];
-
-export const MOCK_PARTNER_NOTIFICATIONS: TripPartnerNotification[] = [
-  {
-    id: 'n-1',
-    title: 'New Booking Received! 🎉',
-    description: 'You have a new booking for The Kausani story 2.0.',
-    date: '15 Oct',
-    type: 'booking',
-  },
-  {
-    id: 'n-2',
-    title: 'New Booking Received! 🎉',
-    description: 'You have a new booking for The Kausani story 2.0.',
-    date: '14 Oct',
-    type: 'booking',
-  },
-  {
-    id: 'n-3',
-    title: 'New Booking Received! 🎉',
-    description: 'You have a new booking for The Kausani story 2.0.',
-    date: '10 Oct',
-    type: 'booking',
-  },
-  {
-    id: 'n-4',
-    title: 'Booking Confirmed! ✅',
-    description: 'Your booking for The Kausani story 2.0 is confirmed.',
-    date: '9 Oct',
-    type: 'confirmation',
-  },
-  {
-    id: 'n-5',
-    title: 'New Booking Received! 🎉',
-    description: 'You have a new booking for The Kausani story 2.0.',
-    date: '9 Oct',
-    type: 'booking',
-  },
-];

@@ -5,4 +5,5 @@ export * from './FloatingBackground';
 export * from './TripCard';
 export * from './Skeleton';
 export * from './Breadcrumb';
+export * from './Select';
 

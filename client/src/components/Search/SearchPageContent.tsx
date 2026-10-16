@@ -1,13 +1,35 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSearchParams } from 'next/navigation';
 import { SearchTopBar } from './SearchTopBar';
 import { SearchFilterSidebar } from './SearchFilterSidebar';
 import { SearchMapView } from './SearchMapView';
 import { allSearchTrips } from './mockSearchTrips';
-import { FilterState, SortOption, ViewMode, TripItem } from './types';
+import { SortOption } from './types';
+import {
+  useAppDispatch,
+  useAppSelector,
+  selectSearchFilters,
+  selectSortOption,
+  selectViewMode,
+  selectIsMobileFilterOpen,
+  selectHasActiveFilters,
+  selectActiveFilterCount,
+  selectFilteredTrips,
+  setSearchQuery,
+  setDestination,
+  setBudget,
+  toggleCategory,
+  toggleDuration,
+  toggleDifficulty,
+  resetFilters,
+  setSortOption,
+  openMobileFilter,
+  closeMobileFilter,
+  setInitialSearchParams,
+} from '@/redux';
 import {
   SearchX,
   Filter as FilterIcon,
@@ -425,60 +447,33 @@ const DrawerApplyButton = styled.button`
 `;
 
 export const SearchPageContent: React.FC = () => {
+  const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get('q') || '';
   const initialCategory = searchParams.get('category') || '';
 
-  const [filters, setFilters] = useState<FilterState>({
-    searchQuery: initialQuery,
-    destination: '',
-    minBudget: null,
-    maxBudget: null,
-    selectedCategories: initialCategory ? [initialCategory] : [],
-    selectedDurations: [],
-    selectedDifficulties: [],
-    selectedDate: null,
-  });
+  const filters = useAppSelector(selectSearchFilters);
+  const sortOption = useAppSelector(selectSortOption);
+  const viewMode = useAppSelector(selectViewMode);
+  const isMobileFilterOpen = useAppSelector(selectIsMobileFilterOpen);
+  const hasActiveFilters = useAppSelector(selectHasActiveFilters);
+  const activeFilterCount = useAppSelector(selectActiveFilterCount);
 
-  const [sortOption, setSortOption] = useState<SortOption>('newest');
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState<boolean>(false);
+  // Sync initial URL search parameters into Redux
+  useEffect(() => {
+    if (initialQuery || initialCategory) {
+      dispatch(
+        setInitialSearchParams({
+          query: initialQuery,
+          category: initialCategory,
+        })
+      );
+    }
+  }, [initialQuery, initialCategory, dispatch]);
 
   const handleResetFilters = () => {
-    setFilters({
-      searchQuery: '',
-      destination: '',
-      minBudget: null,
-      maxBudget: null,
-      selectedCategories: [],
-      selectedDurations: [],
-      selectedDifficulties: [],
-      selectedDate: null,
-    });
+    dispatch(resetFilters());
   };
-
-  const hasActiveFilters = useMemo(() => {
-    return Boolean(
-      filters.destination.trim() ||
-      filters.minBudget !== null ||
-      filters.maxBudget !== null ||
-      filters.selectedCategories.length > 0 ||
-      filters.selectedDurations.length > 0 ||
-      filters.selectedDifficulties.length > 0 ||
-      filters.selectedDate !== null
-    );
-  }, [filters]);
-
-  const activeFilterCount = useMemo(() => {
-    let count = 0;
-    if (filters.destination.trim()) count++;
-    if (filters.minBudget !== null || filters.maxBudget !== null) count++;
-    count += filters.selectedCategories.length;
-    count += filters.selectedDurations.length;
-    count += filters.selectedDifficulties.length;
-    if (filters.selectedDate !== null) count++;
-    return count;
-  }, [filters]);
 
   // Lock body scroll when mobile filter drawer is open
   useEffect(() => {
@@ -496,134 +491,17 @@ export const SearchPageContent: React.FC = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setIsMobileFilterOpen(false);
+        dispatch(closeMobileFilter());
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [dispatch]);
 
-  // Filtered & Sorted trips
-  const filteredTrips = useMemo(() => {
-    let result: TripItem[] = [...allSearchTrips];
-
-    // Search query
-    if (filters.searchQuery.trim()) {
-      const q = filters.searchQuery.toLowerCase().trim();
-      result = result.filter(
-        (t) =>
-          t.title.toLowerCase().includes(q) ||
-          t.destination.toLowerCase().includes(q) ||
-          t.tags.some((tag) =>
-            (typeof tag === 'string' ? tag : tag.label).toLowerCase().includes(q)
-          )
-      );
-    }
-
-    // Destination filter
-    if (filters.destination.trim()) {
-      const dest = filters.destination.toLowerCase().trim();
-      result = result.filter((t) => t.destination.toLowerCase().includes(dest));
-    }
-
-    // Budget range filter
-    if (filters.minBudget !== null) {
-      result = result.filter((t) => t.price >= (filters.minBudget as number));
-    }
-    if (filters.maxBudget !== null) {
-      result = result.filter((t) => t.price <= (filters.maxBudget as number));
-    }
-
-    // Categories filter
-    if (filters.selectedCategories.length > 0) {
-      result = result.filter((t) =>
-        filters.selectedCategories.some((cat) =>
-          t.tags.some(
-            (tag) =>
-              (typeof tag === 'string' ? tag : tag.label).toLowerCase() ===
-              cat.toLowerCase()
-          )
-        )
-      );
-    }
-
-    // Duration filter
-    if (filters.selectedDurations.length > 0) {
-      result = result.filter((t) => {
-        const dLower = t.duration.toLowerCase();
-        return filters.selectedDurations.some((dur) => {
-          if (dur === '1-3 Days') {
-            return (
-              dLower.includes('1 day') ||
-              dLower.includes('2 day') ||
-              dLower.includes('3 day') ||
-              dLower.includes('1 night') ||
-              dLower.includes('2 night') ||
-              dLower.includes('3 night')
-            );
-          }
-          if (dur === '4-7 Days') {
-            return (
-              dLower.includes('4 day') ||
-              dLower.includes('5 day') ||
-              dLower.includes('6 day') ||
-              dLower.includes('7 day') ||
-              dLower.includes('4 night') ||
-              dLower.includes('5 night') ||
-              dLower.includes('6 night') ||
-              dLower.includes('7 night')
-            );
-          }
-          if (dur === '8+ Days') {
-            return (
-              dLower.includes('8 day') ||
-              dLower.includes('9 day') ||
-              dLower.includes('10 day') ||
-              dLower.includes('8 night') ||
-              dLower.includes('9 night')
-            );
-          }
-          return false;
-        });
-      });
-    }
-
-    // Difficulty filter
-    if (filters.selectedDifficulties.length > 0) {
-      result = result.filter((t) =>
-        filters.selectedDifficulties.some((diff) =>
-          t.tags.some((tag) => {
-            const label = (
-              typeof tag === 'string' ? tag : tag.label
-            ).toLowerCase();
-            return label === diff.toLowerCase();
-          })
-        )
-      );
-    }
-
-    // Sorting
-    switch (sortOption) {
-      case 'price-asc':
-        result.sort((a, b) => a.price - b.price);
-        break;
-      case 'price-desc':
-        result.sort((a, b) => b.price - a.price);
-        break;
-      case 'duration-asc':
-        result.sort((a, b) => a.duration.localeCompare(b.duration));
-        break;
-      case 'duration-desc':
-        result.sort((a, b) => b.duration.localeCompare(a.duration));
-        break;
-      case 'newest':
-      default:
-        // maintain default ranking
-        break;
-    }
-
-    return result;
-  }, [filters, sortOption]);
+  // Filtered & Sorted trips memoized from Redux selector
+  const filteredTrips = useAppSelector((state) =>
+    selectFilteredTrips(state, allSearchTrips)
+  );
 
   const breadcrumbItems = useMemo(() => {
     const items: BreadcrumbItem[] = [
@@ -647,10 +525,7 @@ export const SearchPageContent: React.FC = () => {
       <div className="pb-16">
         <section className="w-full pb-16 pt-2">
           {/* Top Bar with Title and Grid/Map toggle */}
-          <SearchTopBar
-            viewMode={viewMode}
-            onViewModeChange={setViewMode}
-          />
+          <SearchTopBar />
 
           {/* Unified Inline Control Bar: Sticky on Scroll */}
           <StickyBar>
@@ -681,7 +556,7 @@ export const SearchPageContent: React.FC = () => {
                 <div className="flex lg:hidden items-center gap-2">
                   <MobileFilterButton
                     type="button"
-                    onClick={() => setIsMobileFilterOpen(true)}
+                    onClick={() => dispatch(openMobileFilter())}
                     aria-label="Open Filters"
                   >
                     <FilterIconSquare $small>
@@ -741,17 +616,13 @@ export const SearchPageContent: React.FC = () => {
                   <StyledSearchInput
                     type="text"
                     value={filters.searchQuery}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, searchQuery: e.target.value }))
-                    }
+                    onChange={(e) => dispatch(setSearchQuery(e.target.value))}
                     placeholder="Search trips, destinations, experiences..."
                   />
                   {filters.searchQuery && (
                     <ClearInputBtn
                       type="button"
-                      onClick={() =>
-                        setFilters((prev) => ({ ...prev, searchQuery: '' }))
-                      }
+                      onClick={() => dispatch(setSearchQuery(''))}
                       aria-label="Clear Search"
                     >
                       <X className="w-3.5 h-3.5" />
@@ -808,7 +679,7 @@ export const SearchPageContent: React.FC = () => {
                     {filters.destination}
                     <button
                       type="button"
-                      onClick={() => setFilters((prev) => ({ ...prev, destination: '' }))}
+                      onClick={() => dispatch(setDestination(''))}
                       aria-label="Remove destination filter"
                     >
                       <X className="w-3 h-3" />
@@ -820,12 +691,7 @@ export const SearchPageContent: React.FC = () => {
                     {cat}
                     <button
                       type="button"
-                      onClick={() =>
-                        setFilters((prev) => ({
-                          ...prev,
-                          selectedCategories: prev.selectedCategories.filter((c) => c !== cat),
-                        }))
-                      }
+                      onClick={() => dispatch(toggleCategory(cat))}
                       aria-label={`Remove ${cat} filter`}
                     >
                       <X className="w-3 h-3" />
@@ -837,12 +703,7 @@ export const SearchPageContent: React.FC = () => {
                     {dur}
                     <button
                       type="button"
-                      onClick={() =>
-                        setFilters((prev) => ({
-                          ...prev,
-                          selectedDurations: prev.selectedDurations.filter((d) => d !== dur),
-                        }))
-                      }
+                      onClick={() => dispatch(toggleDuration(dur))}
                       aria-label={`Remove ${dur} filter`}
                     >
                       <X className="w-3 h-3" />
@@ -854,12 +715,7 @@ export const SearchPageContent: React.FC = () => {
                     {diff}
                     <button
                       type="button"
-                      onClick={() =>
-                        setFilters((prev) => ({
-                          ...prev,
-                          selectedDifficulties: prev.selectedDifficulties.filter((d) => d !== diff),
-                        }))
-                      }
+                      onClick={() => dispatch(toggleDifficulty(diff))}
                       aria-label={`Remove ${diff} filter`}
                     >
                       <X className="w-3 h-3" />
@@ -871,9 +727,7 @@ export const SearchPageContent: React.FC = () => {
                     ₹{filters.minBudget || 0} - ₹{filters.maxBudget || '∞'}
                     <button
                       type="button"
-                      onClick={() =>
-                        setFilters((prev) => ({ ...prev, minBudget: null, maxBudget: null }))
-                      }
+                      onClick={() => dispatch(setBudget({ min: null, max: null }))}
                       aria-label="Remove budget filter"
                     >
                       <X className="w-3 h-3" />
@@ -905,10 +759,7 @@ export const SearchPageContent: React.FC = () => {
           <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
             {/* Desktop Sidebar Filters (Hidden on Mobile/Tablet) */}
             <div className="hidden lg:block w-[400px] overflow-visible lg:sticky lg:top-[9rem] shrink-0 z-10 max-h-[calc(100vh-10.5rem)] overflow-y-auto scrollbar-hide">
-              <SearchFilterSidebar
-                filters={filters}
-                onFilterChange={setFilters}
-              />
+              <SearchFilterSidebar />
             </div>
 
             {/* Results Column */}
@@ -973,7 +824,7 @@ export const SearchPageContent: React.FC = () => {
         <div className="fixed inset-0 z-50 lg:hidden flex flex-col justify-end">
           {/* Backdrop */}
           <DrawerBackdrop
-            onClick={() => setIsMobileFilterOpen(false)}
+            onClick={() => dispatch(closeMobileFilter())}
             aria-hidden="true"
           />
 
@@ -1027,7 +878,7 @@ export const SearchPageContent: React.FC = () => {
                 )}
                 <button
                   type="button"
-                  onClick={() => setIsMobileFilterOpen(false)}
+                  onClick={() => dispatch(closeMobileFilter())}
                   style={{
                     padding: '0.5rem',
                     borderRadius: '9999px',
@@ -1046,8 +897,6 @@ export const SearchPageContent: React.FC = () => {
             {/* Drawer Body (Scrollable Filters) */}
             <div className="flex-1 overflow-y-auto px-4 py-2 scrollbar-hide">
               <SearchFilterSidebar
-                filters={filters}
-                onFilterChange={setFilters}
                 className="border-0 shadow-none p-0"
               />
             </div>
@@ -1064,7 +913,7 @@ export const SearchPageContent: React.FC = () => {
               )}
               <DrawerApplyButton
                 type="button"
-                onClick={() => setIsMobileFilterOpen(false)}
+                onClick={() => dispatch(closeMobileFilter())}
               >
                 Show {filteredTrips.length} {filteredTrips.length === 1 ? 'Adventure' : 'Adventures'}
               </DrawerApplyButton>

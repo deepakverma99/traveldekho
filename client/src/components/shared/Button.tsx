@@ -17,7 +17,16 @@ export interface ButtonProps {
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
   id?: string;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  style?: React.CSSProperties;
 }
+
+const sizeClasses: Record<'sm' | 'md' | 'lg' | 'xl', string> = {
+  sm: 'px-5 py-2 text-xs',
+  md: 'px-6 py-2.5 text-xs',
+  lg: 'px-7 py-3.5 text-xs',
+  xl: 'px-8 py-4 text-sm',
+};
 
 const StyledButton = styled(motion.button)`
   position: relative;
@@ -70,13 +79,16 @@ export const Button = ({
   disabled = false,
   type = 'button',
   id,
+  size = 'md',
+  style,
 }: ButtonProps) => {
   return (
     <StyledButton
       id={id}
       type={type}
       disabled={disabled}
-      className={`px-6 py-2.5 text-xs uppercase tracking-wider font-bold group flex items-center justify-center gap-2 ${className || ''}`.trim()}
+      style={style}
+      className={`${sizeClasses[size]} uppercase tracking-wider font-bold group flex items-center justify-center gap-2 ${className || ''}`.trim()}
       onClick={disabled ? undefined : onClick}
       whileHover={disabled ? undefined : { scale: 1.02 }}
       whileTap={disabled ? undefined : { scale: 0.98 }}

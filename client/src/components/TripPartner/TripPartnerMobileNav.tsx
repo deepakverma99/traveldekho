@@ -4,19 +4,11 @@ import React from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { usePathname } from 'next/navigation';
-import {
-  LayoutDashboard,
-  Map,
-  CalendarCheck,
-  CalendarClock,
-  CircleUser,
-  Settings,
-} from 'lucide-react';
 import { colors } from '@/theme/colors';
+import { type TripPartnerMobileNavProps } from './types/';
+import { getPartnerNavItems } from './data';
 
-export interface TripPartnerMobileNavProps {
-  username: string;
-}
+export type { TripPartnerMobileNavProps };
 
 const MobileNavRoot = styled.nav`
   position: fixed;
@@ -53,7 +45,7 @@ const NavScroll = styled.div`
   scrollbar-width: none;
 `;
 
-const NavItemLink = styled(Link)<{ $isActive: boolean }>`
+const NavItemLink = styled(Link) <{ $isActive: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -119,44 +111,7 @@ const NavLabel = styled.span<{ $isActive: boolean }>`
 export const TripPartnerMobileNav: React.FC<TripPartnerMobileNavProps> = ({ username }) => {
   const pathname = usePathname();
 
-  const navItems = [
-    {
-      label: 'Dashboard',
-      href: `/trip-partner/${username}/dashboard`,
-      icon: LayoutDashboard,
-      isActive: pathname?.includes('/dashboard'),
-    },
-    {
-      label: 'My Trips',
-      href: `/trip-partner/${username}/trips`,
-      icon: Map,
-      isActive: pathname?.includes('/trips'),
-    },
-    {
-      label: 'Bookings',
-      href: `/trip-partner/${username}/bookings`,
-      icon: CalendarCheck,
-      isActive: pathname?.includes('/bookings'),
-    },
-    {
-      label: 'Date Requests',
-      href: `/trip-partner/${username}/date-requests`,
-      icon: CalendarClock,
-      isActive: pathname?.includes('/date-requests'),
-    },
-    {
-      label: 'Profile',
-      href: `/trip-partner/${username}/profile`,
-      icon: CircleUser,
-      isActive: pathname?.includes('/profile'),
-    },
-    {
-      label: 'Settings',
-      href: `/trip-partner/${username}/settings`,
-      icon: Settings,
-      isActive: pathname?.includes('/settings'),
-    },
-  ];
+  const navItems = getPartnerNavItems(username, pathname);
 
   return (
     <MobileNavRoot className="animate-nav-appear">

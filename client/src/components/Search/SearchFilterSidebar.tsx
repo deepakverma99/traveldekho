@@ -14,12 +14,23 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { FilterState } from './types';
+import {
+  useAppDispatch,
+  useAppSelector,
+  selectSearchFilters,
+  setDestination,
+  setBudget,
+  toggleCategory as toggleCategoryAction,
+  toggleDuration as toggleDurationAction,
+  toggleDifficulty as toggleDifficultyAction,
+  setSelectedDate,
+} from '@/redux';
 import { typography } from '@/theme/typography';
 import { colors } from '@/theme/colors';
 
 export interface SearchFilterSidebarProps {
-  filters: FilterState;
-  onFilterChange: (filters: FilterState) => void;
+  filters?: FilterState;
+  onFilterChange?: (filters: FilterState) => void;
   onResetFilters?: () => void;
   className?: string;
 }
@@ -297,16 +308,50 @@ const CalendarDayButton = styled.button<{ $isSelected: boolean; $isHighlighted: 
 `;
 
 export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
-  filters,
+  filters: propFilters,
   onFilterChange,
   className,
 }) => {
+  const dispatch = useAppDispatch();
+  const reduxFilters = useAppSelector(selectSearchFilters);
+  const filters = propFilters ?? reduxFilters;
+
+  const [prevBudget, setPrevBudget] = useState<{
+    min: number | null;
+    max: number | null;
+  }>({
+    min: filters.minBudget,
+    max: filters.maxBudget,
+  });
+
   const [minBudgetInput, setMinBudgetInput] = useState<string>(
-    filters.minBudget ? filters.minBudget.toString() : ''
+    filters.minBudget !== null && filters.minBudget !== undefined
+      ? filters.minBudget.toString()
+      : ''
   );
   const [maxBudgetInput, setMaxBudgetInput] = useState<string>(
-    filters.maxBudget ? filters.maxBudget.toString() : ''
+    filters.maxBudget !== null && filters.maxBudget !== undefined
+      ? filters.maxBudget.toString()
+      : ''
   );
+
+  // Synchronize local input state if filters change externally (e.g., reset or chip removed)
+  if (
+    prevBudget.min !== filters.minBudget ||
+    prevBudget.max !== filters.maxBudget
+  ) {
+    setPrevBudget({ min: filters.minBudget, max: filters.maxBudget });
+    setMinBudgetInput(
+      filters.minBudget !== null && filters.minBudget !== undefined
+        ? filters.minBudget.toString()
+        : ''
+    );
+    setMaxBudgetInput(
+      filters.maxBudget !== null && filters.maxBudget !== undefined
+        ? filters.maxBudget.toString()
+        : ''
+    );
+  }
 
   // Accordion state
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
@@ -322,33 +367,72 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
     setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
+  const handleDestinationChange = (val: string) => {
+    if (onFilterChange) {
+      onFilterChange({ ...filters, destination: val });
+    } else {
+      dispatch(setDestination(val));
+    }
+  };
+
   const toggleCategory = (category: string) => {
-    const updated = filters.selectedCategories.includes(category)
-      ? filters.selectedCategories.filter((c) => c !== category)
-      : [...filters.selectedCategories, category];
-    onFilterChange({ ...filters, selectedCategories: updated });
+    if (onFilterChange) {
+      const updated = filters.selectedCategories.includes(category)
+        ? filters.selectedCategories.filter((c) => c !== category)
+        : [...filters.selectedCategories, category];
+      onFilterChange({ ...filters, selectedCategories: updated });
+    } else {
+      dispatch(toggleCategoryAction(category));
+    }
   };
 
   const toggleDuration = (duration: string) => {
-    const updated = filters.selectedDurations.includes(duration)
-      ? filters.selectedDurations.filter((d) => d !== duration)
-      : [...filters.selectedDurations, duration];
-    onFilterChange({ ...filters, selectedDurations: updated });
+    if (onFilterChange) {
+      const updated = filters.selectedDurations.includes(duration)
+        ? filters.selectedDurations.filter((d) => d !== duration)
+        : [...filters.selectedDurations, duration];
+      onFilterChange({ ...filters, selectedDurations: updated });
+    } else {
+      dispatch(toggleDurationAction(duration));
+    }
   };
 
   const toggleDifficulty = (difficulty: string) => {
-    const updated = filters.selectedDifficulties.includes(difficulty)
-      ? filters.selectedDifficulties.filter((d) => d !== difficulty)
-      : [...filters.selectedDifficulties, difficulty];
-    onFilterChange({ ...filters, selectedDifficulties: updated });
+    if (onFilterChange) {
+      const updated = filters.selectedDifficulties.includes(difficulty)
+        ? filters.selectedDifficulties.filter((d) => d !== difficulty)
+        : [...filters.selectedDifficulties, difficulty];
+      onFilterChange({ ...filters, selectedDifficulties: updated });
+    } else {
+      dispatch(toggleDifficultyAction(difficulty));
+    }
   };
 
   const handleApplyBudget = () => {
-    onFilterChange({
-      ...filters,
-      minBudget: minBudgetInput ? Number(minBudgetInput) : null,
-      maxBudget: maxBudgetInput ? Number(maxBudgetInput) : null,
-    });
+    const min = minBudgetInput ? Number(minBudgetInput) : null;
+    const max = maxBudgetInput ? Number(maxBudgetInput) : null;
+    if (onFilterChange) {
+      onFilterChange({
+        ...filters,
+        minBudget: min,
+        maxBudget: max,
+      });
+    } else {
+      dispatch(setBudget({ min, max }));
+    }
+  };
+
+  const handleDateClick = (day: number) => {
+    const isSelected = filters.selectedDate === day;
+    const newDate = isSelected ? null : day;
+    if (onFilterChange) {
+      onFilterChange({
+        ...filters,
+        selectedDate: newDate,
+      });
+    } else {
+      dispatch(setSelectedDate(newDate));
+    }
   };
 
   return (
@@ -375,9 +459,7 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
               placeholder="Search a city..."
               type="text"
               value={filters.destination}
-              onChange={(e) =>
-                onFilterChange({ ...filters, destination: e.target.value })
-              }
+              onChange={(e) => handleDestinationChange(e.target.value)}
               autoComplete="off"
               name="location"
             />
@@ -621,12 +703,7 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
                   <CalendarDayButton
                     key={`day-${day}`}
                     type="button"
-                    onClick={() =>
-                      onFilterChange({
-                        ...filters,
-                        selectedDate: isSelected ? null : day,
-                      })
-                    }
+                    onClick={() => handleDateClick(day)}
                     $isSelected={isSelected}
                     $isHighlighted={isHighlighted}
                   >

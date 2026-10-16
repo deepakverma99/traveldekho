@@ -1,37 +1,46 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
-import { Globe, LogOut, Bell, UserCheck } from 'lucide-react';
+import styled from 'styled-components';
+import { LogOut, Bell, UserCheck, Menu, X } from 'lucide-react';
 import { colors } from '@/theme/colors';
-import { clearPartnerSession } from './utils/partnerAuth';
 import { TripPartnerLogoutModal } from './TripPartnerLogoutModal';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import {
+  selectIsPartnerLogoutModalOpen,
+  selectCurrentPartner,
+  openPartnerLogoutModal,
+  closePartnerLogoutModal,
+  partnerLogout,
+  toggleMobileSidebar,
+  selectIsMobileSidebarOpen,
+} from '@/redux/slices/tripPartnerSlice';
 
-export interface TripPartnerHeaderProps {
-  username: string;
-  displayName: string;
-}
+import { type TripPartnerHeaderProps } from './types/';
+
+export type { TripPartnerHeaderProps };
 
 const HeaderRoot = styled.header`
   position: sticky;
   top: 0;
   z-index: 50;
   width: 100%;
-  height: 72px;
+  height: 64px;
   background-color: ${colors.offWhite};
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid ${colors.amber[200]}80;
-  padding: 0 1rem;
+  padding: 0 0.875rem;
 
   @media (min-width: 640px) {
+    height: 72px;
     padding: 0 1.5rem;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     padding: 0 2rem;
   }
 `;
@@ -43,12 +52,6 @@ const HeaderInner = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-`;
-
-const LeftSection = styled.div`
-  display: flex;
-  align-items: center;
   gap: 0.75rem;
 
   @media (min-width: 640px) {
@@ -56,12 +59,58 @@ const LeftSection = styled.div`
   }
 `;
 
+const LeftSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  @media (min-width: 640px) {
+    gap: 0.875rem;
+  }
+`;
+
+const MobileMenuToggle = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.625rem;
+  border: 1px solid ${colors.amber[200]}80;
+  background-color: ${colors.white};
+  color: ${colors.gray[700]};
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+
+  &:hover {
+    background-color: ${colors.amber[50]};
+    color: ${colors.amber[600]};
+    border-color: ${colors.amber[300]};
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+`;
+
 const LogoContainer = styled(Link)`
   position: relative;
-  height: 2.25rem;
-  width: 8.5rem;
+  height: 2rem;
+  width: 7.25rem;
   display: block;
   transition: transform 0.2s ease;
+  flex-shrink: 0;
+
+  @media (min-width: 480px) {
+    height: 2.25rem;
+    width: 8.5rem;
+  }
 
   &:hover {
     transform: scale(1.03);
@@ -71,59 +120,49 @@ const LogoContainer = styled(Link)`
     transform: scale(0.97);
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     display: none;
   }
 `;
 
 const PartnerBadge = styled.span`
-  display: inline-flex;
+  display: none;
   align-items: center;
-  padding: 0.25rem 0.75rem;
+  padding: 0.25rem 0.625rem;
   background-color: ${colors.amber[400]};
   color: ${colors.black};
   font-size: 10px;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   border-radius: 9999px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  white-space: nowrap;
+
+  @media (min-width: 480px) {
+    display: inline-flex;
+  }
+
+  @media (min-width: 640px) {
+    padding: 0.25rem 0.75rem;
+    letter-spacing: 0.1em;
+  }
 `;
 
 const RightSection = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.375rem;
 
   @media (min-width: 640px) {
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 1024px) {
     gap: 1rem;
   }
 `;
 
-const MarketplaceLink = styled(Link)`
-  display: none;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.375rem 0.75rem;
-  border-radius: 0.75rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: ${colors.gray[600]};
-  transition: color 0.2s ease, background-color 0.2s ease;
-
-  svg {
-    color: ${colors.amber[600]};
-  }
-
-  &:hover {
-    color: ${colors.black};
-    background-color: ${colors.amber[100]}80;
-  }
-
-  @media (min-width: 768px) {
-    display: inline-flex;
-  }
-`;
 
 const NotificationButton = styled(Link)`
   position: relative;
@@ -226,11 +265,24 @@ export const TripPartnerHeader: React.FC<TripPartnerHeaderProps> = ({
   displayName,
 }) => {
   const router = useRouter();
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const isLogoutModalOpen = useAppSelector(selectIsPartnerLogoutModalOpen);
+  const isMobileSidebarOpen = useAppSelector(selectIsMobileSidebarOpen);
+  const currentPartner = useAppSelector(selectCurrentPartner);
+
+  const effectiveDisplayName =
+    currentPartner?.displayName || displayName || username;
+
+  const handleOpenLogout = () => {
+    dispatch(openPartnerLogoutModal());
+  };
+
+  const handleCloseLogout = () => {
+    dispatch(closePartnerLogoutModal());
+  };
 
   const handleConfirmLogout = () => {
-    clearPartnerSession();
-    setIsLogoutModalOpen(false);
+    dispatch(partnerLogout());
     router.push('/trip-partner/login');
   };
 
@@ -240,6 +292,16 @@ export const TripPartnerHeader: React.FC<TripPartnerHeaderProps> = ({
         <HeaderInner>
           {/* Left: Brand & Portal Badge */}
           <LeftSection>
+            <MobileMenuToggle
+              type="button"
+              onClick={() => dispatch(toggleMobileSidebar())}
+              aria-label={isMobileSidebarOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
+              title={isMobileSidebarOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
+              aria-expanded={isMobileSidebarOpen}
+            >
+              {isMobileSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </MobileMenuToggle>
+
             <LogoContainer
               href={`/trip-partner/${username}/dashboard`}
               title="Trip Partner Dashboard"
@@ -261,14 +323,6 @@ export const TripPartnerHeader: React.FC<TripPartnerHeaderProps> = ({
 
           {/* Right: Actions & Partner Profile */}
           <RightSection>
-            {/* View Website Link */}
-            <MarketplaceLink
-              href="/"
-              title="Visit TravelDekho Marketplace"
-            >
-              <Globe className="w-3.5 h-3.5" />
-              <span>View Marketplace</span>
-            </MarketplaceLink>
 
             {/* Notifications Shortcut */}
             <NotificationButton
@@ -282,12 +336,12 @@ export const TripPartnerHeader: React.FC<TripPartnerHeaderProps> = ({
             {/* Profile Pill */}
             <ProfileContainer>
               <Avatar>
-                {displayName.charAt(0) || 'T'}
+                {effectiveDisplayName.charAt(0) || 'T'}
               </Avatar>
 
               <ProfileInfo>
                 <PartnerName>
-                  {displayName}
+                  {effectiveDisplayName}
                 </PartnerName>
                 <VerifiedBadge>
                   <UserCheck className="w-3 h-3" /> Verified Partner
@@ -296,7 +350,7 @@ export const TripPartnerHeader: React.FC<TripPartnerHeaderProps> = ({
 
               {/* Logout Button */}
               <LogoutButton
-                onClick={() => setIsLogoutModalOpen(true)}
+                onClick={handleOpenLogout}
                 title="Log Out of Partner Portal"
                 aria-label="Log Out of Partner Portal"
               >
@@ -310,9 +364,9 @@ export const TripPartnerHeader: React.FC<TripPartnerHeaderProps> = ({
       {/* Confirmation Modal */}
       <TripPartnerLogoutModal
         isOpen={isLogoutModalOpen}
-        onClose={() => setIsLogoutModalOpen(false)}
+        onClose={handleCloseLogout}
         onConfirm={handleConfirmLogout}
-        displayName={displayName}
+        displayName={effectiveDisplayName}
       />
     </>
   );
