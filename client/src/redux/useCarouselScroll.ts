@@ -4,7 +4,8 @@ import { useRef, useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './hooks';
 import {
   setScrollState,
-  selectCarouselScroll,
+  selectCanScrollLeft,
+  selectCanScrollRight,
 } from './slices/scrollSlice';
 
 export interface UseCarouselScrollOptions {
@@ -19,8 +20,11 @@ export const useCarouselScroll = (
   const { scrollRatio = 0.75, initialCanScrollRight = true } = options ?? {};
   const trackRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
-  const { canScrollLeft, canScrollRight } = useAppSelector((state) =>
-    selectCarouselScroll(state, sectionId, initialCanScrollRight)
+  const canScrollLeft = useAppSelector((state) =>
+    selectCanScrollLeft(state, sectionId)
+  );
+  const canScrollRight = useAppSelector((state) =>
+    selectCanScrollRight(state, sectionId, initialCanScrollRight)
   );
 
   const checkScrollState = useCallback(() => {

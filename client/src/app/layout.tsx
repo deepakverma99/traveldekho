@@ -2,7 +2,8 @@ import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { Montserrat, Plus_Jakarta_Sans, Caveat, Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
-import { Header, Footer } from "@/components";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { StyledComponentsRegistry } from "@/lib";
 import { StoreProvider } from "@/redux/StoreProvider";
 

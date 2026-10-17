@@ -109,11 +109,18 @@ const StatusPill = styled.div<{ $status: TripPartnerCardStatus }>`
           color: #ffffff;
           border: 1px solid rgba(255, 255, 255, 0.4);
         `;
+      case 'Pending Review':
       case 'Pending':
         return `
           background-color: rgba(245, 158, 11, 0.95);
           color: #ffffff;
           border: 1px solid rgba(255, 255, 255, 0.4);
+        `;
+      case 'Expired':
+        return `
+          background-color: rgba(239, 68, 68, 0.92);
+          color: #ffffff;
+          border: 1px solid rgba(255, 255, 255, 0.35);
         `;
       case 'Draft':
       default:

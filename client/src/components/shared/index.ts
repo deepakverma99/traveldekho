@@ -6,4 +6,4 @@ export * from './TripCard';
 export * from './Skeleton';
 export * from './Breadcrumb';
 export * from './Select';
-
+export * from './PlaceAutocompleteInput';

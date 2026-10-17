@@ -140,6 +140,7 @@ export const TripCard: React.FC<TripCardProps> = ({
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             priority={priority}
             loading={priority ? 'eager' : undefined}
+            unoptimized
           />
 
           {/* Free Goodies Badge */}

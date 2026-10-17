@@ -14,3 +14,4 @@ export * from './TripPartnerLogoutModal';
 export * from './TripPartnerStatCard';
 export * from './TripPartnerMyTrips';
 export * from './TripPartnerTripCard';
+export * from './TripPartnerNewTrip';

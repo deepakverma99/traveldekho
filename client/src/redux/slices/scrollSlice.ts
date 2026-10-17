@@ -43,6 +43,17 @@ export const scrollSlice = createSlice({
 
 export const { setScrollState, resetSectionScroll } = scrollSlice.actions;
 
+// Constant frozen references to prevent selector reference inequality warnings
+const DEFAULT_SCROLL_RIGHT_TRUE: CarouselScrollState = Object.freeze({
+  canScrollLeft: false,
+  canScrollRight: true,
+});
+
+const DEFAULT_SCROLL_RIGHT_FALSE: CarouselScrollState = Object.freeze({
+  canScrollLeft: false,
+  canScrollRight: false,
+});
+
 // Selectors
 export const selectScrollState = (state: { scroll?: ScrollState }) => state?.scroll;
 
@@ -50,11 +61,13 @@ export const selectCarouselScroll = (
   state: { scroll?: ScrollState },
   sectionId: string,
   defaultCanScrollRight = true
-): CarouselScrollState =>
-  state?.scroll?.carousels?.[sectionId] ?? {
-    canScrollLeft: false,
-    canScrollRight: defaultCanScrollRight,
-  };
+): CarouselScrollState => {
+  const item = state?.scroll?.carousels?.[sectionId];
+  if (item) return item;
+  return defaultCanScrollRight
+    ? DEFAULT_SCROLL_RIGHT_TRUE
+    : DEFAULT_SCROLL_RIGHT_FALSE;
+};
 
 export const selectCanScrollLeft = (
   state: { scroll?: ScrollState },
@@ -63,7 +76,8 @@ export const selectCanScrollLeft = (
 
 export const selectCanScrollRight = (
   state: { scroll?: ScrollState },
-  sectionId: string
-): boolean => state?.scroll?.carousels?.[sectionId]?.canScrollRight ?? true;
+  sectionId: string,
+  defaultValue = true
+): boolean => state?.scroll?.carousels?.[sectionId]?.canScrollRight ?? defaultValue;
 
 export const scrollReducer = scrollSlice.reducer;

@@ -2,9 +2,9 @@
  * Trip Partner Itinerary & Trips Management Types
  */
 
-export type TripPartnerCardStatus = 'Draft' | 'Pending' | 'Published';
+export type TripPartnerCardStatus = 'Draft' | 'Pending Review' | 'Pending' | 'Published' | 'Expired';
 
-export type TripDifficulty = 'Easy' | 'Moderate' | 'Difficult' | 'Challenging';
+export type TripDifficulty = 'Easy' | 'Moderate' | 'Hard' | 'Difficult' | 'Challenging';
 
 export interface PartnerTripItem {
   id: string;

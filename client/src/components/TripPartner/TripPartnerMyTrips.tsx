@@ -105,9 +105,10 @@ const AmberText = styled.span`
 
 const SubtitleText = styled.p`
   color: ${colors.gray[500]};
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: -0.01em;
   font-size: 0.875rem;
+  margin-top: 0.25rem;
 `;
 
 /* Search, Filters & Export Container */
@@ -332,15 +333,17 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
     <PageRoot>
       {/* Top Banner / Welcome Header */}
       <BannerWrapper>
-        <div className="space-y-2">
+        <div>
           <Breadcrumb items={breadcrumbItems} />
 
-          <Heading>
-            My <AmberText>Trips</AmberText>
-          </Heading>
-          <SubtitleText>
-            Manage and track all your Active Trips, Upcoming Departures, and Published Itineraries
-          </SubtitleText>
+          <div className="mt-2">
+            <Heading>
+              My <AmberText>Trips</AmberText>
+            </Heading>
+            <SubtitleText>
+              Manage and track all your Active Trips, Upcoming Departures, and Published Itineraries
+            </SubtitleText>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
@@ -375,10 +378,11 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
             value={statusFilter}
             onChange={(e) => dispatch(setTripsStatusFilter(e.target.value))}
           >
-            <option value="All">All Status</option>
-            <option value="Published">Published</option>
-            <option value="Pending">Pending</option>
+            <option value="All Status">All Status</option>
             <option value="Draft">Draft</option>
+            <option value="Pending Review">Pending Review</option>
+            <option value="Published">Published</option>
+            <option value="Expired">Expired</option>
           </Select>
 
           {/* Categories Filter */}
@@ -387,12 +391,14 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
             value={categoryFilter}
             onChange={(e) => dispatch(setTripsCategoryFilter(e.target.value))}
           >
-            <option value="All">All Categories</option>
-            <option value="Trekking">Trekking</option>
-            <option value="Weekend Gateway">Weekend Gateway</option>
-            <option value="Adventure">Adventure</option>
+            <option value="All Categories">All Categories</option>
+            <option value="Budget Friendly">Budget Friendly</option>
+            <option value="Educational Trips">Educational Trips</option>
+            <option value="Explore Offbeat">Explore Offbeat</option>
             <option value="Heritage">Heritage</option>
-            <option value="Offbeat">Offbeat</option>
+            <option value="Hike">Hike</option>
+            <option value="Mountains">Mountains</option>
+            <option value="Weekend Escapes">Weekend Escapes</option>
           </Select>
 
           {/* Difficulties Filter */}
@@ -401,11 +407,10 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
             value={difficultyFilter}
             onChange={(e) => dispatch(setTripsDifficultyFilter(e.target.value))}
           >
-            <option value="All">All Difficulties</option>
+            <option value="All Difficulties">All Difficulties</option>
             <option value="Easy">Easy</option>
             <option value="Moderate">Moderate</option>
-            <option value="Difficult">Difficult</option>
-            <option value="Challenging">Challenging</option>
+            <option value="Hard">Hard</option>
           </Select>
 
           {/* Sort By Filter */}

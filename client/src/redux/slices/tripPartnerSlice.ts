@@ -72,9 +72,9 @@ const initialState: TripPartnerState = {
 
   myTrips: INITIAL_PARTNER_TRIPS,
   tripsSearchQuery: '',
-  tripsStatusFilter: 'All',
-  tripsCategoryFilter: 'All',
-  tripsDifficultyFilter: 'All',
+  tripsStatusFilter: 'All Status',
+  tripsCategoryFilter: 'All Categories',
+  tripsDifficultyFilter: 'All Difficulties',
   tripsSortBy: 'newest',
   tripsToastMessage: null,
 };
@@ -201,13 +201,24 @@ export const tripPartnerSlice = createSlice({
     },
     resetTripsFilters: (state) => {
       state.tripsSearchQuery = '';
-      state.tripsStatusFilter = 'All';
-      state.tripsCategoryFilter = 'All';
-      state.tripsDifficultyFilter = 'All';
+      state.tripsStatusFilter = 'All Status';
+      state.tripsCategoryFilter = 'All Categories';
+      state.tripsDifficultyFilter = 'All Difficulties';
       state.tripsSortBy = 'newest';
     },
     setTripsToastMessage: (state, action: PayloadAction<string | null>) => {
       state.tripsToastMessage = action.payload;
+    },
+    addPartnerTrip: (state, action: PayloadAction<PartnerTripItem>) => {
+      const existingIdx = state.myTrips.findIndex((t) => t.id === action.payload.id);
+      if (existingIdx >= 0) {
+        state.myTrips[existingIdx] = action.payload;
+        state.tripsToastMessage = `Trip "${action.payload.title}" updated successfully!`;
+      } else {
+        state.myTrips.unshift(action.payload);
+        state.tripsToastMessage = `Trip "${action.payload.title}" published successfully!`;
+      }
+      state.stats.activeTrips = state.myTrips.filter((t) => t.status === 'Published').length;
     },
     deletePartnerTrip: (state, action: PayloadAction<string>) => {
       const tripToDelete = state.myTrips.find((t) => t.id === action.payload);
@@ -260,6 +271,7 @@ export const {
   setTripsSortBy,
   resetTripsFilters,
   setTripsToastMessage,
+  addPartnerTrip,
   deletePartnerTrip,
   archivePartnerTrip,
   editPartnerTrip,
@@ -359,14 +371,45 @@ export const selectFilteredPartnerTrips = createSelector(
           const matchDest = trip.destination.toLowerCase().includes(searchQuery);
           if (!matchTitle && !matchDest) return false;
         }
-        if (statusFilter !== 'All' && trip.status !== statusFilter) {
-          return false;
+        // Status filtering
+        if (statusFilter && statusFilter !== 'All' && statusFilter !== 'All Status') {
+          if (statusFilter === 'Pending Review' && (trip.status === 'Pending Review' || trip.status === 'Pending')) {
+            // match
+          } else if (trip.status !== statusFilter) {
+            return false;
+          }
         }
-        if (categoryFilter !== 'All' && trip.category !== categoryFilter) {
-          return false;
+
+        // Category filtering
+        if (categoryFilter && categoryFilter !== 'All' && categoryFilter !== 'All Categories') {
+          const catLower = categoryFilter.toLowerCase();
+          const tripCatLower = trip.category.toLowerCase();
+          const matchCategory =
+            tripCatLower === catLower ||
+            (catLower === 'weekend escapes' && (tripCatLower.includes('weekend') || tripCatLower.includes('gateway'))) ||
+            (catLower === 'educational trips' && tripCatLower.includes('education')) ||
+            (catLower === 'explore offbeat' && tripCatLower.includes('offbeat')) ||
+            (catLower === 'hike' && (tripCatLower.includes('trek') || tripCatLower.includes('hike'))) ||
+            (catLower === 'mountains' && tripCatLower.includes('mountain')) ||
+            (catLower === 'budget friendly' && tripCatLower.includes('budget')) ||
+            (trip.tags && trip.tags.some((t) => t.toLowerCase().includes(catLower) || catLower.includes(t.toLowerCase())));
+
+          if (!matchCategory) {
+            return false;
+          }
         }
-        if (difficultyFilter !== 'All' && trip.difficulty !== difficultyFilter) {
-          return false;
+
+        // Difficulty filtering
+        if (difficultyFilter && difficultyFilter !== 'All' && difficultyFilter !== 'All Difficulties') {
+          const diffLower = difficultyFilter.toLowerCase();
+          const tripDiffLower = trip.difficulty.toLowerCase();
+          const matchDifficulty =
+            tripDiffLower === diffLower ||
+            (diffLower === 'hard' && (tripDiffLower === 'challenging' || tripDiffLower === 'difficult' || tripDiffLower === 'hard'));
+
+          if (!matchDifficulty) {
+            return false;
+          }
         }
         return true;
       })

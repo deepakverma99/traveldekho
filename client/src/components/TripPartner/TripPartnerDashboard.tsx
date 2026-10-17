@@ -89,9 +89,10 @@ const AmberText = styled.span`
 
 const SubtitleText = styled.p`
   color: ${colors.gray[500]};
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: -0.01em;
   font-size: 0.875rem;
+  margin-top: 0.25rem;
 `;
 
 
@@ -448,15 +449,17 @@ export const TripPartnerDashboard: React.FC<TripPartnerDashboardProps> = ({
     <DashboardRoot>
       {/* Top Banner / Welcome Header */}
       <BannerWrapper>
-        <div className="space-y-2">
+        <div>
           <Breadcrumb items={breadcrumbItems} />
 
-          <Heading>
-            Hello, <AmberText>{effectiveDisplayName}!</AmberText>
-          </Heading>
-          <SubtitleText>
-            Manage your trips and track your growth
-          </SubtitleText>
+          <div className="mt-2">
+            <Heading>
+              Hello, <AmberText>{effectiveDisplayName}!</AmberText>
+            </Heading>
+            <SubtitleText>
+              Manage your trips and track your growth
+            </SubtitleText>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
