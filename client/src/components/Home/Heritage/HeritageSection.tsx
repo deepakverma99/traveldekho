@@ -125,7 +125,8 @@ export const HeritageSection: React.FC = () => {
           <h2
             className="text-xl sm:text-[28px] md:text-[32px] font-extrabold tracking-tight text-[#191c1d]"
           >
-            Heritage
+            Cultural
+            <span className="ml-1 text-amber-500">Heritage</span>
           </h2>
 
           <Link

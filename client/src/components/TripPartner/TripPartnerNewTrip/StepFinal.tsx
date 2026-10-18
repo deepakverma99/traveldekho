@@ -193,7 +193,7 @@ export const StepFinal: React.FC<StepFinalProps> = ({
         </FieldLabel>
 
         <div
-          className="mt-3 inline-block w-full max-w-[280px]"
+          className="mt-3 w-full max-w-[280px] mx-auto sm:mx-0"
           onClickCapture={(e) => {
             e.preventDefault();
             e.stopPropagation();

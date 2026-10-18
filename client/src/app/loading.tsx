@@ -1,6 +1,6 @@
 import React from 'react';
-import { HomeSkeleton } from '@/components/Home';
+import { LoadingView } from '@/components/Loading';
 
 export default function Loading() {
-  return <HomeSkeleton />;
+  return <LoadingView fullScreen />;
 }

@@ -53,10 +53,13 @@ const PageRoot = styled.div`
   margin: 0 auto;
   width: 100%;
   min-width: 0;
-  padding: 1.25rem 0.875rem 2.5rem 0.875rem;
+  padding: 0.875rem 0.625rem 2.5rem 0.625rem;
 
+  @media (min-width: 480px) {
+    padding: 1rem 0.75rem 2.5rem 0.75rem;
+  }
   @media (min-width: 640px) {
-    padding: 1.5rem 1.25rem 2.5rem 1.25rem;
+    padding: 1.25rem 1rem 2.5rem 1rem;
   }
   @media (min-width: 768px) {
     padding: 1.5rem 1.5rem 3rem 1.5rem;
@@ -68,12 +71,12 @@ const BannerWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   gap: 1.25rem;
   width: 100%;
   min-width: 0;
 
-  @media (min-width: 768px) {
+  @media (min-width: 640px) {
     flex-direction: row;
     align-items: center;
     margin-bottom: 1.75rem;
@@ -81,22 +84,24 @@ const BannerWrapper = styled.div`
   }
 `;
 
+const BreadcrumbScroll = styled.div`
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: 100%;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
 const Heading = styled.h1`
-  font-size: 1.375rem;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
   font-weight: 900;
   color: ${colors.gray[900]};
   letter-spacing: -0.025em;
+  text-transform: uppercase;
   word-break: break-word;
-
-  @media (min-width: 480px) {
-    font-size: 1.625rem;
-  }
-  @media (min-width: 640px) {
-    font-size: 1.875rem;
-  }
-  @media (min-width: 768px) {
-    font-size: 2.25rem;
-  }
 `;
 
 const AmberText = styled.span`
@@ -104,10 +109,12 @@ const AmberText = styled.span`
 `;
 
 const SubtitleText = styled.p`
-  color: ${colors.gray[500]};
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  color: ${colors.gray[400]};
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
   margin-top: 0.25rem;
 `;
 
@@ -116,33 +123,107 @@ const FilterBarCard = styled.div`
   background-color: ${colors.white};
   border: 1px solid ${colors.gray[200]};
   border-radius: 1rem;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 0.875rem;
   margin-bottom: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  display: grid;
+  gap: 0.625rem;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
 
-  @media (min-width: 1024px) {
+  /* Mobile (< 640px): 3 stacked rows */
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "search"
+    "selects"
+    "actions";
+
+  /* Tablet (640px to 1199px): Top row has search and actions, bottom row has selects */
+  @media (min-width: 640px) {
+    padding: 0.875rem 1rem;
+    gap: 0.75rem;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "search actions"
+      "selects selects";
+  }
+
+  /* Desktop (>= 1200px): Unified single continuous row */
+  @media (min-width: 1200px) {
+    display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75rem;
+    gap: 0.625rem;
   }
 `;
 
-const FilterGroup = styled.div`
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  flex: 1;
+const SearchWrapper = styled.div`
+  grid-area: search;
+  width: 100%;
+
+  @media (min-width: 1200px) {
+    flex: 1 1 200px;
+    max-width: 280px;
+    min-width: 180px;
+  }
+
+  /* Force inner SearchBar FilterContainer to expand to wrapper width */
+  > div {
+    max-width: 100% !important;
+    width: 100%;
+  }
 `;
 
+const FilterSelectsGrid = styled.div`
+  grid-area: selects;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 1200px) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: auto;
+    flex-shrink: 0;
+  }
+`;
+
+const SelectItemWrapper = styled.div`
+  width: 100%;
+
+  @media (min-width: 1200px) {
+    width: auto;
+  }
+`;
+
+const ActionButtonsWrapper = styled.div`
+  grid-area: actions;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+
+  @media (min-width: 640px) {
+    width: auto;
+    flex-shrink: 0;
+    justify-content: flex-end;
+  }
+
+  @media (min-width: 1200px) {
+    margin-left: auto;
+  }
+`;
 
 const ExportButton = styled.button`
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   padding: 0.5625rem 1.125rem;
   background-color: #0b132b;
@@ -156,6 +237,11 @@ const ExportButton = styled.button`
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
+  width: 100%;
+
+  @media (min-width: 640px) {
+    width: auto;
+  }
 
   svg {
     width: 0.9375rem;
@@ -176,16 +262,45 @@ const ExportButton = styled.button`
   }
 `;
 
-/* Trips Grid */
+const ResetFiltersButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5625rem 0.875rem;
+  background-color: ${colors.amber[50]};
+  color: ${colors.amber[800]};
+  border: 1px solid ${colors.amber[200]};
+  border-radius: 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-family: ${typography.fonts.jakarta};
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: ${colors.amber[100]};
+    color: ${colors.amber[900]};
+    border-color: ${colors.amber[300]};
+  }
+
+  svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+`;
+
+/* Trips Grid - 2 cards per row on small devices matching search page */
 const TripsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 0.875rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.625rem;
   width: 100%;
   min-width: 0;
 
-  @media (min-width: 400px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  @media (min-width: 640px) {
     gap: 1rem;
   }
 
@@ -194,7 +309,7 @@ const TripsGrid = styled.div`
     gap: 1.25rem;
   }
 
-  @media (min-width: 1120px) {
+  @media (min-width: 1280px) {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1.25rem;
   }
@@ -329,29 +444,40 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
     dispatch(resetTripsFilters());
   };
 
+  const hasActiveFilters = Boolean(
+    searchQuery ||
+    statusFilter !== 'All Status' ||
+    categoryFilter !== 'All Categories' ||
+    difficultyFilter !== 'All Difficulties' ||
+    sortBy !== 'newest'
+  );
+
   return (
     <PageRoot>
       {/* Top Banner / Welcome Header */}
       <BannerWrapper>
-        <div>
-          <Breadcrumb items={breadcrumbItems} />
+        <div className="w-full sm:w-auto">
+          <BreadcrumbScroll>
+            <Breadcrumb items={breadcrumbItems} />
+          </BreadcrumbScroll>
 
           <div className="mt-2">
-            <Heading>
-              My <AmberText>Trips</AmberText>
+            <Heading className="text-3xl font-black text-gray-900 tracking-tight uppercase">
+              My <AmberText className="text-amber-500">Trips</AmberText>
             </Heading>
-            <SubtitleText>
+            <SubtitleText className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">
               Manage and track all your Active Trips, Upcoming Departures, and Published Itineraries
             </SubtitleText>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Link href={`/trip-partner/${username}/trips/new`}>
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <Link href={`/trip-partner/${username}/trips/new`} className="w-full sm:w-auto block">
             <Button
               leftIcon={<Plus className="w-4 h-4 stroke-[2.5]" />}
               showArrow={false}
               size="lg"
+              className="w-full sm:w-auto justify-center"
             >
               Post New Trip
             </Button>
@@ -361,8 +487,8 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
 
       {/* Search, Filters, and Export Bar (Matching User Screenshot) */}
       <FilterBarCard>
-        <FilterGroup>
-          {/* Search Input using shared SearchBar */}
+        {/* Search Input using shared SearchBar */}
+        <SearchWrapper>
           <SearchBar
             variant="filter"
             placeholder="Search by title or destination..."
@@ -370,68 +496,89 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
             onChange={(e) => dispatch(setTripsSearchQuery(e.target.value))}
             onClear={() => dispatch(setTripsSearchQuery(''))}
             aria-label="Search trips"
+            maxWidth="100%"
+            minWidth="100%"
           />
+        </SearchWrapper>
 
-          {/* Status Filter */}
-          <Select
-            aria-label="Filter by Status"
-            value={statusFilter}
-            onChange={(e) => dispatch(setTripsStatusFilter(e.target.value))}
-          >
-            <option value="All Status">All Status</option>
-            <option value="Draft">Draft</option>
-            <option value="Pending Review">Pending Review</option>
-            <option value="Published">Published</option>
-            <option value="Expired">Expired</option>
-          </Select>
+        {/* 4 Category Selects */}
+        <FilterSelectsGrid>
+          <SelectItemWrapper>
+            <Select
+              aria-label="Filter by Status"
+              value={statusFilter}
+              onChange={(e) => dispatch(setTripsStatusFilter(e.target.value))}
+              isFullWidth
+            >
+              <option value="All Status">All Status</option>
+              <option value="Draft">Draft</option>
+              <option value="Pending Review">Pending Review</option>
+              <option value="Published">Published</option>
+              <option value="Expired">Expired</option>
+            </Select>
+          </SelectItemWrapper>
 
-          {/* Categories Filter */}
-          <Select
-            aria-label="Filter by Category"
-            value={categoryFilter}
-            onChange={(e) => dispatch(setTripsCategoryFilter(e.target.value))}
-          >
-            <option value="All Categories">All Categories</option>
-            <option value="Budget Friendly">Budget Friendly</option>
-            <option value="Educational Trips">Educational Trips</option>
-            <option value="Explore Offbeat">Explore Offbeat</option>
-            <option value="Heritage">Heritage</option>
-            <option value="Hike">Hike</option>
-            <option value="Mountains">Mountains</option>
-            <option value="Weekend Escapes">Weekend Escapes</option>
-          </Select>
+          <SelectItemWrapper>
+            <Select
+              aria-label="Filter by Category"
+              value={categoryFilter}
+              onChange={(e) => dispatch(setTripsCategoryFilter(e.target.value))}
+              isFullWidth
+            >
+              <option value="All Categories">All Categories</option>
+              <option value="Budget Friendly">Budget Friendly</option>
+              <option value="Educational Trips">Educational Trips</option>
+              <option value="Explore Offbeat">Explore Offbeat</option>
+              <option value="Heritage">Heritage</option>
+              <option value="Hike">Hike</option>
+              <option value="Mountains">Mountains</option>
+              <option value="Weekend Escapes">Weekend Escapes</option>
+            </Select>
+          </SelectItemWrapper>
 
-          {/* Difficulties Filter */}
-          <Select
-            aria-label="Filter by Difficulty"
-            value={difficultyFilter}
-            onChange={(e) => dispatch(setTripsDifficultyFilter(e.target.value))}
-          >
-            <option value="All Difficulties">All Difficulties</option>
-            <option value="Easy">Easy</option>
-            <option value="Moderate">Moderate</option>
-            <option value="Hard">Hard</option>
-          </Select>
+          <SelectItemWrapper>
+            <Select
+              aria-label="Filter by Difficulty"
+              value={difficultyFilter}
+              onChange={(e) => dispatch(setTripsDifficultyFilter(e.target.value))}
+              isFullWidth
+            >
+              <option value="All Difficulties">All Difficulties</option>
+              <option value="Easy">Easy</option>
+              <option value="Moderate">Moderate</option>
+              <option value="Hard">Hard</option>
+            </Select>
+          </SelectItemWrapper>
 
-          {/* Sort By Filter */}
-          <Select
-            aria-label="Sort Trips"
-            value={sortBy}
-            onChange={(e) => dispatch(setTripsSortBy(e.target.value))}
-          >
-            <option value="newest">Sort by Newest</option>
-            <option value="oldest">Sort by Oldest</option>
-            <option value="price_low">Price: Low to High</option>
-            <option value="price_high">Price: High to Low</option>
-            <option value="bookings">Most Booked</option>
-          </Select>
-        </FilterGroup>
+          <SelectItemWrapper>
+            <Select
+              aria-label="Sort Trips"
+              value={sortBy}
+              onChange={(e) => dispatch(setTripsSortBy(e.target.value))}
+              isFullWidth
+            >
+              <option value="newest">Sort by Newest</option>
+              <option value="oldest">Sort by Oldest</option>
+              <option value="price_low">Price: Low to High</option>
+              <option value="price_high">Price: High to Low</option>
+              <option value="bookings">Most Booked</option>
+            </Select>
+          </SelectItemWrapper>
+        </FilterSelectsGrid>
 
-        {/* Export Button */}
-        <ExportButton type="button" onClick={handleExport}>
-          <Download />
-          <span>Export</span>
-        </ExportButton>
+        {/* Action Buttons: Reset & Export */}
+        <ActionButtonsWrapper>
+          {hasActiveFilters && (
+            <ResetFiltersButton type="button" onClick={handleResetFilters} title="Reset all filters">
+              <RotateCcw />
+              <span>Reset</span>
+            </ResetFiltersButton>
+          )}
+          <ExportButton type="button" onClick={handleExport}>
+            <Download />
+            <span>Export</span>
+          </ExportButton>
+        </ActionButtonsWrapper>
       </FilterBarCard>
 
       {/* Trips Grid */}

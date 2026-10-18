@@ -126,7 +126,7 @@ export const EducationalTripsSection: React.FC = () => {
             className="text-xl sm:text-[28px] md:text-[32px] font-extrabold tracking-tight text-[#191c1d]"
           >
             Educational
-            <span className="ml-1 text-[#FFD133]">
+            <span className="ml-1 text-amber-500">
               Trips
             </span>
           </h2>

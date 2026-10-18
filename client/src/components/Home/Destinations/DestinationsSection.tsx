@@ -72,8 +72,8 @@ const Title = styled.h2`
 `;
 
 const HighlightText = styled.span`
-  margin-left: 0.25rem;
-  color: ${colors.primaryContainer};
+  margin-left: 0.35rem;
+  color: ${colors.amber[500]};
 `;
 
 const CarouselContainer = styled.div`
@@ -186,8 +186,8 @@ export const DestinationsSection: React.FC = () => {
         {/* Header */}
         <SectionHeader>
           <Title>
-            Destinations
-            <HighlightText />
+            Popular
+            <HighlightText>Destinations</HighlightText>
           </Title>
         </SectionHeader>
 

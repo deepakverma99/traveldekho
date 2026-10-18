@@ -12,8 +12,8 @@ const CardContainer = styled(motion.div)`
   padding: 1.25rem 1rem 1.5rem;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(145deg, #ffd133 0%, #f5c623 50%, #eec221 100%);
-  box-shadow: rgba(115, 92, 0, 0.2) 0px 20px 60px -12px, rgba(255, 209, 51, 0.25) 0px 8px 24px -8px;
+  background: linear-gradient(145deg, ${colors.amber[300]} 0%, ${colors.amber[400]} 55%, ${colors.amber[500]} 100%);
+  box-shadow: 0 20px 50px -12px rgba(244, 140, 6, 0.22), 0 8px 24px -8px rgba(250, 161, 46, 0.25);
   font-family: ${typography.fonts.jakarta};
 
   @media (min-width: 480px) {
@@ -28,19 +28,19 @@ const CardContainer = styled(motion.div)`
 const SheenOverlay = styled.div`
   position: absolute;
   inset: 0;
-  opacity: 0.06;
+  opacity: 0.10;
   pointer-events: none;
-  background-image: radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.8) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.5) 0%, transparent 40%);
+  background-image: radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.9) 0%, transparent 55%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.7) 0%, transparent 45%);
 `;
 
 const FormBox = styled.div`
   backdrop-filter: blur(24px);
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.78);
   border-radius: 1rem;
   padding: 0.875rem;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 30px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 10px 30px;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -71,12 +71,12 @@ const SelectTrigger = styled.button`
 
   &:hover {
     background-color: #ffffff;
-    border-color: rgba(255, 209, 51, 0.5);
+    border-color: rgba(244, 140, 6, 0.4);
   }
 
   &:focus {
-    border-color: ${colors.gold};
-    box-shadow: 0 0 0 3px rgba(250, 203, 43, 0.3);
+    border-color: ${colors.amber[500]};
+    box-shadow: 0 0 0 3px rgba(244, 140, 6, 0.25);
   }
 `;
 
@@ -94,11 +94,11 @@ const SearchSubmitButton = styled(motion.button)`
   margin-top: 0.375rem;
   position: relative;
   overflow: hidden;
-  background-color: ${colors.gold};
-  color: ${colors.charcoal};
+  background-color: ${colors.amber[500]};
+  color: ${colors.white};
   border: none;
   font-family: ${typography.fonts.jakarta};
-  box-shadow: 0 4px 14px rgba(250, 203, 43, 0.4);
+  box-shadow: 0 4px 14px rgba(244, 140, 6, 0.35);
   transition: all 0.25s ease;
 
   &::before {
@@ -139,13 +139,13 @@ export const HeroBookingCard: React.FC = () => {
       <SheenOverlay />
 
       <div className="relative z-10">
-        <h1 className="text-[24px] sm:text-[34px] md:text-[40px] font-black leading-[1.08] mb-2 sm:mb-3.5 tracking-tight text-[#191c1d]">
+        <h1 className="text-[24px] sm:text-[34px] md:text-[40px] font-black leading-[1.08] mb-2 sm:mb-3.5 tracking-tight text-[#1A1615]">
           Find Your
           <br />
           Dream Trip
         </h1>
 
-        <p className="text-[14px] sm:text-[15px] leading-relaxed mb-5 sm:mb-7 font-medium text-[#3a3520]">
+        <p className="text-[14px] sm:text-[15px] leading-relaxed mb-5 sm:mb-7 font-medium text-[#431904]">
           Get instant suggestions for your next adventure
         </p>
 
@@ -217,7 +217,7 @@ export const HeroBookingCard: React.FC = () => {
           </div>
 
           {/* Divider */}
-          <div className="w-px h-10 bg-[#C89B16]/30 mx-4" />
+          <div className="w-px h-10 bg-[#431904]/20 mx-4" />
 
           {/* Happy Customers */}
           <div className="flex flex-col items-center flex-1">

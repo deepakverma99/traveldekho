@@ -212,7 +212,7 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
       </FormGroup>
 
       {/* Inclusions & Exclusions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 pt-2">
         {/* Inclusions */}
         <div className="space-y-3">
           <FieldLabel>

@@ -134,9 +134,8 @@ export const GalleryImagesField: React.FC<GalleryImagesFieldProps> = ({
         onClick={handleUploadClick}
         disabled={isFull}
         title="Upload multiple photos from your device"
-        style={{ width: '100%' }}
       >
-        <UploadCloud className="w-5 h-5 stroke-[2.2]" />
+        <UploadCloud className="w-4 h-4 stroke-[2.2]" />
         <span>Upload Images</span>
       </ThumbnailActionButton>
 

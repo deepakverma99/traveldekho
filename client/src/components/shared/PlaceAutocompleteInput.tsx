@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
-import { Trash2, AlertCircle, Loader2 } from 'lucide-react';
+import { Trash2, AlertCircle, Loader2, MapPin, Navigation } from 'lucide-react';
 import { colors } from '@/theme/colors';
 import { typography } from '@/theme/typography';
 import { useGooglePlaces, PlacePrediction, PlaceDetails } from '@/hooks/useGooglePlaces';
@@ -18,6 +18,7 @@ export interface PlaceAutocompleteInputProps {
   errorMessage?: string;
   countryCode?: string;
   apiKey?: string;
+  debounceMs?: number;
   disabled?: boolean;
   id?: string;
   name?: string;
@@ -115,7 +116,7 @@ const SuggestionsCard = styled.div`
   border: 1px solid ${colors.gray[200]};
   border-radius: 1rem;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-  max-height: 280px;
+  max-height: 290px;
   overflow-y: auto;
   z-index: 50;
   padding: 0.35rem 0;
@@ -136,8 +137,8 @@ const SuggestionsCard = styled.div`
 const SuggestionItem = styled.div<{ $isHighlighted: boolean }>`
   padding: 0.75rem 1rem;
   display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
+  align-items: flex-start;
+  gap: 0.75rem;
   cursor: pointer;
   text-align: left;
   border-bottom: 1px solid ${colors.gray[100]};
@@ -154,11 +155,40 @@ const SuggestionItem = styled.div<{ $isHighlighted: boolean }>`
   }
 `;
 
+const SuggestionIconBadge = styled.div`
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.5rem;
+  background-color: ${colors.amber[50]};
+  color: ${colors.amber[600]};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+
+  svg {
+    width: 0.9375rem;
+    height: 0.9375rem;
+  }
+`;
+
+const SuggestionTextCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  flex: 1;
+`;
+
 const PlaceMainText = styled.span`
   font-size: 0.875rem;
   font-weight: 700;
   color: ${colors.gray[900]};
   line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const PlaceSecondaryText = styled.span`
@@ -166,19 +196,39 @@ const PlaceSecondaryText = styled.span`
   font-weight: 400;
   color: ${colors.gray[500]};
   line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const CustomLocationItem = styled(SuggestionItem)`
+  border-top: 1px solid ${colors.gray[100]};
+  background-color: ${({ $isHighlighted }) =>
+    $isHighlighted ? colors.amber[50] : '#fdfdfd'};
+
+  &:hover {
+    background-color: ${colors.amber[50]};
+  }
+
+  ${SuggestionIconBadge} {
+    background-color: ${colors.amber[100]};
+    color: ${colors.amber[700]};
+  }
 `;
 
 const LoadingRow = styled.div`
-  padding: 0.75rem 1rem;
+  padding: 0.875rem 1rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.625rem;
   font-size: 0.8125rem;
-  color: ${colors.gray[500]};
+  font-weight: 500;
+  color: ${colors.gray[600]};
 
   svg {
-    width: 0.875rem;
-    height: 0.875rem;
+    width: 1rem;
+    height: 1rem;
+    color: ${colors.amber[500]};
     animation: spin 1s linear infinite;
   }
 
@@ -220,6 +270,7 @@ export const PlaceAutocompleteInput: React.FC<PlaceAutocompleteInputProps> = ({
   errorMessage = 'Only alphabets and numbers are allowed',
   countryCode = 'in',
   apiKey,
+  debounceMs = 300,
   disabled = false,
   id,
   name,
@@ -231,12 +282,12 @@ export const PlaceAutocompleteInput: React.FC<PlaceAutocompleteInputProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Use the custom Google Places hook
+  // Use the enhanced Google & live geocoding Places hook
   const { predictions, isLoading, search, clearPredictions, getPlaceDetails } =
     useGooglePlaces({
       apiKey,
       countryCode,
-      debounceMs: 250,
+      debounceMs,
     });
 
   // Handle outside click to close suggestions card
@@ -280,10 +331,10 @@ export const PlaceAutocompleteInput: React.FC<PlaceAutocompleteInputProps> = ({
   };
 
   const handleSelectPrediction = async (prediction: PlacePrediction) => {
-    // Sanitize prediction mainText if filter is present (removes parentheses/symbols safely)
+    const rawName = prediction.mainText || prediction.description || '';
     const formatted = filterInput
-      ? filterInput(prediction.mainText.replace(/[()]/g, ''))
-      : prediction.mainText;
+      ? filterInput(rawName.replace(/[()]/g, ''))
+      : rawName;
 
     const trimmed = formatted.trim();
     onChange(trimmed);
@@ -300,23 +351,54 @@ export const PlaceAutocompleteInput: React.FC<PlaceAutocompleteInputProps> = ({
     }
   };
 
+  const handleSelectCustom = (customText: string) => {
+    const cleaned = filterInput ? filterInput(customText) : customText;
+    const trimmed = cleaned.trim();
+    onChange(trimmed);
+    clearPredictions();
+    setIsOpen(false);
+    setHighlightedIndex(-1);
+    inputRef.current?.focus();
+
+    if (onPlaceSelected) {
+      onPlaceSelected({
+        name: trimmed,
+        formattedAddress: trimmed,
+      });
+    }
+  };
+
+  // Determine whether to display the custom location option
+  const trimmedVal = value ? value.trim() : '';
+  const hasExactMatch = useMemo(() => {
+    if (!trimmedVal) return false;
+    return predictions.some(
+      (p) => p.mainText.toLowerCase() === trimmedVal.toLowerCase()
+    );
+  }, [predictions, trimmedVal]);
+
+  const showCustomOption = trimmedVal.length >= 2 && !hasExactMatch;
+  const customOptionIndex = predictions.length;
+  const totalItems = predictions.length + (showCustomOption ? 1 : 0);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!isOpen || predictions.length === 0) return;
+    if (!isOpen || totalItems === 0) return;
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setHighlightedIndex((prev) =>
-        prev < predictions.length - 1 ? prev + 1 : 0
-      );
+      setHighlightedIndex((prev) => (prev < totalItems - 1 ? prev + 1 : 0));
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setHighlightedIndex((prev) =>
-        prev > 0 ? prev - 1 : predictions.length - 1
-      );
+      setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : totalItems - 1));
     } else if (e.key === 'Enter') {
       e.preventDefault();
       if (highlightedIndex >= 0 && highlightedIndex < predictions.length) {
         handleSelectPrediction(predictions[highlightedIndex]);
+      } else if (
+        showCustomOption &&
+        (highlightedIndex === customOptionIndex || highlightedIndex === -1)
+      ) {
+        handleSelectCustom(trimmedVal);
       }
     } else if (e.key === 'Escape') {
       setIsOpen(false);
@@ -352,9 +434,9 @@ export const PlaceAutocompleteInput: React.FC<PlaceAutocompleteInputProps> = ({
         )}
       </InputWrapper>
 
-      {isOpen && (predictions.length > 0 || isLoading) && (
+      {isOpen && (predictions.length > 0 || isLoading || showCustomOption) && (
         <SuggestionsCard>
-          {isLoading && predictions.length === 0 && (
+          {isLoading && (
             <LoadingRow>
               <Loader2 />
               <span>Searching locations...</span>
@@ -371,12 +453,40 @@ export const PlaceAutocompleteInput: React.FC<PlaceAutocompleteInputProps> = ({
               }}
               onMouseEnter={() => setHighlightedIndex(idx)}
             >
-              <PlaceMainText>{item.mainText}</PlaceMainText>
-              {item.secondaryText && (
-                <PlaceSecondaryText>{item.secondaryText}</PlaceSecondaryText>
-              )}
+              <SuggestionIconBadge>
+                <MapPin />
+              </SuggestionIconBadge>
+              <SuggestionTextCol>
+                <PlaceMainText>{item.mainText}</PlaceMainText>
+                {item.secondaryText && (
+                  <PlaceSecondaryText>{item.secondaryText}</PlaceSecondaryText>
+                )}
+              </SuggestionTextCol>
             </SuggestionItem>
           ))}
+
+          {showCustomOption && (
+            <CustomLocationItem
+              $isHighlighted={highlightedIndex === customOptionIndex}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                handleSelectCustom(trimmedVal);
+              }}
+              onMouseEnter={() => setHighlightedIndex(customOptionIndex)}
+            >
+              <SuggestionIconBadge>
+                <Navigation />
+              </SuggestionIconBadge>
+              <SuggestionTextCol>
+                <PlaceMainText>Use &ldquo;{trimmedVal}&rdquo;</PlaceMainText>
+                <PlaceSecondaryText>
+                  {predictions.length > 0
+                    ? 'Custom location • Click or press Enter to use'
+                    : 'No direct catalog matches • Click or press Enter to use'}
+                </PlaceSecondaryText>
+              </SuggestionTextCol>
+            </CustomLocationItem>
+          )}
         </SuggestionsCard>
       )}
 

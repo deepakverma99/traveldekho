@@ -92,6 +92,13 @@ const StatusPill = styled.div<{ $status: TripPartnerCardStatus }>`
   letter-spacing: 0.03em;
   backdrop-filter: blur(8px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  max-width: calc(100% - 2.85rem);
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
   @media (min-width: 640px) {
     top: 0.625rem;
@@ -99,6 +106,7 @@ const StatusPill = styled.div<{ $status: TripPartnerCardStatus }>`
     padding: 0.2rem 0.55rem;
     font-size: 0.625rem;
     gap: 0.35rem;
+    max-width: calc(100% - 3.25rem);
   }
 
   ${({ $status }) => {
@@ -385,10 +393,10 @@ export const TripPartnerTripCard: React.FC<TripPartnerTripCardProps> = ({
 
       {/* Content Body */}
       <Link href={`/trips/${trip.slug}`} className="contents">
-        <div className="flex flex-col justify-center flex-grow p-2.5 sm:p-4 pt-2 sm:pt-3.5">
+        <div className="flex flex-col justify-center flex-grow p-2 sm:p-4 pt-1.5 sm:pt-3.5">
           {/* Duration */}
           <div
-            className="flex items-center gap-1 text-[10px] sm:text-[12px] mb-1 sm:mb-1.5"
+            className="flex items-center gap-1 text-[9.5px] sm:text-[12px] mb-1 sm:mb-1.5"
             style={{ fontFamily: typography.fonts.vietnam, color: colors.gray[500] }}
           >
             <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 opacity-70" />
@@ -397,16 +405,16 @@ export const TripPartnerTripCard: React.FC<TripPartnerTripCardProps> = ({
 
           {/* Title */}
           <h3
-            className="font-bold leading-snug mb-1 sm:mb-1.5 line-clamp-2 text-[12px] sm:text-[14px] h-[34px] sm:h-[40px] overflow-hidden"
+            className="font-bold leading-snug mb-1 sm:mb-1.5 line-clamp-2 text-[11.5px] sm:text-[14px] h-[32px] sm:h-[40px] overflow-hidden"
             style={{ fontFamily: typography.fonts.jakarta, color: colors.charcoal }}
           >
             {trip.title}
           </h3>
 
           {/* Destination */}
-          <div className="h-[16px] sm:h-[20px] mb-1.5 sm:mb-2.5 flex items-center overflow-hidden">
+          <div className="h-[16px] sm:h-[20px] mb-1 sm:mb-2.5 flex items-center overflow-hidden">
             <div
-              className="flex items-center gap-1 text-[10px] sm:text-[11px] font-bold truncate"
+              className="flex items-center gap-1 text-[9.5px] sm:text-[11px] font-bold truncate"
               style={{ color: colors.amber[600] }}
             >
               <MapPin className="w-2.5 h-2.5 sm:w-3 sm:h-3 shrink-0" />
@@ -415,7 +423,7 @@ export const TripPartnerTripCard: React.FC<TripPartnerTripCardProps> = ({
           </div>
 
           {/* Tags */}
-          <div className="h-[20px] sm:h-[24px] mb-1.5 sm:mb-2.5 overflow-hidden">
+          <div className="h-[18px] sm:h-[24px] mb-1 sm:mb-2.5 overflow-hidden">
             <div className="flex flex-nowrap overflow-x-auto scrollbar-hide gap-1 sm:gap-1.5 pb-2">
               {trip.tags.map((tag, idx) => (
                 <TagBadge key={idx}>{tag}</TagBadge>
@@ -425,18 +433,18 @@ export const TripPartnerTripCard: React.FC<TripPartnerTripCardProps> = ({
 
           {/* Pricing */}
           <div
-            className="h-[20px] sm:h-[24px] flex items-baseline gap-1.5 sm:gap-2 mb-1.5 sm:mb-3 overflow-hidden whitespace-nowrap"
+            className="min-h-[18px] sm:min-h-[24px] flex items-baseline flex-wrap gap-x-1.5 gap-y-0.5 mb-1 sm:mb-2.5"
             style={{ fontFamily: typography.fonts.jakarta }}
           >
             <span
-              className="text-[13px] sm:text-[16px] font-extrabold shrink-0"
+              className="text-[12px] sm:text-[16px] font-extrabold shrink-0"
               style={{ color: colors.charcoal }}
             >
               ₹{trip.price.toLocaleString('en-IN')}
             </span>
             {trip.originalPrice && (
               <span
-                className="text-[10px] sm:text-[12px] line-through shrink-0"
+                className="text-[9.5px] sm:text-[12px] line-through shrink-0"
                 style={{ color: colors.gray[400] }}
               >
                 ₹{trip.originalPrice.toLocaleString('en-IN')}
@@ -444,7 +452,7 @@ export const TripPartnerTripCard: React.FC<TripPartnerTripCardProps> = ({
             )}
             {trip.discount && (
               <span
-                className="text-[9px] sm:text-[11px] font-bold shrink-0"
+                className="text-[8.5px] sm:text-[11px] font-bold shrink-0"
                 style={{ color: colors.amber[700] }}
               >
                 {trip.discount}
@@ -454,10 +462,10 @@ export const TripPartnerTripCard: React.FC<TripPartnerTripCardProps> = ({
 
           {/* Departure Date */}
           <div
-            className="flex items-start gap-1 text-[9.5px] sm:text-[11px] h-[15px] sm:h-[16px] overflow-hidden"
+            className="flex items-center gap-1 text-[9px] sm:text-[11px] h-[15px] sm:h-[18px] overflow-hidden"
             style={{ fontFamily: typography.fonts.vietnam, color: colors.gray[500] }}
           >
-            <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 mt-0.5 shrink-0 opacity-70" />
+            <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 opacity-70" />
             <span className="truncate">{trip.date}</span>
           </div>
 
@@ -467,18 +475,18 @@ export const TripPartnerTripCard: React.FC<TripPartnerTripCardProps> = ({
             style={{ borderColor: colors.gray[100] }}
           >
             <div
-              className="flex items-center justify-between w-full px-2 sm:px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl border border-transparent"
+              className="flex items-center justify-between w-full px-1.5 sm:px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl border border-transparent"
               style={{ backgroundColor: `${colors.gray[50]}CC` }}
             >
-              <div className="flex items-center gap-1 sm:gap-1.5 overflow-hidden flex-1 pr-1 sm:pr-2">
+              <div className="flex items-center gap-1 sm:gap-1.5 overflow-hidden flex-1 min-w-0 pr-1">
                 <div
-                  className="shrink-0 w-3.5 h-3.5 sm:w-5 sm:h-5 rounded-full font-black text-[8px] sm:text-[9px] flex items-center justify-center shadow-sm"
+                  className="shrink-0 w-3.5 h-3.5 sm:w-5 sm:h-5 rounded-full font-black text-[7.5px] sm:text-[9px] flex items-center justify-center shadow-sm"
                   style={{ backgroundColor: colors.amber[500], color: colors.white }}
                 >
                   {trip.partner.name.charAt(0).toUpperCase()}
                 </div>
                 <span
-                  className="text-[9px] sm:text-[11px] truncate"
+                  className="text-[8.5px] sm:text-[11px] truncate min-w-0"
                   style={{ fontFamily: typography.fonts.jakarta, color: colors.gray[500] }}
                 >
                   By <span className="font-bold tracking-wide" style={{ color: colors.gray[900] }}>{trip.partner.name}</span>
@@ -486,7 +494,7 @@ export const TripPartnerTripCard: React.FC<TripPartnerTripCardProps> = ({
               </div>
 
               <div
-                className="flex items-center gap-0.5 sm:gap-1 shrink-0 ml-1.5 sm:ml-2 border-l pl-1.5 sm:pl-2"
+                className="flex items-center gap-0.5 sm:gap-1 shrink-0 ml-1 border-l pl-1 sm:pl-2"
                 style={{ borderColor: colors.gray[200] }}
               >
                 <Star
@@ -494,10 +502,17 @@ export const TripPartnerTripCard: React.FC<TripPartnerTripCardProps> = ({
                   style={{ color: colors.amber[500], fill: colors.amber[500] }}
                 />
                 <span
-                  className="text-[9px] sm:text-[10px] font-black"
+                  className="text-[8.5px] sm:text-[10px] font-black whitespace-nowrap"
                   style={{ color: colors.gray[700] }}
                 >
-                  {trip.bookingsCount > 0 ? `${trip.bookingsCount} Bookings` : 'New'}
+                  {trip.bookingsCount > 0 ? (
+                    <>
+                      <span className="hidden sm:inline">{trip.bookingsCount} Bookings</span>
+                      <span className="inline sm:hidden">{trip.bookingsCount} Bkgs</span>
+                    </>
+                  ) : (
+                    'New'
+                  )}
                 </span>
               </div>
             </div>

@@ -145,10 +145,10 @@ export const OccupancyPricingField: React.FC<OccupancyPricingFieldProps> = ({
           return (
             <div
               key={option.id || index}
-              className="flex items-end gap-3 sm:gap-4 p-0.5"
+              className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] items-end gap-3 sm:gap-4 p-0.5"
             >
               {/* Room Sharing Type Dropdown */}
-              <div className="flex-1 min-w-0">
+              <div className="min-w-0">
                 <label
                   htmlFor={`sharing-type-${option.id}`}
                   className="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-1.5"
@@ -162,7 +162,7 @@ export const OccupancyPricingField: React.FC<OccupancyPricingFieldProps> = ({
                     onChange={(e) =>
                       handleUpdateOption(option.id, { sharingType: e.target.value })
                     }
-                    className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25 rounded-2xl pl-5 pr-10 py-3.5 text-sm sm:text-base font-bold text-gray-900 outline-none transition-all shadow-2xs appearance-none cursor-pointer"
+                    className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25 rounded-2xl pl-4 sm:pl-5 pr-10 py-3 sm:py-3.5 text-sm sm:text-base font-bold text-gray-900 outline-none transition-all shadow-2xs appearance-none cursor-pointer"
                   >
                     {ROOM_SHARING_OPTIONS.map((type) => (
                       <option
@@ -180,36 +180,50 @@ export const OccupancyPricingField: React.FC<OccupancyPricingFieldProps> = ({
                 </div>
               </div>
 
-              {/* Price (INR) */}
-              <div className="flex-1 min-w-0">
-                <label
-                  htmlFor={`sharing-price-${option.id}`}
-                  className="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-1.5"
-                >
-                  Price (INR)
-                </label>
-                <input
-                  id={`sharing-price-${option.id}`}
-                  type="text"
-                  inputMode="numeric"
-                  value={option.price === '' ? '' : option.price}
-                  placeholder="0"
-                  onChange={(e) => {
-                    const filtered = filterOnlyNumbers(e.target.value);
-                    handleUpdateOption(option.id, {
-                      price: filtered === '' ? '' : Number(filtered),
-                    });
-                  }}
-                  className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25 rounded-2xl px-5 py-3.5 text-sm sm:text-base font-bold text-gray-900 placeholder:text-gray-400 placeholder:font-normal outline-none transition-all shadow-2xs"
-                />
+              {/* Price (INR) with integrated delete button on mobile */}
+              <div className="min-w-0 flex items-end gap-2 sm:block">
+                <div className="flex-1 min-w-0">
+                  <label
+                    htmlFor={`sharing-price-${option.id}`}
+                    className="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-1.5"
+                  >
+                    Price (INR)
+                  </label>
+                  <input
+                    id={`sharing-price-${option.id}`}
+                    type="text"
+                    inputMode="numeric"
+                    value={option.price === '' ? '' : option.price}
+                    placeholder="0"
+                    onChange={(e) => {
+                      const filtered = filterOnlyNumbers(e.target.value);
+                      handleUpdateOption(option.id, {
+                        price: filtered === '' ? '' : Number(filtered),
+                      });
+                    }}
+                    className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25 rounded-2xl px-4 sm:px-5 py-3 sm:py-3.5 text-sm sm:text-base font-bold text-gray-900 placeholder:text-gray-400 placeholder:font-normal outline-none transition-all shadow-2xs"
+                  />
+                </div>
+
+                {/* Delete Option Button (shown inline on mobile) */}
+                {activeOptions.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveOption(option.id)}
+                    className="sm:hidden w-11 h-11 rounded-2xl bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 transition-colors flex items-center justify-center shrink-0 cursor-pointer shadow-2xs"
+                    title="Remove sharing option"
+                  >
+                    <Trash2 className="w-4 h-4 stroke-[2.2]" />
+                  </button>
+                )}
               </div>
 
-              {/* Delete Option Button */}
+              {/* Delete Option Button (shown on tablet/desktop) */}
               {activeOptions.length > 1 && (
                 <button
                   type="button"
                   onClick={() => handleRemoveOption(option.id)}
-                  className="w-13 h-13 rounded-2xl bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 transition-colors flex items-center justify-center shrink-0 cursor-pointer mb-0.5 shadow-2xs"
+                  className="hidden sm:flex w-13 h-13 rounded-2xl bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 transition-colors items-center justify-center shrink-0 cursor-pointer mb-0.5 shadow-2xs"
                   title="Remove sharing option"
                 >
                   <Trash2 className="w-4 h-4 stroke-[2.2]" />
@@ -240,7 +254,7 @@ export const OccupancyPricingField: React.FC<OccupancyPricingFieldProps> = ({
             return (
               <div
                 key={`discount-${option.id || index}`}
-                className="flex items-center justify-between p-3.5 sm:p-4 bg-white border border-gray-200/90 rounded-2xl shadow-2xs hover:border-gray-300 transition-all gap-2"
+                className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 sm:p-4 bg-white border border-gray-200/90 rounded-2xl shadow-2xs hover:border-gray-300 transition-all gap-2.5 sm:gap-3"
               >
                 {/* Sharing Type Title + Base Price */}
                 <div className="flex items-center gap-1.5 min-w-0">
@@ -256,7 +270,7 @@ export const OccupancyPricingField: React.FC<OccupancyPricingFieldProps> = ({
                 </div>
 
                 {/* Right Controls: Discount input + Option's discounted price */}
-                <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+                <div className="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto pt-1 sm:pt-0 border-t border-gray-100 sm:border-0">
                   <div className="flex items-center gap-1.5">
                     <span className="text-xs font-bold text-gray-500">
                       Discount

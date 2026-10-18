@@ -147,13 +147,13 @@ export const TripPartnerNewTripForm: React.FC<TripPartnerNewTripFormProps> = ({
       return false;
     }
 
-    // 4. Trip Blueprint (Detailed Description)
+    // 4. Detailed Description
     if (!formData.description.trim()) {
-      setValidationError('Please enter the trip blueprint (detailed description) before proceeding.');
+      setValidationError('Please enter the detailed description before proceeding.');
       return false;
     }
     if (!isValidAlphanumericDot(formData.description)) {
-      setValidationError('Trip Blueprint (Detailed Description): only numbers, alphabets and . are allowed.');
+      setValidationError('Detailed Description: only numbers, alphabets and . are allowed.');
       return false;
     }
 
@@ -503,11 +503,12 @@ export const TripPartnerNewTripForm: React.FC<TripPartnerNewTripFormProps> = ({
               type="button"
               onClick={handleBack}
               disabled={isSubmitting}
+              className="w-full sm:w-auto justify-center"
             >
               <ArrowLeft /> Previous
             </SecondaryActionButton>
           ) : (
-            <div />
+            <div className="hidden sm:block" />
           )}
 
           {currentStep < 5 ? (
@@ -516,15 +517,17 @@ export const TripPartnerNewTripForm: React.FC<TripPartnerNewTripFormProps> = ({
               showArrow={true}
               onClick={handleContinue}
               disabled={isSubmitting}
+              className="w-full sm:w-auto justify-center"
             >
               Continue
             </Button>
           ) : (
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
               <SecondaryActionButton
                 type="button"
                 onClick={() => handleSave(true)}
                 disabled={isSubmitting}
+                className="w-full sm:w-auto justify-center"
               >
                 <FileCheck /> {isSubmitting ? 'Saving...' : 'Save Draft'}
               </SecondaryActionButton>
@@ -535,6 +538,7 @@ export const TripPartnerNewTripForm: React.FC<TripPartnerNewTripFormProps> = ({
                 showArrow={false}
                 onClick={() => handleSave(false)}
                 disabled={isSubmitting}
+                className="w-full sm:w-auto justify-center"
               >
                 {isSubmitting ? 'Publishing...' : 'Publish Trip'}
               </Button>

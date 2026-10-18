@@ -126,7 +126,7 @@ export const StepPlan: React.FC<StepPlanProps> = ({
         {formData.itinerary.map((day, idx) => (
           <DayCardBox key={day.day}>
             {/* Top Row: Day 1 Badge + Title input + Delete button */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <DayBadgeSquircle>Day {day.day}</DayBadgeSquircle>
 
               <div className="flex-1 min-w-0">
@@ -137,7 +137,7 @@ export const StepPlan: React.FC<StepPlanProps> = ({
                   onChange={(e) =>
                     handleUpdateDay(idx, { title: e.target.value })
                   }
-                  className="w-full bg-white border border-gray-200/90 rounded-2xl px-4 py-3 text-sm font-bold text-gray-800 placeholder-gray-400 outline-none shadow-2xs focus:border-amber-400 focus:ring-2 focus:ring-amber-100 transition-all"
+                  className="w-full bg-white border border-gray-200/90 rounded-2xl px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-gray-800 placeholder-gray-400 outline-none shadow-2xs focus:border-amber-400 focus:ring-2 focus:ring-amber-100 transition-all"
                 />
               </div>
 

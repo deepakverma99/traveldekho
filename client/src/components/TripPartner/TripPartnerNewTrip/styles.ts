@@ -9,12 +9,20 @@ export const FormRoot = styled.div`
   width: 100%;
   max-width: 64rem;
   margin: 0 auto;
-  padding: 1.5rem 1rem 4rem;
+  padding: 1.25rem 0.75rem 3.5rem;
   font-family: ${typography.fonts.jakarta};
   min-width: 0;
 
+  @media (min-width: 480px) {
+    padding: 1.5rem 1rem 4rem;
+  }
+
   @media (min-width: 640px) {
     padding: 2rem 1.5rem 5rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 2.5rem 2rem 6rem;
   }
 `;
 
@@ -32,8 +40,12 @@ export const BackNavButton = styled.button`
   text-transform: uppercase;
   letter-spacing: 0.05em;
   cursor: pointer;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   transition: all 0.2s ease;
+
+  @media (min-width: 640px) {
+    margin-bottom: 1.5rem;
+  }
 
   &:hover {
     background-color: ${colors.gray[50]};
@@ -49,16 +61,23 @@ export const BackNavButton = styled.button`
 
 export const HeaderContainer = styled.header`
   text-align: center;
-  margin-bottom: 2.25rem;
+  margin-bottom: 1.75rem;
+
+  @media (min-width: 640px) {
+    margin-bottom: 2.25rem;
+  }
 `;
 
 export const MainTitle = styled.h1`
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 900;
   color: ${colors.gray[900]};
   letter-spacing: -0.025em;
   line-height: 1.2;
 
+  @media (min-width: 400px) {
+    font-size: 1.75rem;
+  }
   @media (min-width: 640px) {
     font-size: 2.25rem;
   }
@@ -73,7 +92,7 @@ export const AmberText = styled.span`
 
 export const Subtitle = styled.p`
   margin-top: 0.375rem;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 400;
   color: ${colors.gray[500]};
   letter-spacing: -0.01em;
@@ -90,9 +109,15 @@ export const StepperWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   max-width: 38rem;
-  margin: 0 auto 2.5rem auto;
+  margin: 0 auto 1.5rem auto;
   position: relative;
-  padding: 0 0.5rem;
+  padding: 0 0.25rem;
+  width: 100%;
+
+  @media (min-width: 640px) {
+    margin: 0 auto 2.5rem auto;
+    padding: 0 0.5rem;
+  }
 `;
 
 export const StepTrackLine = styled.div<{ $isCompleted: boolean }>`
@@ -100,9 +125,14 @@ export const StepTrackLine = styled.div<{ $isCompleted: boolean }>`
   height: 2px;
   background-color: ${({ $isCompleted }) =>
     $isCompleted ? colors.gold : colors.gray[200]};
-  margin: 0 0.5rem;
-  margin-bottom: 1.5rem;
+  margin: 0 0.25rem;
+  margin-bottom: 1.15rem;
   transition: background-color 0.3s ease;
+
+  @media (min-width: 640px) {
+    margin: 0 0.5rem;
+    margin-bottom: 1.5rem;
+  }
 `;
 
 export const StepNode = styled.div`
@@ -112,44 +142,50 @@ export const StepNode = styled.div`
   position: relative;
   cursor: pointer;
   user-select: none;
+  min-width: 0;
+  flex-shrink: 0;
 `;
 
 export const StepCircle = styled.div<{
   $isActive: boolean;
   $isCompleted: boolean;
 }>`
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2rem;
+  height: 2rem;
   border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 900;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   transition: all 0.25s ease;
   background-color: ${({ $isActive, $isCompleted }) =>
     $isActive
       ? colors.gold
       : $isCompleted
-      ? colors.gray[900]
-      : colors.white};
+        ? colors.gray[900]
+        : colors.white};
   color: ${({ $isActive, $isCompleted }) =>
-    $isActive
-      ? colors.black
-      : $isCompleted
+    $isActive || $isCompleted
       ? colors.white
       : colors.gray[300]};
   border: 1px solid
     ${({ $isActive, $isCompleted }) =>
-      $isActive
-        ? colors.gold
-        : $isCompleted
+    $isActive
+      ? colors.gold
+      : $isCompleted
         ? colors.gray[900]
         : colors.gray[200]};
   box-shadow: ${({ $isActive }) =>
     $isActive
       ? '0 6px 16px -2px rgba(250, 203, 43, 0.45)'
       : '0 1px 3px rgba(0, 0, 0, 0.05)'};
+
+  @media (min-width: 480px) {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 0.8125rem;
+  }
 
   @media (min-width: 640px) {
     width: 2.625rem;
@@ -159,35 +195,57 @@ export const StepCircle = styled.div<{
 `;
 
 export const StepNodeLabel = styled.span<{ $isActive: boolean }>`
-  margin-top: 0.5rem;
-  font-size: 0.625rem;
+  margin-top: 0.35rem;
+  font-size: 0.5625rem;
   font-weight: ${({ $isActive }) => ($isActive ? '900' : '700')};
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.02em;
   color: ${({ $isActive }) => ($isActive ? colors.gray[900] : colors.gray[500])};
   transition: color 0.25s ease;
+  text-align: center;
+  max-width: 3.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @media (min-width: 480px) {
+    font-size: 0.625rem;
+    letter-spacing: 0.05em;
+    max-width: 4.25rem;
+  }
 
   @media (min-width: 640px) {
+    margin-top: 0.5rem;
     font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    max-width: none;
   }
 `;
 
 /* Form Card */
 export const CardContainer = styled(motion.div)`
   background-color: ${colors.white};
-  border-radius: 1.5rem;
+  border-radius: 1.25rem;
   border: 1px solid rgba(245, 158, 11, 0.12);
   box-shadow: 0 8px 30px -4px rgba(115, 92, 0, 0.06),
     0 1px 4px 0 rgba(0, 0, 0, 0.02);
-  padding: 1.75rem 1.25rem;
-  min-height: 26rem;
+  padding: 1.25rem 0.875rem;
+  min-height: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+
+  @media (min-width: 480px) {
+    padding: 1.75rem 1.25rem;
+    border-radius: 1.5rem;
+  }
 
   @media (min-width: 640px) {
     border-radius: 2rem;
-    padding: 2.5rem 2.25rem;
+    padding: 2.25rem 2rem;
+    min-height: 26rem;
   }
 
   @media (min-width: 768px) {
@@ -279,7 +337,7 @@ export const FieldInput = styled.input<{ $hasError?: boolean }>`
     border-color: ${({ $hasError }) => ($hasError ? colors.red[500] : colors.gold)};
     box-shadow: 0 0 0 4px
       ${({ $hasError }) =>
-        $hasError ? 'rgba(239, 68, 68, 0.18)' : 'rgba(250, 203, 43, 0.2)'};
+    $hasError ? 'rgba(239, 68, 68, 0.18)' : 'rgba(250, 203, 43, 0.2)'};
   }
 `;
 
@@ -327,7 +385,7 @@ export const ToggleSwitch = styled.button<{ $isActive: boolean }>`
     background-color: ${colors.white};
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
     transform: ${({ $isActive }) =>
-      $isActive ? 'translateX(0.9375rem)' : 'translateX(0)'};
+    $isActive ? 'translateX(0.9375rem)' : 'translateX(0)'};
     transition: transform 0.25s ease;
   }
 `;
@@ -351,7 +409,7 @@ export const RemovableInputWrapper = styled.div<{ $hasError?: boolean }>`
     border-color: ${({ $hasError }) => ($hasError ? colors.red[500] : colors.gold)};
     box-shadow: 0 0 0 4px
       ${({ $hasError }) =>
-        $hasError ? 'rgba(239, 68, 68, 0.18)' : 'rgba(250, 203, 43, 0.2)'};
+    $hasError ? 'rgba(239, 68, 68, 0.18)' : 'rgba(250, 203, 43, 0.2)'};
   }
 
   input {
@@ -504,18 +562,27 @@ export const FieldTextarea = styled.textarea<{ $hasError?: boolean }>`
     border-color: ${({ $hasError }) => ($hasError ? colors.red[500] : colors.gold)};
     box-shadow: 0 0 0 4px
       ${({ $hasError }) =>
-        $hasError ? 'rgba(239, 68, 68, 0.18)' : 'rgba(250, 203, 43, 0.2)'};
+    $hasError ? 'rgba(239, 68, 68, 0.18)' : 'rgba(250, 203, 43, 0.2)'};
 `;
 
 export const ActionFooter = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
+  flex-direction: column-reverse;
+  align-items: stretch;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
   border-top: 1px solid ${colors.gray[100]};
-  flex-wrap: wrap;
+  width: 100%;
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+  }
 `;
 
 export const ContinueButton = styled.button`
@@ -605,7 +672,7 @@ export const ChipBadge = styled.span<{ $selected?: boolean }>`
     $selected ? colors.amber[900] : colors.gray[700]};
   border: 1px solid
     ${({ $selected }) =>
-      $selected ? colors.amber[400] : 'transparent'};
+    $selected ? colors.amber[400] : 'transparent'};
 
   &:hover {
     background-color: ${colors.amber[50]};
@@ -754,7 +821,7 @@ export const FillButton = styled(motion.button)`
   gap: 0.35rem;
   padding: 0.375rem 0.875rem;
   background-color: ${colors.gold};
-  color: ${colors.black};
+  color: ${colors.white};
   border-radius: 9999px;
   font-size: 0.6875rem;
   font-weight: 900;
@@ -990,14 +1057,14 @@ export const DayCardBox = styled.div`
 `;
 
 export const DayBadgeSquircle = styled.div`
-  min-width: 4.5rem;
-  height: 2.75rem;
-  padding: 0 0.875rem;
-  border-radius: 0.875rem;
+  min-width: 3.5rem;
+  height: 2.375rem;
+  padding: 0 0.5rem;
+  border-radius: 0.75rem;
   background-color: ${colors.gold};
   color: ${colors.black};
   font-weight: 900;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   letter-spacing: 0.02em;
   display: flex;
   align-items: center;
@@ -1005,6 +1072,14 @@ export const DayBadgeSquircle = styled.div`
   flex-shrink: 0;
   white-space: nowrap;
   box-shadow: 0 2px 6px rgba(250, 203, 43, 0.35);
+
+  @media (min-width: 640px) {
+    min-width: 4.5rem;
+    height: 2.75rem;
+    padding: 0 0.875rem;
+    border-radius: 0.875rem;
+    font-size: 0.8125rem;
+  }
 `;
 
 export const DaySectionLabel = styled.label`
@@ -1034,15 +1109,15 @@ export const MealPillButton = styled.button<{ $selected: boolean }>`
     $selected ? colors.black : colors.gray[400]};
   border: 1px solid
     ${({ $selected }) =>
-      $selected ? colors.gold : colors.gray[200]};
+    $selected ? colors.gold : colors.gray[200]};
   box-shadow: ${({ $selected }) =>
     $selected ? '0 1px 3px rgba(250, 203, 43, 0.35)' : 'none'};
 
   &:hover {
     border-color: ${({ $selected }) =>
-      $selected ? colors.gold : colors.gray[300]};
+    $selected ? colors.gold : colors.gray[300]};
     color: ${({ $selected }) =>
-      $selected ? colors.black : colors.gray[600]};
+    $selected ? colors.black : colors.gray[600]};
   }
 `;
 
@@ -1108,58 +1183,81 @@ export const CatchphraseTextarea = styled.textarea<{ $hasError?: boolean }>`
     border-color: ${({ $hasError }) => ($hasError ? colors.red[500] : colors.gold)};
     box-shadow: 0 0 0 4px
       ${({ $hasError }) =>
-        $hasError ? 'rgba(239, 68, 68, 0.18)' : 'rgba(250, 203, 43, 0.2)'};
+    $hasError ? 'rgba(239, 68, 68, 0.18)' : 'rgba(250, 203, 43, 0.2)'};
   }
 `;
 
 export const ThumbnailButtonsGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex-wrap: wrap;
   width: 100%;
-
-  @media (min-width: 640px) {
-    gap: 1rem;
-  }
 `;
 
 export const ThumbnailActionButton = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.9375rem 1rem;
-  background-color: ${colors.gold};
-  color: ${colors.black};
-  border-radius: 1.125rem;
-  font-size: 0.875rem;
-  font-weight: 800;
+  gap: 0.4rem;
+  height: 2.25rem;
+  padding: 0 0.875rem;
+  background-color: ${colors.white};
+  color: ${colors.amber[600]};
+  border: 1.5px solid ${colors.amber[500]};
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 700;
   letter-spacing: 0.01em;
   font-family: ${typography.fonts.jakarta};
-  border: none;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(250, 203, 43, 0.35);
+  box-shadow: 0 1px 2px rgba(244, 140, 6, 0.08);
+  min-width: 0;
+  width: auto;
+  align-self: flex-start;
+
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  svg {
+    width: 0.9375rem;
+    height: 0.9375rem;
+    color: ${colors.amber[500]};
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+  }
 
   &:hover:not(:disabled) {
-    background-color: ${colors.amber[400]};
+    background-color: ${colors.amber[50]};
+    border-color: ${colors.amber[600]};
+    color: ${colors.amber[700]};
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(250, 203, 43, 0.5);
+    box-shadow: 0 3px 8px rgba(244, 140, 6, 0.16);
+
+    svg {
+      color: ${colors.amber[600]};
+    }
   }
 
   &:active:not(:disabled) {
     transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(244, 140, 6, 0.08);
   }
 
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.55;
     cursor: not-allowed;
+    border-color: ${colors.gray[300]};
+    color: ${colors.gray[400]};
     box-shadow: none;
-  }
 
-  svg {
-    width: 1.125rem;
-    height: 1.125rem;
+    svg {
+      color: ${colors.gray[400]};
+    }
   }
 `;
 

@@ -173,6 +173,16 @@ export const tripPartnerSlice = createSlice({
       state.stats.totalBookings += 1;
       state.stats.totalRevenue += action.payload.amount;
     },
+    togglePartnerBookingPaid: (state, action: PayloadAction<string>) => {
+      const booking = state.bookings.find((b) => b.id === action.payload);
+      if (booking) {
+        booking.paymentStatus = booking.paymentStatus === 'paid' ? 'unpaid' : 'paid';
+      }
+    },
+    deletePartnerBooking: (state, action: PayloadAction<string>) => {
+      state.bookings = state.bookings.filter((b) => b.id !== action.payload);
+      state.stats.totalBookings = Math.max(0, state.stats.totalBookings - 1);
+    },
     markNotificationAsRead: (state, action: PayloadAction<string>) => {
       const notif = state.notifications.find((n) => n.id === action.payload);
       if (notif) {
@@ -262,6 +272,8 @@ export const {
   toggleMobileSidebar,
   updatePartnerStats,
   addPartnerBooking,
+  togglePartnerBookingPaid,
+  deletePartnerBooking,
   markNotificationAsRead,
   setBookingTrends,
   setTripsSearchQuery,

@@ -116,7 +116,9 @@ export const WeatherForecastSection: React.FC = () => {
         {/* Section Header */}
         <HeaderContainer>
           <div>
-            <SectionHeading>Live Weather Forecasts</SectionHeading>
+            <SectionHeading>
+              Live Weather <span className="ml-1 text-amber-500">Forecasts</span>
+            </SectionHeading>
             <SectionSubtitle>
               Check the live weather and upcoming 3-day forecast for some of our
               most popular destinations before you pack your bags!

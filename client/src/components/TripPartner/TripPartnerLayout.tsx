@@ -52,7 +52,6 @@ const MainWrapper = styled.div`
   min-width: 0;
   width: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
 `;
 
 const MainContent = styled.main`

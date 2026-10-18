@@ -111,10 +111,10 @@ export const DepartureBatchesField: React.FC<DepartureBatchesFieldProps> = ({
         {activeBatches.map((batch, index) => (
           <div
             key={batch.id || index}
-            className="flex items-end gap-3 sm:gap-4 p-1"
+            className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] items-end gap-3 sm:gap-4 p-1"
           >
             {/* Start Date */}
-            <div className="flex-1 min-w-0">
+            <div className="min-w-0">
               <label
                 htmlFor={`batch-start-${batch.id}`}
                 className="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-1.5"
@@ -134,33 +134,47 @@ export const DepartureBatchesField: React.FC<DepartureBatchesFieldProps> = ({
               </div>
             </div>
 
-            {/* End Date */}
-            <div className="flex-1 min-w-0">
-              <label
-                htmlFor={`batch-end-${batch.id}`}
-                className="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-1.5"
-              >
-                End Date
-              </label>
-              <div className="relative flex items-center">
-                <input
-                  id={`batch-end-${batch.id}`}
-                  type="date"
-                  value={batch.endDate || ''}
-                  onChange={(e) =>
-                    handleUpdateBatch(batch.id, { endDate: e.target.value })
-                  }
-                  className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25 rounded-2xl px-4 py-3 text-sm font-semibold text-gray-900 outline-none transition-all shadow-2xs cursor-pointer"
-                />
+            {/* End Date with integrated remove button on mobile */}
+            <div className="min-w-0 flex items-end gap-2 sm:block">
+              <div className="flex-1 min-w-0">
+                <label
+                  htmlFor={`batch-end-${batch.id}`}
+                  className="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-1.5"
+                >
+                  End Date
+                </label>
+                <div className="relative flex items-center">
+                  <input
+                    id={`batch-end-${batch.id}`}
+                    type="date"
+                    value={batch.endDate || ''}
+                    onChange={(e) =>
+                      handleUpdateBatch(batch.id, { endDate: e.target.value })
+                    }
+                    className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25 rounded-2xl px-4 py-3 text-sm font-semibold text-gray-900 outline-none transition-all shadow-2xs cursor-pointer"
+                  />
+                </div>
               </div>
+
+              {/* Remove Batch Button (inline on mobile) */}
+              {activeBatches.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => handleRemoveBatch(batch.id)}
+                  className="sm:hidden w-11 h-11 rounded-2xl bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 transition-colors flex items-center justify-center shrink-0 cursor-pointer shadow-2xs"
+                  title="Remove batch"
+                >
+                  <Trash2 className="w-4 h-4 stroke-[2.2]" />
+                </button>
+              )}
             </div>
 
-            {/* Remove Batch Button */}
+            {/* Remove Batch Button (tablet/desktop) */}
             {activeBatches.length > 1 && (
               <button
                 type="button"
                 onClick={() => handleRemoveBatch(batch.id)}
-                className="w-12 h-12 rounded-2xl bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 transition-colors flex items-center justify-center shrink-0 cursor-pointer mb-0.5"
+                className="hidden sm:flex w-12 h-12 rounded-2xl bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 transition-colors items-center justify-center shrink-0 cursor-pointer mb-0.5"
                 title="Remove batch"
               >
                 <Trash2 className="w-4 h-4 stroke-[2.2]" />

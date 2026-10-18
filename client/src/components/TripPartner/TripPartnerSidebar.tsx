@@ -112,17 +112,19 @@ const NavItemLink = styled(Link) <{ $isActive: boolean }>`
   position: relative;
   z-index: 10;
   text-decoration: none;
+  background-color: ${colors.white};
+  border: 1px solid ${colors.gray[300]}80;
 
   ${({ $isActive }) =>
     $isActive
       ? `
-    color: ${colors.gray[950]};
+    color: ${colors.white};
     font-weight: 900;
-    box-shadow: 0 4px 6px -1px ${colors.amber[300]}59;
-    background: linear-gradient(to right, ${colors.amber[400]}, ${colors.gold});
+    box-shadow: 0 4px 12px ${colors.amber[500]}40;
+    background: linear-gradient(to right, ${colors.amber[500]}, ${colors.gold});
 
     svg {
-      color: ${colors.gray[950]};
+      color: ${colors.white};
     }
   `
       : `
@@ -135,7 +137,7 @@ const NavItemLink = styled(Link) <{ $isActive: boolean }>`
     }
 
     &:hover {
-      background-color: ${colors.white};
+      
       color: ${colors.gray[950]};
       box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 

@@ -131,9 +131,8 @@ export const TripReelsField: React.FC<TripReelsFieldProps> = ({
         onClick={handleUploadClick}
         disabled={isFull}
         title="Upload short videos / reels from your device"
-        style={{ width: '100%' }}
       >
-        <UploadCloud className="w-5 h-5 stroke-[2.2]" />
+        <UploadCloud className="w-4 h-4 stroke-[2.2]" />
         <span>Upload Reels</span>
       </ThumbnailActionButton>
 

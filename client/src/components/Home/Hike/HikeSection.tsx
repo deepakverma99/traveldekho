@@ -125,7 +125,8 @@ export const HikeSection: React.FC = () => {
           <h2
             className="text-xl sm:text-[28px] md:text-[32px] font-extrabold tracking-tight text-[#191c1d]"
           >
-            Hike
+            Trail
+            <span className="ml-1 text-amber-500">Hike</span>
           </h2>
 
           <Link

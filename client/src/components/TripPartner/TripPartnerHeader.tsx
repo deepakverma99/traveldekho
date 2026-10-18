@@ -129,21 +129,18 @@ const PartnerBadge = styled.span`
   display: none;
   align-items: center;
   padding: 0.25rem 0.625rem;
-  background-color: ${colors.amber[400]};
-  color: ${colors.black};
+  background-color: ${colors.amber[500]};
+  color: ${colors.white};
   font-size: 10px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   border-radius: 9999px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px 0 rgba(244, 140, 6, 0.35);
   white-space: nowrap;
 
-  @media (min-width: 480px) {
-    display: inline-flex;
-  }
-
   @media (min-width: 640px) {
+    display: inline-flex;
     padding: 0.25rem 0.75rem;
     letter-spacing: 0.1em;
   }

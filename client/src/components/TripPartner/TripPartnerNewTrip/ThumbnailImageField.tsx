@@ -8,6 +8,7 @@ import {
   Loader2,
   Trash2,
   Check,
+  Sparkles,
 } from 'lucide-react';
 import {
   FormGroup,
@@ -191,7 +192,7 @@ export const ThumbnailImageField: React.FC<ThumbnailImageFieldProps> = ({
           onClick={handleUploadClick}
           title="Upload image from computer"
         >
-          <UploadCloud className="w-5 h-5 stroke-[2.2]" />
+          <UploadCloud className="w-4 h-4 stroke-[2.2]" />
           <span>Upload Image</span>
         </ThumbnailActionButton>
 
@@ -203,11 +204,14 @@ export const ThumbnailImageField: React.FC<ThumbnailImageFieldProps> = ({
         >
           {isGenerating ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin text-black" />
+              <Loader2 className="w-4 h-4 animate-spin text-amber-500" />
               <span>Fetching Image...</span>
             </>
           ) : (
-            <span>Generate</span>
+            <>
+              <Sparkles className="w-4 h-4 stroke-[2.2]" />
+              <span>Generate</span>
+            </>
           )}
         </ThumbnailActionButton>
       </ThumbnailButtonsGrid>

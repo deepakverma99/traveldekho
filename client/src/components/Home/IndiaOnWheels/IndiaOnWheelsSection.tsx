@@ -73,7 +73,7 @@ const Title = styled.h2`
 
 const HighlightText = styled.span`
   margin-left: 0.25rem;
-  color: ${colors.primaryContainer};
+  color: ${colors.amber[500]};
 `;
 
 const CarouselContainer = styled.div`

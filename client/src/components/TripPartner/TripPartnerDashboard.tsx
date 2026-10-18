@@ -65,33 +65,26 @@ const BannerWrapper = styled.div`
 `;
 
 const Heading = styled.h1`
-  font-size: 1.375rem;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
   font-weight: 900;
   color: ${colors.gray[900]};
   letter-spacing: -0.025em;
+  text-transform: uppercase;
   word-break: break-word;
-
-  @media (min-width: 480px) {
-    font-size: 1.625rem;
-  }
-  @media (min-width: 640px) {
-    font-size: 1.875rem;
-  }
-  @media (min-width: 768px) {
-    font-size: 2.25rem;
-  }
 `;
 
 const AmberText = styled.span`
   color: ${colors.amber[500]};
-  text-transform: uppercase;
 `;
 
 const SubtitleText = styled.p`
-  color: ${colors.gray[500]};
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  color: ${colors.gray[400]};
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
   margin-top: 0.25rem;
 `;
 
@@ -453,10 +446,10 @@ export const TripPartnerDashboard: React.FC<TripPartnerDashboardProps> = ({
           <Breadcrumb items={breadcrumbItems} />
 
           <div className="mt-2">
-            <Heading>
-              Hello, <AmberText>{effectiveDisplayName}!</AmberText>
+            <Heading className="text-3xl font-black text-gray-900 tracking-tight uppercase">
+              Hello, <AmberText className="text-amber-500">{effectiveDisplayName}!</AmberText>
             </Heading>
-            <SubtitleText>
+            <SubtitleText className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">
               Manage your trips and track your growth
             </SubtitleText>
           </div>

@@ -125,7 +125,8 @@ export const MountainsSection: React.FC = () => {
           <h2
             className="text-xl sm:text-[28px] md:text-[32px] font-extrabold tracking-tight text-[#191c1d]"
           >
-            Mountains
+            Majestic
+            <span className="ml-1 text-amber-500">Mountains</span>
           </h2>
 
           <Link

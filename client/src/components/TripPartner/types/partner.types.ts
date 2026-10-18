@@ -15,8 +15,17 @@ export interface TripPartnerBooking {
   id: string;
   travelerName: string;
   travelerEmail: string;
+  travelerPhone?: string;
+  tripId?: string;
   tripTitle: string;
+  tripLocation?: string;
+  tripDuration?: string;
+  tripImage?: string;
+  guestsCount?: number;
+  travelDate?: string;
+  bookingDate?: string;
   status: 'booked' | 'pending' | 'cancelled';
+  paymentStatus?: 'paid' | 'unpaid';
   amount: number;
 }
 

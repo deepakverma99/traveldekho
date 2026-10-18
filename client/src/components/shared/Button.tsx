@@ -18,6 +18,7 @@ export interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   id?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl';
+  variant?: 'primary' | 'secondary';
   style?: React.CSSProperties;
 }
 
@@ -28,39 +29,80 @@ const sizeClasses: Record<'sm' | 'md' | 'lg' | 'xl', string> = {
   xl: 'px-8 py-4 text-sm',
 };
 
-const StyledButton = styled(motion.button)`
+const StyledButton = styled(motion.button) <{ $variant: 'primary' | 'secondary' }>`
   position: relative;
   overflow: hidden;
-  background-color: ${colors.gold};
-  color: ${colors.black};
   border-radius: 9999px;
   font-family: ${typography.fonts.sans};
   font-weight: ${typography.weights.bold};
-  border: none;
   cursor: pointer;
   outline: none;
   isolation: isolate;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  white-space: nowrap;
 
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-color: ${colors.black};
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 9999px;
-    z-index: 0;
-  }
-
-  &:hover:not(:disabled) {
+  ${({ $variant }) =>
+    $variant === 'primary'
+      ? `
+    background-color: ${colors.orange[500]};
     color: ${colors.white};
+    border: none;
+    box-shadow: 0 4px 18px rgba(249, 115, 22, 0.38);
 
     &::before {
-      transform: scaleX(1);
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: ${colors.black};
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 9999px;
+      z-index: 0;
     }
-  }
+
+    &:hover:not(:disabled) {
+      color: ${colors.white};
+      box-shadow: 0 8px 24px rgba(249, 115, 22, 0.5);
+
+      &::before {
+        transform: scaleX(1);
+      }
+    }
+  `
+      : `
+    background-color: ${colors.white};
+    color: ${colors.charcoal};
+    border: 1.5px solid ${colors.gray[200]};
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: ${colors.black};
+     
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 9999px;
+      z-index: 0;
+    }
+
+    &:hover:not(:disabled) {
+      color: ${colors.white};
+      
+      box-shadow: 0 8px 24px rgba(249, 115, 22, 0.35);
+
+      &::before {
+        transform: scaleX(1);
+      }
+
+      svg {
+        color: ${colors.white};
+      }
+    }
+  `}
 
   &:disabled {
     opacity: 0.65;
@@ -80,6 +122,7 @@ export const Button = ({
   type = 'button',
   id,
   size = 'md',
+  variant = 'primary',
   style,
 }: ButtonProps) => {
   return (
@@ -87,6 +130,7 @@ export const Button = ({
       id={id}
       type={type}
       disabled={disabled}
+      $variant={variant}
       style={style}
       className={`${sizeClasses[size]} uppercase tracking-wider font-bold group flex items-center justify-center gap-2 ${className || ''}`.trim()}
       onClick={disabled ? undefined : onClick}

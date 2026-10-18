@@ -357,12 +357,12 @@ export const StepBasic: React.FC<StepBasicProps> = ({
         </FormGroup>
       </div>
 
-      {/* Full Width: Trip Blueprint */}
+      {/* Full Width: Detailed Description */}
       <FormGroup>
         <FieldLabel htmlFor="trip-description">
           <span className="flex items-center gap-1.5 text-gray-800">
             <FileText className="w-3.5 h-3.5 text-amber-500" />
-            Trip Blueprint (Detailed Description) <RequiredAsterisk>*</RequiredAsterisk>
+            Detailed Description <RequiredAsterisk>*</RequiredAsterisk>
           </span>
         </FieldLabel>
         <FieldTextarea

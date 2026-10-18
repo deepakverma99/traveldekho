@@ -138,7 +138,7 @@ export const StepLogistics: React.FC<StepLogisticsProps> = ({
   return (
     <StepContentArea>
       {/* 3-Column Row: Destination City, Destination State, Difficulty */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
 
 
         {/* Destination State Dropdown */}
@@ -269,7 +269,7 @@ export const StepLogistics: React.FC<StepLogisticsProps> = ({
       </div>
 
       {/* Duration (Nights & Days) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div className="grid grid-cols-2 gap-3 sm:gap-5">
         <FormGroup>
           <FieldLabel htmlFor="trip-nights">
             <span className="flex items-center gap-1.5">

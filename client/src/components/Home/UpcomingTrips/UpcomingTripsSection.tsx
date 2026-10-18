@@ -124,7 +124,7 @@ export const UpcomingTripsSection: React.FC = () => {
         <div className="flex items-center justify-between mb-6 md:mb-8">
           <h2 className="text-xl sm:text-[28px] md:text-[32px] font-black tracking-tight text-[#191c1d]">
             Upcoming
-            <span className="ml-1 text-[#FFD133]">Trips</span>
+            <span className="ml-1 text-amber-500">Trips</span>
           </h2>
 
           <Link

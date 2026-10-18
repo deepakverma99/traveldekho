@@ -86,7 +86,7 @@ const NewsletterSubmitButton = styled.button`
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   background-color: ${colors.amber[400]};
-  color: ${colors.black};
+  color: ${colors.white};
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -98,7 +98,7 @@ const NewsletterSubmitButton = styled.button`
   box-shadow: 0 10px 15px -3px rgba(251, 191, 36, 0.2);
 
   &:hover {
-    background-color: ${colors.white};
+    background-color: ${colors.black};
   }
 
   &:disabled {
