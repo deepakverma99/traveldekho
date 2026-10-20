@@ -26,12 +26,12 @@ import { typography } from '@/theme/typography';
 
 const HeaderWrapper = styled.header`
   width: 100%;
-  background-color: rgba(255, 251, 235, 0.95);
-  border-bottom: 1px solid rgba(254, 243, 199, 0.8);
+  background-color: rgba(250, 247, 245, 0.95);
+  border-bottom: 1px solid ${colors.gray[200]};
   position: sticky;
   top: 0;
   z-index: 50;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
   backdrop-filter: blur(12px);
   font-family: ${typography.fonts.sans};
 `;

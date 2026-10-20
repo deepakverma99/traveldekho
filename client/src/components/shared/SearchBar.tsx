@@ -50,24 +50,29 @@ const HeaderInputWrapper = styled.div`
 const HeaderInput = styled.input`
   width: 100%;
   height: 2.5rem;
-  padding-left: 1rem;
-  padding-right: 2.5rem;
+  padding-left: 1.125rem;
+  padding-right: 2.75rem;
   font-size: ${typography.sizes.sm};
-  color: ${colors.gray[600]};
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(253, 230, 138, 0.6);
+  color: ${colors.gray[800]};
+  background-color: ${colors.white};
+  border: 1px solid ${colors.gray[300]};
   border-radius: 9999px;
   outline: none;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
   font-weight: ${typography.weights.medium};
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
 
   &::placeholder {
     color: ${colors.gray[400]};
   }
 
+  &:hover {
+    border-color: ${colors.gray[400]};
+  }
+
   &:focus {
-    border-color: ${colors.amber[400]};
-    box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.2);
+    border-color: ${colors.amber[500]};
+    box-shadow: 0 0 0 3px ${colors.amber[100]};
   }
 `;
 
@@ -83,12 +88,14 @@ const HeaderSubmitButton = styled.button`
   justify-content: center;
   background-color: ${colors.white};
   border-radius: 9999px;
-  transition: background-color 0.2s;
-  border: 1px solid rgba(253, 230, 138, 0.4);
+  transition: all 0.2s ease;
+  border: 1px solid ${colors.gray[200]};
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  cursor: pointer;
 
   &:hover {
-    background-color: ${colors.amber[400]};
+    background-color: ${colors.amber[500]};
+    border-color: ${colors.amber[500]};
 
     svg {
       color: ${colors.white};

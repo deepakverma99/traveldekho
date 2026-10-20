@@ -76,7 +76,7 @@ async function SettingsContent({ params }: PageProps) {
 
 export default function PartnerSettingsPage(props: PageProps) {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#FFFBF0]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
       <SettingsContent {...props} />
     </Suspense>
   );

@@ -66,39 +66,28 @@ const MainWrapper = styled.main`
 
 const StickyBar = styled.div`
   position: sticky;
-  top: 4rem;
+  top: 4.25rem;
   z-index: 30;
-  background-color: ${colors.cream}F2;
+  width: 100%;
+  background-color: rgba(249, 249, 249, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  padding-top: 0.625rem;
-  padding-bottom: 0.625rem;
-  margin-left: -1rem;
-  margin-right: -1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  border-bottom: 1px solid ${colors.amber[200]}66;
-  box-shadow: 0 2px 10px -4px rgba(0, 0, 0, 0.05);
+  padding: 0.625rem 1rem;
+  border: 1px solid ${colors.gray[200]};
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.03);
   margin-bottom: 1rem;
   transition: all 0.2s ease;
 
   @media (min-width: 640px) {
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-    margin-left: -1.5rem;
-    margin-right: -1.5rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding: 0.75rem 1.25rem;
     margin-bottom: 1.5rem;
   }
   @media (min-width: 768px) {
-    top: 4.5rem;
+    top: 4.75rem;
   }
   @media (min-width: 1024px) {
-    margin-left: -2rem;
-    margin-right: -2rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding: 0.75rem 1.5rem;
   }
 `;
 
@@ -107,7 +96,6 @@ const FilterIconSquare = styled.div<{ $small?: boolean }>`
   height: ${({ $small }) => ($small ? '1.5rem' : '2rem')};
   border-radius: ${({ $small }) => ($small ? '0.375rem' : '0.5rem')};
   background-color: ${colors.amber[100]};
-  border: 1px solid ${colors.amber[300]}B3;
   color: ${colors.amber[600]};
   display: flex;
   align-items: center;
@@ -207,12 +195,12 @@ const StyledSearchInput = styled.input`
   padding-left: 2rem;
   padding-right: 2rem;
   background-color: ${colors.white};
-  border: 1px solid ${colors.gray[200]};
+  border: 1px solid ${colors.gray[300]};
   border-radius: 0.75rem;
   font-size: 0.75rem;
   font-weight: 700;
   outline: none;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
   color: ${colors.gray[800]};
   transition: all 0.2s ease;
 
@@ -220,9 +208,13 @@ const StyledSearchInput = styled.input`
     color: ${colors.gray[400]};
   }
 
+  &:hover {
+    border-color: ${colors.gray[400]};
+  }
+
   &:focus {
-    border-color: ${colors.amber[400]};
-    box-shadow: 0 0 0 4px ${colors.amber[500]}1A;
+    border-color: ${colors.amber[500]};
+    box-shadow: 0 0 0 3px ${colors.amber[100]};
   }
 
   @media (min-width: 640px) {
@@ -262,7 +254,7 @@ const StyledSortSelect = styled.select`
   font-size: 11px;
   font-weight: 700;
   background-color: ${colors.white};
-  border: 1px solid ${colors.gray[200]};
+  border: 1px solid ${colors.gray[300]};
   border-radius: 0.75rem;
   padding-left: 0.75rem;
   padding-right: 1.75rem;
@@ -293,12 +285,13 @@ const FilterPill = styled.span`
   gap: 0.25rem;
   padding: 0.25rem 0.625rem;
   border-radius: 0.5rem;
-  background-color: ${colors.amber[100]}CC;
-  color: ${colors.amber[900]};
-  border: 1px solid ${colors.amber[200]};
+  background-color: ${colors.charcoal};
+  color: ${colors.white};
+  border: 1px solid ${colors.charcoal};
   font-size: 11px;
   font-weight: 700;
   flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 
   button {
     padding: 0.125rem;
@@ -309,9 +302,12 @@ const FilterPill = styled.span`
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    opacity: 0.8;
+    transition: opacity 0.15s ease;
 
     &:hover {
-      color: ${colors.black};
+      opacity: 1;
+      color: ${colors.white};
     }
   }
 `;
@@ -758,7 +754,7 @@ export const SearchPageContent: React.FC = () => {
           {/* Main Layout: Filters Sidebar + Results Listing */}
           <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
             {/* Desktop Sidebar Filters (Hidden on Mobile/Tablet) */}
-            <div className="hidden lg:block w-[400px] overflow-visible lg:sticky lg:top-[9rem] shrink-0 z-10 max-h-[calc(100vh-10.5rem)] overflow-y-auto scrollbar-hide">
+            <div className="hidden lg:block w-[280px] xl:w-[300px] overflow-visible lg:sticky lg:top-[9rem] shrink-0 z-10 max-h-[calc(100vh-10.5rem)] overflow-y-auto scrollbar-hide">
               <SearchFilterSidebar />
             </div>
 

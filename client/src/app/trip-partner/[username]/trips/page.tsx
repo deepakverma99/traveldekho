@@ -27,7 +27,7 @@ async function TripsContent({ params }: PageProps) {
 
 export default function PartnerTripsPage(props: PageProps) {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#FFFBF0]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
       <TripsContent {...props} />
     </Suspense>
   );

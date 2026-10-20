@@ -61,7 +61,7 @@ async function DateRequestsContent({ params }: PageProps) {
 
 export default function PartnerDateRequestsPage(props: PageProps) {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#FFFBF0]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
       <DateRequestsContent {...props} />
     </Suspense>
   );

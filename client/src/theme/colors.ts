@@ -16,7 +16,7 @@ export const colors = {
   gold: '#f48c06',
   primaryContainer: '#faa12e',
   primaryContainerText: '#77350c',
-  cream: '#FFF9F5',
+  cream: '#FAF7F5',
   warmCream: '#FFF5EB',
   offWhite: '#FAF7F5',
   charcoal: '#1A1615',

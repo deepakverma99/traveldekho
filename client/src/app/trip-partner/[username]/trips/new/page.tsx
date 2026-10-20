@@ -32,7 +32,7 @@ async function NewTripContent({ params }: PageProps) {
 
 export default function PartnerNewTripPage(props: PageProps) {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#FFFBF0]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
       <NewTripContent {...props} />
     </Suspense>
   );

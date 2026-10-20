@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import {
-  MapPin,
   Wallet,
   Tags,
   Clock,
@@ -14,11 +13,11 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { FilterState } from './types';
+import { BudgetTrackbar } from './BudgetTrackbar';
 import {
   useAppDispatch,
   useAppSelector,
   selectSearchFilters,
-  setDestination,
   setBudget,
   toggleCategory as toggleCategoryAction,
   toggleDuration as toggleDurationAction,
@@ -54,12 +53,12 @@ const DIFFICULTIES = ['Easy', 'Moderate', 'Challenging', 'Extreme'];
 const SidebarWrapper = styled.aside`
   width: 100%;
   background-color: ${colors.white};
-  border-radius: 1rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-  padding: 1.5rem;
+  border-radius: 0.875rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  padding: 1.125rem;
   overflow: hidden;
   height: fit-content;
-  border: 1px solid ${colors.gray[100]};
+  border: 1px solid ${colors.gray[200]};
 `;
 
 const SectionContainer = styled.div<{ $hasBorderTop?: boolean }>`
@@ -113,95 +112,22 @@ const ChevronIcon = styled(ChevronDown)<{ $isOpen: boolean }>`
   transform: ${({ $isOpen }) => ($isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
 
-const InputContainer = styled.div`
-  position: relative;
-  width: 100%;
-  margin-top: 1rem;
-`;
 
-const StyledTextInput = styled.input`
-  width: 100%;
-  height: 3rem;
-  padding-left: 2.5rem;
-  padding-right: 1rem;
-  background-color: ${colors.gray[50]};
-  border: 1px solid ${colors.gray[200]};
-  border-radius: 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 700;
-  outline: none;
-  color: ${colors.gray[800]};
-  transition: all 0.2s ease;
-
-  &::placeholder {
-    color: ${colors.gray[400]};
-  }
-
-  &:focus {
-    border-color: ${colors.amber[400]};
-    background-color: ${colors.white};
-  }
-`;
-
-const BudgetFlex = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-top: 1rem;
-`;
-
-const StyledNumberInput = styled.input`
-  width: 100%;
-  height: 2.5rem;
-  padding: 0 1rem;
-  background-color: ${colors.gray[50]};
-  border: 1px solid ${colors.gray[200]};
-  border-radius: 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 700;
-  outline: none;
-  color: ${colors.gray[800]};
-  transition: all 0.2s ease;
-
-  &:focus {
-    border-color: ${colors.amber[400]};
-  }
-`;
-
-const ApplyButton = styled.button`
-  height: 2.5rem;
-  padding: 0 1rem;
-  background-color: ${colors.amber[400]};
-  color: ${colors.black};
-  font-weight: 900;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  border-radius: 0.75rem;
-  border: none;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: ${colors.amber[500]};
-  }
-`;
 
 const ChipsWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  gap: 0.375rem;
+  margin-top: 0.875rem;
 `;
 
 const FilterChip = styled.button<{ $isSelected: boolean }>`
   display: flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0.375rem 0.75rem;
+  gap: 0.25rem;
+  padding: 0.3125rem 0.625rem;
   border-radius: 9999px;
-  font-size: 12px;
+  font-size: 11px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: ${typography.fonts.vietnam};
@@ -209,11 +135,16 @@ const FilterChip = styled.button<{ $isSelected: boolean }>`
   ${({ $isSelected }) =>
     $isSelected
       ? `
-    background-color: ${colors.amber[100]};
-    border: 1px solid ${colors.amber[400]};
-    color: ${colors.amber[900]};
+    background-color: ${colors.charcoal};
+    border: 1px solid ${colors.charcoal};
+    color: ${colors.white};
     font-weight: 700;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+
+    &:hover {
+      background-color: ${colors.black};
+      border-color: ${colors.black};
+    }
   `
       : `
     background-color: transparent;
@@ -222,7 +153,9 @@ const FilterChip = styled.button<{ $isSelected: boolean }>`
     font-weight: 500;
 
     &:hover {
-      background-color: ${colors.gray[50]};
+      background-color: ${colors.gray[100]};
+      border-color: ${colors.gray[300]};
+      color: ${colors.gray[900]};
     }
   `}
 `;
@@ -316,46 +249,10 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
   const reduxFilters = useAppSelector(selectSearchFilters);
   const filters = propFilters ?? reduxFilters;
 
-  const [prevBudget, setPrevBudget] = useState<{
-    min: number | null;
-    max: number | null;
-  }>({
-    min: filters.minBudget,
-    max: filters.maxBudget,
-  });
 
-  const [minBudgetInput, setMinBudgetInput] = useState<string>(
-    filters.minBudget !== null && filters.minBudget !== undefined
-      ? filters.minBudget.toString()
-      : ''
-  );
-  const [maxBudgetInput, setMaxBudgetInput] = useState<string>(
-    filters.maxBudget !== null && filters.maxBudget !== undefined
-      ? filters.maxBudget.toString()
-      : ''
-  );
-
-  // Synchronize local input state if filters change externally (e.g., reset or chip removed)
-  if (
-    prevBudget.min !== filters.minBudget ||
-    prevBudget.max !== filters.maxBudget
-  ) {
-    setPrevBudget({ min: filters.minBudget, max: filters.maxBudget });
-    setMinBudgetInput(
-      filters.minBudget !== null && filters.minBudget !== undefined
-        ? filters.minBudget.toString()
-        : ''
-    );
-    setMaxBudgetInput(
-      filters.maxBudget !== null && filters.maxBudget !== undefined
-        ? filters.maxBudget.toString()
-        : ''
-    );
-  }
 
   // Accordion state
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    destination: true,
     budget: true,
     category: true,
     duration: true,
@@ -365,14 +262,6 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
 
   const toggleSection = (section: string) => {
     setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
-  };
-
-  const handleDestinationChange = (val: string) => {
-    if (onFilterChange) {
-      onFilterChange({ ...filters, destination: val });
-    } else {
-      dispatch(setDestination(val));
-    }
   };
 
   const toggleCategory = (category: string) => {
@@ -408,9 +297,7 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
     }
   };
 
-  const handleApplyBudget = () => {
-    const min = minBudgetInput ? Number(minBudgetInput) : null;
-    const max = maxBudgetInput ? Number(maxBudgetInput) : null;
+  const handleBudgetChange = (min: number | null, max: number | null) => {
     if (onFilterChange) {
       onFilterChange({
         ...filters,
@@ -437,42 +324,8 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
 
   return (
     <SidebarWrapper className={className || ''}>
-      {/* 1. Destination */}
+      {/* 1. Budget (₹) */}
       <SectionContainer>
-        <AccordionButton
-          type="button"
-          onClick={() => toggleSection('destination')}
-        >
-          <IconTitleGroup>
-            <SectionIconWrapper $bg={colors.red[50]} $color={colors.red[500]}>
-              <MapPin className="w-4 h-4" />
-            </SectionIconWrapper>
-            <SectionTitle>
-              Destination
-            </SectionTitle>
-          </IconTitleGroup>
-          <ChevronIcon $isOpen={!!openSections.destination} />
-        </AccordionButton>
-        {openSections.destination && (
-          <InputContainer>
-            <StyledTextInput
-              placeholder="Search a city..."
-              type="text"
-              value={filters.destination}
-              onChange={(e) => handleDestinationChange(e.target.value)}
-              autoComplete="off"
-              name="location"
-            />
-            <MapPin
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
-              style={{ color: colors.gray[400] }}
-            />
-          </InputContainer>
-        )}
-      </SectionContainer>
-
-      {/* 2. Budget (₹) */}
-      <SectionContainer $hasBorderTop>
         <AccordionButton
           type="button"
           onClick={() => toggleSection('budget')}
@@ -488,24 +341,11 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
           <ChevronIcon $isOpen={!!openSections.budget} />
         </AccordionButton>
         {openSections.budget && (
-          <BudgetFlex>
-            <StyledNumberInput
-              placeholder="Min"
-              type="number"
-              value={minBudgetInput}
-              onChange={(e) => setMinBudgetInput(e.target.value)}
-            />
-            <span style={{ color: colors.gray[400], fontWeight: 700 }}>-</span>
-            <StyledNumberInput
-              placeholder="Max"
-              type="number"
-              value={maxBudgetInput}
-              onChange={(e) => setMaxBudgetInput(e.target.value)}
-            />
-            <ApplyButton type="button" onClick={handleApplyBudget}>
-              Apply
-            </ApplyButton>
-          </BudgetFlex>
+          <BudgetTrackbar
+            minBudget={filters.minBudget}
+            maxBudget={filters.maxBudget}
+            onChange={handleBudgetChange}
+          />
         )}
       </SectionContainer>
 

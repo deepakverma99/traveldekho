@@ -32,7 +32,7 @@ async function DashboardContent({ params }: DashboardPageProps) {
 
 export default function PartnerDashboardPage(props: DashboardPageProps) {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#FFFBF0]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
       <DashboardContent {...props} />
     </Suspense>
   );

@@ -31,7 +31,7 @@ async function BookingsContent({ params }: PageProps) {
 
 export default function PartnerBookingsPage(props: PageProps) {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#FFFBF0]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
       <BookingsContent {...props} />
     </Suspense>
   );
