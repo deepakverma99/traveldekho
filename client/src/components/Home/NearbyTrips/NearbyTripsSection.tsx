@@ -2,167 +2,11 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import styled from 'styled-components';
 import { MapPin, ChevronRight, CheckCircle2, RotateCcw } from 'lucide-react';
 import { LocationPermissionCard } from './LocationPermissionCard';
 import { LocationPermissionState, NearbyTripsSectionProps } from './types';
 import { mockNearbyTripsData } from './mockNearbyTrips';
 import { TripCard } from '@/components/shared';
-import { colors } from '@/theme/colors';
-import { typography } from '@/theme/typography';
-
-const SectionWrapper = styled.section`
-  position: relative;
-  width: 100%;
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-  overflow: hidden;
-  background-color: transparent;
-  font-family: ${typography.fonts.jakarta};
-
-  @media (min-width: 768px) {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-  }
-`;
-
-const Container = styled.div`
-  max-width: 80rem;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  position: relative;
-  z-index: 10;
-
-  @media (min-width: 640px) {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-
-  @media (min-width: 1024px) {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-`;
-
-const HeaderWrapper = styled.div`
-  position: relative;
-  margin-bottom: 1.5rem;
-
-  @media (min-width: 768px) {
-    margin-bottom: 2rem;
-  }
-`;
-
-const HeaderInner = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-
-  @media (min-width: 768px) {
-    margin-bottom: 2rem;
-  }
-`;
-
-const SectionTitle = styled.h2`
-  display: flex;
-  align-items: center;
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  color: ${colors.charcoal};
-  font-family: ${typography.fonts.jakarta};
-
-  @media (min-width: 640px) {
-    font-size: 28px;
-  }
-
-  @media (min-width: 768px) {
-    font-size: 32px;
-  }
-`;
-
-const HighlightText = styled.span`
-  margin-left: 0.25rem;
-  color: ${colors.primaryContainer};
-`;
-
-const ViewAllLink = styled(Link)`
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: ${colors.charcoal};
-  font-family: ${typography.fonts.jakarta};
-  flex-shrink: 0;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: ${colors.amber[600]};
-  }
-
-  svg {
-    width: 1rem;
-    height: 1rem;
-    transition: transform 0.2s ease;
-  }
-
-  &:hover svg {
-    transform: translateX(2px);
-  }
-`;
-
-const ScrollTrack = styled.div`
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  padding-bottom: 1rem;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  -webkit-overflow-scrolling: touch;
-
-  @media (min-width: 640px) {
-    gap: 1.25rem;
-  }
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const LocationDetectedBar = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.25rem;
-  background-color: rgba(254, 243, 199, 0.5);
-  border: 1px solid ${colors.amber[200]};
-  border-radius: 0.75rem;
-  font-size: 0.8125rem;
-  color: ${colors.charcoal};
-`;
-
-const ResetButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: ${colors.gray[600]};
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: ${colors.charcoal};
-  }
-`;
 
 export const NearbyTripsSection: React.FC<NearbyTripsSectionProps> = ({
   initialState = 'denied',
@@ -196,43 +40,53 @@ export const NearbyTripsSection: React.FC<NearbyTripsSectionProps> = ({
   };
 
   return (
-    <SectionWrapper id="nearby-trips-section">
-      <Container>
+    <section
+      id="nearby-trips-section"
+      className="relative w-full py-12 md:py-16 overflow-hidden bg-transparent font-sans"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header Section */}
-        <HeaderWrapper>
-          <HeaderInner>
-            <SectionTitle>
-              <MapPin className="inline-block text-amber-500 w-6 h-6 mr-2 -mt-1" aria-hidden="true" />
-              Trips Near
-              <HighlightText>You</HighlightText>
-            </SectionTitle>
+        <div className="flex items-center justify-between mb-6 md:mb-8">
+          <h2 className="flex items-center text-xl sm:text-[28px] md:text-[32px] font-black tracking-tight text-charcoal">
+            <MapPin className="inline-block text-primary w-6 h-6 mr-2 -mt-1" aria-hidden="true" />
+            <span>Trips Near</span>
+            <span className="ml-1 text-primary">You</span>
+          </h2>
 
-            <ViewAllLink href="/search" id="nearby-trips-view-all">
-              <span>View all</span>
-              <ChevronRight aria-hidden="true" strokeWidth={2.5} />
-            </ViewAllLink>
-          </HeaderInner>
-        </HeaderWrapper>
+          <Link
+            href="/search"
+            id="nearby-trips-view-all"
+            className="flex items-center gap-1 text-sm font-bold text-charcoal hover:text-amber-600 transition-colors duration-200 group shrink-0"
+          >
+            <span>View all</span>
+            <ChevronRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" strokeWidth={2.5} />
+          </Link>
+        </div>
 
         {/* Content Section: Permission Prompt or Trips Carousel */}
         {status === 'granted' ? (
           <div>
-            <LocationDetectedBar>
+            <div className="flex items-center justify-between p-3 sm:px-4 mb-5 bg-amber-50/50 border border-amber-200 rounded-xl text-[13px] text-charcoal">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span className="font-medium">Showing top getaways within 300 km of your location</span>
               </div>
-              <ResetButton type="button" onClick={handleReset} title="Reset location state">
+              <button
+                type="button"
+                onClick={handleReset}
+                title="Reset location state"
+                className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 hover:text-charcoal bg-transparent border-none cursor-pointer transition-colors duration-200"
+              >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Reset</span>
-              </ResetButton>
-            </LocationDetectedBar>
+              </button>
+            </div>
 
-            <ScrollTrack>
+            <div className="flex gap-4 sm:gap-5 overflow-x-auto pb-4 scroll-smooth scrollbar-hide">
               {mockNearbyTripsData.map((trip) => (
                 <TripCard key={trip.id} trip={trip} />
               ))}
-            </ScrollTrack>
+            </div>
           </div>
         ) : (
           <LocationPermissionCard
@@ -240,7 +94,7 @@ export const NearbyTripsSection: React.FC<NearbyTripsSectionProps> = ({
             onRetry={handleRequestLocation}
           />
         )}
-      </Container>
-    </SectionWrapper>
+      </div>
+    </section>
   );
 };

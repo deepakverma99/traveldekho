@@ -29,10 +29,11 @@ const HeaderRoot = styled.header`
   z-index: 50;
   width: 100%;
   height: 64px;
-  background-color: ${colors.offWhite};
+  background-color: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid ${colors.amber[200]}80;
+  border-bottom: 1px solid ${colors.gray[200]};
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
   padding: 0 0.875rem;
 
   @media (min-width: 640px) {
@@ -76,7 +77,7 @@ const MobileMenuToggle = styled.button`
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 0.625rem;
-  border: 1px solid ${colors.amber[200]}80;
+  border: 1px solid ${colors.gray[200]};
   background-color: ${colors.white};
   color: ${colors.gray[700]};
   cursor: pointer;
@@ -189,7 +190,7 @@ const ProfileContainer = styled.div`
   align-items: center;
   gap: 0.5rem;
   padding-left: 0.5rem;
-  border-left: 1px solid ${colors.amber[200]}80;
+  border-left: 1px solid ${colors.gray[200]};
 `;
 
 const Avatar = styled.div`

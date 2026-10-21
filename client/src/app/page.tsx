@@ -18,7 +18,7 @@ import { FloatingBackground } from "@/components/shared";
 
 export default function Home() {
   return (
-    <main className="relative flex-1 w-full bg-background overflow-x-hidden min-h-screen">
+    <main className="relative flex-1 w-full bg-white overflow-x-hidden min-h-screen">
       <FloatingBackground fixed />
       <HeroSection />
       <UpcomingTripsSection />

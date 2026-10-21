@@ -1,11 +1,8 @@
 'use client';
 
-import styled from 'styled-components';
-import { motion } from 'framer-motion';
-import { colors } from '@/theme/colors';
-import { typography } from '@/theme/typography';
-import { ChevronRight } from 'lucide-react';
 import React from 'react';
+import { motion } from 'framer-motion';
+import { ChevronRight } from 'lucide-react';
 
 export interface ButtonProps {
   children: React.ReactNode;
@@ -29,88 +26,6 @@ const sizeClasses: Record<'sm' | 'md' | 'lg' | 'xl', string> = {
   xl: 'px-8 py-4 text-sm',
 };
 
-const StyledButton = styled(motion.button) <{ $variant: 'primary' | 'secondary' }>`
-  position: relative;
-  overflow: hidden;
-  border-radius: 9999px;
-  font-family: ${typography.fonts.sans};
-  font-weight: ${typography.weights.bold};
-  cursor: pointer;
-  outline: none;
-  isolation: isolate;
-  transition: color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  white-space: nowrap;
-
-  ${({ $variant }) =>
-    $variant === 'primary'
-      ? `
-    background-color: ${colors.orange[500]};
-    color: ${colors.white};
-    border: none;
-    box-shadow: 0 4px 18px rgba(249, 115, 22, 0.38);
-
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-color: ${colors.black};
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 9999px;
-      z-index: 0;
-    }
-
-    &:hover:not(:disabled) {
-      color: ${colors.white};
-      box-shadow: 0 8px 24px rgba(249, 115, 22, 0.5);
-
-      &::before {
-        transform: scaleX(1);
-      }
-    }
-  `
-      : `
-    background-color: ${colors.white};
-    color: ${colors.charcoal};
-    border: 1.5px solid ${colors.gray[200]};
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-color: ${colors.black};
-     
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 9999px;
-      z-index: 0;
-    }
-
-    &:hover:not(:disabled) {
-      color: ${colors.white};
-      
-      box-shadow: 0 8px 24px rgba(249, 115, 22, 0.35);
-
-      &::before {
-        transform: scaleX(1);
-      }
-
-      svg {
-        color: ${colors.white};
-      }
-    }
-  `}
-
-  &:disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-`;
-
 export const Button = ({
   children,
   onClick,
@@ -125,14 +40,18 @@ export const Button = ({
   variant = 'primary',
   style,
 }: ButtonProps) => {
+  const variantClasses =
+    variant === 'primary'
+      ? 'bg-primary text-white border-0 shadow-[0_4px_18px_rgba(249,115,22,0.38)] hover:shadow-[0_8px_24px_rgba(249,115,22,0.5)]'
+      : 'bg-white text-charcoal border border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:text-white hover:shadow-[0_8px_24px_rgba(249,115,22,0.35)] [&:hover_svg]:text-white';
+
   return (
-    <StyledButton
+    <motion.button
       id={id}
       type={type}
       disabled={disabled}
-      $variant={variant}
       style={style}
-      className={`${sizeClasses[size]} uppercase tracking-wider font-bold group flex items-center justify-center gap-2 ${className || ''}`.trim()}
+      className={`relative overflow-hidden rounded-full font-sans font-bold cursor-pointer outline-none isolate transition-all duration-300 whitespace-nowrap before:content-[''] before:absolute before:inset-0 before:bg-black before:scale-x-0 before:origin-left before:transition-transform before:duration-350 before:ease-out before:rounded-full before:z-0 hover:before:scale-x-100 disabled:opacity-65 disabled:cursor-not-allowed disabled:pointer-events-none ${variantClasses} ${sizeClasses[size]} uppercase tracking-wider group flex items-center justify-center gap-2 ${className || ''}`.trim()}
       onClick={disabled ? undefined : onClick}
       whileHover={disabled ? undefined : { scale: 1.02 }}
       whileTap={disabled ? undefined : { scale: 0.98 }}
@@ -143,6 +62,6 @@ export const Button = ({
       {showArrow && (
         <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform relative z-10 shrink-0" />
       )}
-    </StyledButton>
+    </motion.button>
   );
 };

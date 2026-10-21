@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 import {
-  TripPartnerLayout,
   TripPartnerNewTripForm,
   formatPartnerDisplayName,
 } from '@/components/TripPartner';
@@ -23,11 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 async function NewTripContent({ params }: PageProps) {
   const { username } = await params;
 
-  return (
-    <TripPartnerLayout username={username}>
-      <TripPartnerNewTripForm username={username} />
-    </TripPartnerLayout>
-  );
+  return <TripPartnerNewTripForm username={username} />;
 }
 
 export default function PartnerNewTripPage(props: PageProps) {

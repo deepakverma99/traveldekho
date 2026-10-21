@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Users, Mail, Calendar, Check, Trash2, ExternalLink } from 'lucide-react';
+import { Users, Mail, Calendar, Check, Trash2, ExternalLink, Phone } from 'lucide-react';
 import {
   BookingCard,
   TravelerDetailsLeft,
@@ -13,6 +13,7 @@ import {
   MarkPaidButton,
   PaidBadge,
   ActionIconButton,
+  ActionIconLink,
 } from './styles';
 import { TripPartnerBooking } from '../types';
 
@@ -32,19 +33,35 @@ export const BookingItemCard: React.FC<BookingItemCardProps> = ({
   const travelDate = booking.travelDate || '30/10/2026';
   const bookingDate = booking.bookingDate || '18 OCT 2026';
 
+  const getInitials = (name: string) => {
+    const parts = name.trim().split(/\s+/);
+    if (parts.length >= 2) {
+      return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
+  };
+
   return (
     <BookingCard>
       {/* Left: Avatar & Traveler Details */}
       <TravelerDetailsLeft>
-        <TravelerAvatar>
-          <Users className="w-5 h-5 stroke-[2.2]" />
+        <TravelerAvatar title={booking.travelerName}>
+          {getInitials(booking.travelerName)}
         </TravelerAvatar>
 
         <TravelerTextMeta>
-          <h3>{booking.travelerName}</h3>
+          <div className="flex items-center gap-2">
+            <h3>{booking.travelerName}</h3>
+            <span className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 font-mono text-[10px] font-bold">
+              #{booking.id}
+            </span>
+          </div>
 
           {booking.travelerPhone && (
-            <p className="phone">{booking.travelerPhone}</p>
+            <p className="phone">
+              <Phone className="w-3 h-3 text-gray-400 shrink-0 inline mr-1" />
+              <span>{booking.travelerPhone}</span>
+            </p>
           )}
 
           <p className="email">
@@ -53,10 +70,15 @@ export const BookingItemCard: React.FC<BookingItemCardProps> = ({
           </p>
 
           <p className="details">
-            <span>{guests} {guests > 1 ? 'GUESTS' : 'GUEST'}</span>
+            <span className="flex items-center gap-1">
+              <Users className="w-3 h-3 text-amber-500" />
+              {guests} {guests > 1 ? 'GUESTS' : 'GUEST'}
+            </span>
             <span>•</span>
-            <Calendar className="w-3 h-3 text-gray-400" />
-            <span>{travelDate}</span>
+            <span className="flex items-center gap-1">
+              <Calendar className="w-3 h-3 text-gray-400" />
+              {travelDate}
+            </span>
           </p>
         </TravelerTextMeta>
       </TravelerDetailsLeft>
@@ -110,17 +132,16 @@ export const BookingItemCard: React.FC<BookingItemCardProps> = ({
             <Trash2 />
           </ActionIconButton>
 
-          <ActionIconButton
-            type="button"
+          <ActionIconLink
+            href={`/bookings/${booking.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
             $variant="default"
-            onClick={() => {
-              alert(`Booking ID: ${booking.id}\nTraveler: ${booking.travelerName}\nAmount: ₹${booking.amount}`);
-            }}
             title="View Booking Details"
             aria-label="View booking details"
           >
             <ExternalLink />
-          </ActionIconButton>
+          </ActionIconLink>
         </div>
       </BookingActionsRight>
     </BookingCard>

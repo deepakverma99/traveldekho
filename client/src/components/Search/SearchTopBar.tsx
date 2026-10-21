@@ -1,104 +1,15 @@
 'use client';
 
 import React from 'react';
-import styled from 'styled-components';
 import { LayoutGrid, Map as MapIcon } from 'lucide-react';
 import { ViewMode } from './types';
 import { useAppDispatch, useAppSelector, selectViewMode, setViewMode } from '@/redux';
-import { typography } from '@/theme/typography';
-import { colors } from '@/theme/colors';
 
 export interface SearchTopBarProps {
   viewMode?: ViewMode;
   onViewModeChange?: (mode: ViewMode) => void;
   description?: string;
 }
-
-const TopBarRoot = styled.div`
-  margin-bottom: 1.5rem;
-
-  @media (min-width: 640px) {
-    margin-bottom: 2rem;
-  }
-`;
-
-const FlexContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  @media (min-width: 640px) {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-`;
-
-const Heading = styled.h1`
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  font-family: ${typography.fonts.jakarta};
-  color: ${colors.charcoal};
-
-  @media (min-width: 640px) {
-    font-size: 28px;
-  }
-  @media (min-width: 768px) {
-    font-size: 32px;
-  }
-`;
-
-const Highlight = styled.span`
-  color: ${colors.primaryContainer};
-`;
-
-const Description = styled.p`
-  font-size: 0.75rem;
-  color: ${colors.gray[500]};
-  margin-top: 0.25rem;
-  font-weight: 500;
-  font-family: ${typography.fonts.jakarta};
-
-  @media (min-width: 640px) {
-    font-size: 0.875rem;
-    margin-top: 0.375rem;
-  }
-`;
-
-const ToggleContainer = styled.div`
-  display: flex;
-  background-color: ${colors.gray[100]};
-  padding: 0.25rem;
-  border-radius: 0.75rem;
-  flex-shrink: 0;
-  align-self: flex-start;
-
-  @media (min-width: 640px) {
-    align-self: auto;
-  }
-`;
-
-const ToggleButton = styled.button<{ $active: boolean }>`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 700;
-  border: none;
-  transition: all 0.2s ease;
-  cursor: pointer;
-
-  background-color: ${({ $active }) => ($active ? colors.white : 'transparent')};
-  color: ${({ $active }) => ($active ? colors.gray[900] : colors.gray[400])};
-  box-shadow: ${({ $active }) => ($active ? '0 1px 2px 0 rgba(0, 0, 0, 0.05)' : 'none')};
-
-  &:hover {
-    color: ${({ $active }) => ($active ? colors.gray[900] : colors.gray[600])};
-  }
-`;
 
 export const SearchTopBar: React.FC<SearchTopBarProps> = ({
   viewMode: propViewMode,
@@ -118,35 +29,45 @@ export const SearchTopBar: React.FC<SearchTopBarProps> = ({
   };
 
   return (
-    <TopBarRoot>
-      <FlexContainer>
+    <div className="mb-6 sm:mb-8 font-jakarta">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <Heading>
-            All Upcoming <Highlight>Adventures</Highlight>
-          </Heading>
-          {description && <Description>{description}</Description>}
+          <h1 className="text-2xl sm:text-[28px] md:text-[32px] font-extrabold tracking-tight text-charcoal">
+            All Upcoming <span className="text-primary-container">Adventures</span>
+          </h1>
+          {description && (
+            <p className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-1.5 font-medium">
+              {description}
+            </p>
+          )}
         </div>
 
         {/* View Toggle (Grid / Map) */}
-        <ToggleContainer>
-          <ToggleButton
+        <div className="flex bg-gray-100 p-1 rounded-xl shrink-0 self-start sm:self-auto">
+          <button
             type="button"
             onClick={() => handleModeChange('grid')}
-            $active={currentViewMode === 'grid'}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 cursor-pointer ${
+              currentViewMode === 'grid'
+                ? 'bg-white text-gray-900 shadow-xs'
+                : 'bg-transparent text-gray-400 hover:text-gray-600'
+            }`}
           >
             <LayoutGrid className="w-4 h-4" /> Grid
-          </ToggleButton>
-          <ToggleButton
+          </button>
+          <button
             type="button"
             onClick={() => handleModeChange('map')}
-            $active={currentViewMode === 'map'}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 cursor-pointer ${
+              currentViewMode === 'map'
+                ? 'bg-white text-gray-900 shadow-xs'
+                : 'bg-transparent text-gray-400 hover:text-gray-600'
+            }`}
           >
             <MapIcon className="w-4 h-4" /> Map
-          </ToggleButton>
-        </ToggleContainer>
-      </FlexContainer>
-    </TopBarRoot>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
-
-

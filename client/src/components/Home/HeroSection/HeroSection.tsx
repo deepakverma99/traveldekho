@@ -1,22 +1,14 @@
 'use client';
 
 import React from 'react';
-import styled from 'styled-components';
 import { FloatingDecorations } from './FloatingDecorations';
 import { HeroBookingCard } from './HeroBookingCard';
 import { HeroImage } from './HeroImage';
 import { WhatsAppButton } from '@/components/shared';
 
-const SectionWrapper = styled.section`
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  background-color: transparent;
-`;
-
 export const HeroSection: React.FC = () => {
   return (
-    <SectionWrapper id="hero-section">
+    <section id="hero-section" className="relative w-full overflow-hidden bg-transparent">
       {/* Background Floating Elements & Ambient Glows */}
       <FloatingDecorations />
 
@@ -35,6 +27,6 @@ export const HeroSection: React.FC = () => {
 
       {/* Floating Action Button */}
       <WhatsAppButton />
-    </SectionWrapper>
+    </section>
   );
 };

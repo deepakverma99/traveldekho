@@ -3,16 +3,6 @@
 import React from 'react';
 import Image from 'next/image';
 import { FloatingBackground } from '@/components/shared';
-import {
-  LoadingContainer,
-  LoadingContentWrapper,
-  AmbientBackglow,
-  GifWrapper,
-  ProgressBarTrack,
-  ProgressBarFill,
-  LoadingTitle,
-  LoadingSubtitle,
-} from './styles';
 
 export interface LoadingViewProps {
   title?: string;
@@ -28,19 +18,25 @@ export const LoadingView: React.FC<LoadingViewProps> = ({
   className = '',
 }) => {
   return (
-    <LoadingContainer
-      $fullScreen={fullScreen}
-      className={className}
+    <main
+      className={`relative w-full flex flex-col items-center justify-center bg-cream overflow-hidden px-4 py-10 font-jakarta z-1 ${
+        fullScreen ? 'min-h-[calc(100vh-80px)]' : 'min-h-[60vh]'
+      } ${className}`}
       role="status"
       aria-live="polite"
       aria-busy="true"
     >
       <FloatingBackground fixed />
 
-      <LoadingContentWrapper>
-        <AmbientBackglow aria-hidden="true" />
+      <div className="relative z-10 flex flex-col items-center text-center max-w-md w-full">
+        {/* Ambient Backglow */}
+        <div
+          aria-hidden="true"
+          className="absolute w-80 h-80 rounded-full bg-[radial-gradient(circle,_#faa12e_0%,_#fed7a1_40%,_transparent_70%)] pointer-events-none animate-pulse opacity-20 z-0"
+        />
 
-        <GifWrapper>
+        {/* Loader GIF */}
+        <div className="relative z-10 flex items-center justify-center mb-6 select-none">
           <Image
             src="/TravelDekho loader.gif"
             alt="TravelDekho loading animation"
@@ -50,15 +46,23 @@ export const LoadingView: React.FC<LoadingViewProps> = ({
             unoptimized
             className="w-44 h-44 sm:w-56 sm:h-56 object-contain"
           />
-        </GifWrapper>
+        </div>
 
-        <ProgressBarTrack aria-hidden="true">
-          <ProgressBarFill />
-        </ProgressBarTrack>
+        {/* Progress Bar */}
+        <div
+          aria-hidden="true"
+          className="relative w-44 h-1 bg-amber-200/50 rounded-full overflow-hidden mb-4"
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-500 to-transparent rounded-full animate-progress-sweep" />
+        </div>
 
-        <LoadingTitle>{title}</LoadingTitle>
-        <LoadingSubtitle>{message}</LoadingSubtitle>
-      </LoadingContentWrapper>
-    </LoadingContainer>
+        <h1 className="text-lg sm:text-xl font-extrabold tracking-tight text-charcoal mb-1.5">
+          {title}
+        </h1>
+        <p className="text-xs sm:text-sm font-semibold text-amber-900/75 leading-snug max-w-xs">
+          {message}
+        </p>
+      </div>
+    </main>
   );
 };

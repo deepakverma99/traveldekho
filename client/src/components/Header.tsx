@@ -5,7 +5,6 @@ import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import styled from 'styled-components';
 import {
   Smartphone,
   Play,
@@ -21,144 +20,6 @@ import {
 import { Button, SearchBar } from '@/components/shared';
 import { LoginModal } from '@/components/Auth';
 import { useAppDispatch, openLoginModal } from '@/redux';
-import { colors } from '@/theme/colors';
-import { typography } from '@/theme/typography';
-
-const HeaderWrapper = styled.header`
-  width: 100%;
-  background-color: rgba(250, 247, 245, 0.95);
-  border-bottom: 1px solid ${colors.gray[200]};
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-  backdrop-filter: blur(12px);
-  font-family: ${typography.fonts.sans};
-`;
-
-const Container = styled.div`
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 0 1rem;
-
-  @media (min-width: 640px) {
-    padding: 0 1.5rem;
-  }
-
-  @media (min-width: 1024px) {
-    padding: 0 2rem;
-  }
-`;
-
-const HeaderInner = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 4rem;
-  transition: all 0.3s;
-
-  @media (min-width: 768px) {
-    height: 4.5rem;
-  }
-`;
-
-const LogoLink = styled(Link)`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s;
-
-  &:hover {
-    transform: scale(1.02);
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-`;
-
-const LogoContainer = styled.div`
-  position: relative;
-  height: 2.25rem;
-  width: 8.75rem;
-  flex-shrink: 0;
-  transition: all 0.3s;
-
-  @media (min-width: 640px) {
-    height: 2.5rem;
-    width: 9.75rem;
-  }
-
-  @media (min-width: 768px) {
-    height: 3rem;
-    width: 11.75rem;
-  }
-`;
-
-const Nav = styled.nav`
-  display: none;
-  align-items: center;
-  gap: 0.25rem;
-  margin-left: auto;
-
-  @media (min-width: 1024px) {
-    display: flex;
-  }
-
-  @media (min-width: 1280px) {
-    gap: 1rem;
-  }
-`;
-
-const NavLink = styled(Link)`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  font-size: ${typography.sizes.sm};
-  font-weight: ${typography.weights.bold};
-  color: ${colors.gray[700]};
-  transition: colors 0.2s;
-  border-radius: 0.5rem;
-
-  &:hover {
-    color: ${colors.amber[500]};
-    background-color: ${colors.amber[50]};
-    
-    svg {
-      transform: rotate(12deg);
-    }
-  }
-
-  svg {
-    transition: transform 0.2s;
-  }
-`;
-
-const JoinUsBtn = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.5rem 0.75rem;
-  font-size: ${typography.sizes.sm};
-  font-weight: ${typography.weights.bold};
-  color: ${colors.gray[700]};
-  transition: colors 0.2s;
-  border-radius: 0.5rem;
-
-  &:hover {
-    color: ${colors.amber[500]};
-    background-color: ${colors.amber[50]};
-    
-    svg {
-      transform: rotate(180deg);
-    }
-  }
-
-  svg {
-    transition: transform 0.2s;
-  }
-`;
 
 const emptySubscribe = () => () => {};
 const useIsMounted = () => {
@@ -205,12 +66,17 @@ const HeaderContent = () => {
   }
 
   return (
-    <HeaderWrapper>
-      <Container>
-        <HeaderInner>
-          <div className="flex-shrink-0">
-            <LogoLink href="/" title="Go to Homepage" onClick={() => setIsMobileMenuOpen(false)}>
-              <LogoContainer>
+    <header className="w-full bg-white/95 border-b border-gray-200 sticky top-0 z-50 shadow-xs backdrop-blur-md font-sans">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 md:h-[4.5rem] transition-all">
+          <div className="shrink-0">
+            <Link
+              href="/"
+              title="Go to Homepage"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-95"
+            >
+              <div className="relative h-9 w-35 sm:h-10 sm:w-[9.75rem] md:h-12 md:w-[11.75rem] shrink-0 transition-all">
                 <Image
                   alt="Travel Dekho Logo"
                   src="/TravelDekho-logo.png"
@@ -220,36 +86,45 @@ const HeaderContent = () => {
                   priority
                   loading="eager"
                 />
-              </LogoContainer>
-            </LogoLink>
+              </div>
+            </Link>
           </div>
 
           <SearchBar />
 
-          <Nav>
-            <NavLink href="/app" className="hidden xl:flex group">
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-4 ml-auto">
+            <Link
+              href="/app"
+              className="hidden xl:flex items-center gap-2 px-3 py-2 text-sm font-bold text-gray-700 transition-colors rounded-lg hover:text-amber-500 hover:bg-amber-50 [&:hover_svg]:rotate-12 [&_svg]:transition-transform [&_svg]:duration-200"
+            >
               <Smartphone className="h-4 w-4 text-amber-500" />
               <span className="whitespace-nowrap">Get the App</span>
-            </NavLink>
-            <NavLink href="/vlog" className="relative group">
+            </Link>
+            <Link
+              href="/vlog"
+              className="relative flex items-center gap-2 px-3 py-2 text-sm font-bold text-gray-700 transition-colors rounded-lg hover:text-amber-500 hover:bg-amber-50 [&:hover_svg]:rotate-12 [&_svg]:transition-transform [&_svg]:duration-200"
+            >
               <Play className="h-4 w-4 text-amber-500 fill-current" />
-              Vlog
+              <span>Vlog</span>
               <span className="absolute -top-1 -right-1 flex h-4 w-10 items-center justify-center rounded-full bg-amber-500 text-[8px] font-black uppercase text-black ring-2 ring-white animate-pulse shadow-sm shadow-amber-500/20">
                 NEW
               </span>
-            </NavLink>
+            </Link>
 
             <div className="relative group">
-              <JoinUsBtn>
-                Join us
+              <button
+                type="button"
+                className="flex items-center gap-1 px-3 py-2 text-sm font-bold text-gray-700 transition-colors rounded-lg hover:text-amber-500 hover:bg-amber-50 [&:hover_svg]:rotate-180 [&_svg]:transition-transform [&_svg]:duration-200 cursor-pointer border-0 bg-transparent"
+              >
+                <span>Join us</span>
                 <ChevronDown className="h-4 w-4" />
-              </JoinUsBtn>
+              </button>
             </div>
 
             <div className="ml-2 relative">
               <Button onClick={() => dispatch(openLoginModal())}>Login</Button>
             </div>
-          </Nav>
+          </nav>
 
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -259,10 +134,10 @@ const HeaderContent = () => {
           >
             {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
-        </HeaderInner>
-      </Container>
+        </div>
+      </div>
 
-      {/* Mobile Drawer (Portaled to document.body to break free from HeaderWrapper stacking context & backdrop-filter) */}
+      {/* Mobile Drawer */}
       {isMounted &&
         createPortal(
           <>
@@ -421,7 +296,7 @@ const HeaderContent = () => {
 
       {/* Login & Signup Modal */}
       <LoginModal />
-    </HeaderWrapper>
+    </header>
   );
 };
 

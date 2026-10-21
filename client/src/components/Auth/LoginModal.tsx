@@ -1,13 +1,10 @@
 'use client';
 
-import React, { useEffect, useCallback, useSyncExternalStore } from 'react';
+import React, { useEffect, useSyncExternalStore, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
-import styled from 'styled-components';
-import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowLeft, CheckCircle2, X } from 'lucide-react';
-import { colors } from '@/theme/colors';
-import { typography } from '@/theme/typography';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import {
   useAppDispatch,
   useAppSelector,
@@ -19,11 +16,11 @@ import {
   selectAuthOtp,
   selectAuthLoading,
   selectAuthError,
-  closeLoginModal,
   setCountryCode,
   setMobileNumber,
   setOtp,
   setStep,
+  closeLoginModal,
   requestOtpStart,
   requestOtpSuccess,
   loginSuccess,
@@ -35,327 +32,6 @@ export interface LoginModalProps {
   onClose?: () => void;
   onSubmitOtp?: (data: { countryCode: string; mobileNumber: string }) => void;
 }
-
-const Backdrop = styled(motion.div)`
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background-color: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-`;
-
-const ModalCard = styled(motion.div)`
-  position: relative;
-  width: 100%;
-  max-width: 400px;
-  background-color: ${colors.white};
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 2rem;
-  box-shadow: 0 25px 70px -15px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  padding: 2rem 1.75rem 1.75rem;
-
-  @media (min-width: 640px) {
-    padding: 2.5rem 2.25rem 2rem;
-  }
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  width: 2rem;
-  height: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 9999px;
-  color: ${colors.gray[400]};
-  background-color: ${colors.gray[100]};
-  border: none;
-  cursor: pointer;
-  z-index: 100;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background-color: ${colors.gray[200]};
-    color: ${colors.gray[900]};
-    transform: rotate(90deg);
-  }
-`;
-
-const BackStepButton = styled.button`
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  width: 2rem;
-  height: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 9999px;
-  color: ${colors.gray[500]};
-  background-color: ${colors.gray[100]};
-  border: none;
-  cursor: pointer;
-  z-index: 100;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background-color: ${colors.gray[200]};
-    color: ${colors.gray[900]};
-  }
-`;
-
-const ModalHeader = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 1.5rem;
-`;
-
-const ModalTitle = styled.h2`
-  font-size: 1.5rem;
-  line-height: 2rem;
-  font-weight: 900;
-  font-family: ${typography.fonts.jakarta};
-  color: ${colors.charcoal};
-  letter-spacing: -0.025em;
-  text-align: center;
-`;
-
-const TitleAccent = styled.span`
-  color: ${colors.gold};
-`;
-
-const ModalSubtitle = styled.p`
-  color: ${colors.gray[500]};
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-align: center;
-  margin-top: 0.25rem;
-`;
-
-const ActiveMobileDisplay = styled.div`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.35rem;
-  background-color: ${colors.amber[50]};
-  border: 1px solid ${colors.amber[200]};
-  padding: 0.25rem 0.65rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: ${colors.amber[900]};
-`;
-
-const InputRow = styled.div`
-  display: flex;
-  gap: 0.625rem;
-  width: 100%;
-`;
-
-const CountrySelect = styled.select`
-  background-color: #f4f5f7;
-  border: 2px solid transparent;
-  border-radius: 0.75rem;
-  padding: 0.875rem 0.625rem;
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: ${colors.gray[900]};
-  outline: none;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: all 0.2s ease;
-
-  @media (min-width: 640px) {
-    padding-left: 0.875rem;
-    padding-right: 0.875rem;
-  }
-
-  &:hover {
-    border-color: ${colors.gray[300]};
-  }
-
-  &:focus {
-    background-color: ${colors.white};
-    border-color: ${colors.gold};
-    box-shadow: 0 0 0 4px rgba(250, 203, 43, 0.2);
-  }
-`;
-
-const PhoneInput = styled.input`
-  flex: 1;
-  width: 100%;
-  min-width: 0;
-  background-color: #f4f5f7;
-  border: 2px solid transparent;
-  border-radius: 0.75rem;
-  padding: 0.875rem 1rem;
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: ${colors.gray[900]};
-  outline: none;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-  transition: all 0.2s ease;
-
-  &::placeholder {
-    color: ${colors.gray[400]};
-    font-weight: 600;
-  }
-
-  &:hover {
-    border-color: ${colors.gray[300]};
-  }
-
-  &:focus {
-    background-color: ${colors.white};
-    border-color: ${colors.gold};
-    box-shadow: 0 0 0 4px rgba(250, 203, 43, 0.2);
-  }
-`;
-
-const OtpInput = styled.input`
-  width: 100%;
-  background-color: #f4f5f7;
-  border: 2px solid transparent;
-  border-radius: 0.75rem;
-  padding: 0.875rem 1rem;
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: 0.5em;
-  text-align: center;
-  color: ${colors.charcoal};
-  outline: none;
-  transition: all 0.2s ease;
-
-  &::placeholder {
-    color: ${colors.gray[400]};
-    font-weight: 600;
-    letter-spacing: normal;
-    font-size: 0.875rem;
-  }
-
-  &:hover {
-    border-color: ${colors.gray[300]};
-  }
-
-  &:focus {
-    background-color: ${colors.white};
-    border-color: ${colors.gold};
-    box-shadow: 0 0 0 4px rgba(250, 203, 43, 0.2);
-  }
-`;
-
-const SubmitButton = styled(motion.button)`
-  width: 100%;
-  border-radius: 0.75rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.875rem;
-  font-size: 0.875rem;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  cursor: pointer;
-  margin-top: 1.25rem;
-  position: relative;
-  overflow: hidden;
-  background-color: ${colors.gold};
-  color: ${colors.charcoal};
-  border: none;
-  font-family: ${typography.fonts.jakarta};
-  transition: color 0.4s ease, box-shadow 0.4s ease;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-color: ${colors.black};
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 0;
-  }
-
-  &:hover:not(:disabled) {
-    color: ${colors.white};
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-
-    &::before {
-      transform: scaleX(1);
-    }
-  }
-
-  &:disabled {
-    background-color: ${colors.gray[200]};
-    color: ${colors.gray[400]};
-    box-shadow: none;
-    cursor: not-allowed;
-    opacity: 0.8;
-  }
-
-  > span {
-    position: relative;
-    z-index: 10;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-`;
-
-const PartnerFooterWrapper = styled.div`
-  text-align: center;
-  margin-top: 1.5rem;
-  padding-top: 0.25rem;
-`;
-
-const PartnerText = styled.p`
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: ${colors.gray[500]};
-
-  @media (min-width: 640px) {
-    font-size: 0.875rem;
-  }
-`;
-
-const PartnerLink = styled(Link)`
-  color: ${colors.amber[700]};
-  font-weight: 700;
-  margin-left: 0.25rem;
-  text-decoration: none;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: ${colors.amber[900]};
-    text-decoration: underline;
-  }
-`;
-
-const ResendButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: ${colors.amber[700]};
-  cursor: pointer;
-  margin-top: 0.75rem;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: ${colors.amber[900]};
-    text-decoration: underline;
-  }
-`;
 
 interface LoginFormProps {
   onClose?: () => void;
@@ -397,7 +73,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSubmitOtp }) => {
     e.preventDefault();
     if (otp.length < 4) return;
 
-    // Simulate OTP verification & authentication success
     dispatch(
       loginSuccess({
         user: {
@@ -416,7 +91,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSubmitOtp }) => {
     return (
       <form className="space-y-4" onSubmit={handleOtpSubmit}>
         <div className="flex flex-col items-center">
-          <OtpInput
+          <input
             placeholder="• • • •"
             maxLength={6}
             required
@@ -425,13 +100,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSubmitOtp }) => {
             onChange={handleOtpChange}
             autoFocus
             aria-label="One-Time Password"
+            className="w-full bg-[#f4f5f7] border-2 border-transparent rounded-xl py-3.5 px-4 text-xl font-extrabold tracking-[0.5em] text-center text-charcoal outline-none transition-all placeholder:text-gray-400 placeholder:font-semibold placeholder:tracking-normal placeholder:text-sm hover:border-gray-300 focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-400/20"
           />
-          <ResendButton
+          <button
             type="button"
             onClick={() => dispatch(requestOtpSuccess())}
+            className="bg-transparent border-none text-xs font-bold text-amber-700 cursor-pointer mt-3 transition-colors hover:text-amber-900 hover:underline"
           >
             Resend OTP
-          </ResendButton>
+          </button>
         </div>
 
         {error && (
@@ -440,34 +117,36 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSubmitOtp }) => {
           </p>
         )}
 
-        <SubmitButton
+        <motion.button
           type="submit"
           disabled={!isOtpValid || isLoading}
           whileHover={isOtpValid ? { scale: 1.01 } : {}}
           whileTap={isOtpValid ? { scale: 0.98 } : {}}
+          className="w-full rounded-xl flex justify-center items-center p-3.5 text-sm font-extrabold tracking-widest cursor-pointer mt-5 relative overflow-hidden bg-primary text-charcoal border-none font-jakarta transition-all duration-300 before:content-[''] before:absolute before:inset-0 before:bg-black before:scale-x-0 before:origin-left before:transition-transform before:duration-500 before:ease-out before:z-0 hover:not-disabled:text-white hover:not-disabled:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.3)] hover:not-disabled:before:scale-x-100 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed disabled:opacity-80"
         >
-          <span>
+          <span className="relative z-10 inline-flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4" />
             {isLoading ? 'VERIFYING...' : 'VERIFY & LOGIN'}
           </span>
-        </SubmitButton>
+        </motion.button>
       </form>
     );
   }
 
   return (
     <form className="space-y-4" onSubmit={handlePhoneSubmit}>
-      <InputRow>
-        <CountrySelect
+      <div className="flex gap-2.5 w-full">
+        <select
           aria-label="Country Code"
           value={countryCode}
           onChange={handleCountryCodeChange}
+          className="bg-[#f4f5f7] border-2 border-transparent rounded-xl py-3.5 px-2.5 sm:px-3.5 text-sm font-bold text-gray-900 outline-none cursor-pointer shrink-0 transition-all hover:border-gray-300 focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-400/20"
         >
           <option value="+91">🇮🇳 +91</option>
           <option value="+1">🇺🇸 +1</option>
-        </CountrySelect>
+        </select>
 
-        <PhoneInput
+        <input
           placeholder="Mobile Number"
           maxLength={10}
           required
@@ -476,8 +155,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSubmitOtp }) => {
           onChange={handleMobileChange}
           autoFocus
           aria-label="Mobile Number"
+          className="flex-1 w-full min-w-0 bg-[#f4f5f7] border-2 border-transparent rounded-xl py-3.5 px-4 text-sm font-bold text-gray-900 outline-none shadow-xs transition-all placeholder:text-gray-400 placeholder:font-semibold hover:border-gray-300 focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-400/20"
         />
-      </InputRow>
+      </div>
 
       {error && (
         <p className="text-xs font-semibold text-red-600 text-center">
@@ -485,28 +165,34 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSubmitOtp }) => {
         </p>
       )}
 
-      <SubmitButton
+      <motion.button
         type="submit"
         disabled={!isMobileComplete || isLoading}
         whileHover={isMobileComplete ? { scale: 1.01 } : {}}
         whileTap={isMobileComplete ? { scale: 0.98 } : {}}
+        className="w-full rounded-xl flex justify-center items-center p-3.5 text-sm font-extrabold tracking-widest cursor-pointer mt-5 relative overflow-hidden bg-primary text-charcoal border-none font-jakarta transition-all duration-300 before:content-[''] before:absolute before:inset-0 before:bg-black before:scale-x-0 before:origin-left before:transition-transform before:duration-500 before:ease-out before:z-0 hover:not-disabled:text-white hover:not-disabled:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.3)] hover:not-disabled:before:scale-x-100 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed disabled:opacity-80"
       >
-        <span>{isLoading ? 'SENDING OTP...' : 'GET OTP'}</span>
-      </SubmitButton>
+        <span className="relative z-10">
+          {isLoading ? 'SENDING OTP...' : 'GET OTP'}
+        </span>
+      </motion.button>
 
-      <PartnerFooterWrapper>
-        <PartnerText>
+      <div className="text-center mt-6 pt-1">
+        <p className="text-xs sm:text-sm font-semibold text-gray-500">
           Are you a trip partner ?
-          <PartnerLink href="/trip-partner/login" onClick={onClose}>
+          <Link
+            href="/trip-partner/login"
+            onClick={onClose}
+            className="text-amber-700 font-bold ml-1 no-underline transition-colors hover:text-amber-900 hover:underline"
+          >
             Login here
-          </PartnerLink>
-        </PartnerText>
-      </PartnerFooterWrapper>
+          </Link>
+        </p>
+      </div>
     </form>
   );
 };
 
-// Safe client-side mount hook for portal without setState in useEffect
 const emptySubscribe = () => () => {};
 const useIsMounted = () => {
   return useSyncExternalStore(
@@ -540,7 +226,6 @@ export const LoginModal: React.FC<LoginModalProps> = ({
     dispatch(setStep('phone'));
   };
 
-  // Handle Escape key press and scroll locking
   useEffect(() => {
     if (!isOpen) return;
 
@@ -565,7 +250,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   return createPortal(
     <AnimatePresence>
       {isOpen && (
-        <Backdrop
+        <motion.div
           key="login-modal-backdrop"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -575,61 +260,70 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           role="dialog"
           aria-modal="true"
           aria-labelledby="login-modal-heading"
+          className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/55 backdrop-blur-md"
         >
-          <ModalCard
+          <motion.div
             key="login-modal-card"
             initial={{ opacity: 0, scale: 0.95, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 12 }}
             transition={{ type: 'spring', damping: 25, stiffness: 350 }}
             onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-[400px] bg-white border border-black/[0.08] rounded-[2rem] shadow-[0_25px_70px_-15px_rgba(0,0,0,0.2)] flex flex-col overflow-hidden p-7 pt-8 sm:p-9 sm:pt-10 sm:pb-8"
           >
             {/* Back button if on OTP step */}
             {step === 'otp' && (
-              <BackStepButton
+              <button
+                type="button"
                 aria-label="Back to phone number"
                 onClick={handleBackToPhone}
+                className="absolute top-4 left-4 w-8 h-8 flex items-center justify-center rounded-full text-gray-500 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 transition-all duration-200 border-0 cursor-pointer z-50"
               >
                 <ArrowLeft className="w-4 h-4" aria-hidden="true" />
-              </BackStepButton>
+              </button>
             )}
 
             {/* Close Button */}
-            <CloseButton aria-label="Close" onClick={handleClose}>
+            <button
+              type="button"
+              aria-label="Close"
+              onClick={handleClose}
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full text-gray-400 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 hover:rotate-90 transition-all duration-200 border-0 cursor-pointer z-50"
+            >
               <X className="w-4 h-4" aria-hidden="true" />
-            </CloseButton>
+            </button>
 
             {/* Brand Header */}
-            <ModalHeader>
-              <ModalTitle id="login-modal-heading">
+            <div className="flex flex-col items-center mb-6">
+              <h2 id="login-modal-heading" className="text-2xl leading-8 font-black font-jakarta text-charcoal tracking-tight text-center">
                 {step === 'otp' ? (
                   <>
-                    Verify <TitleAccent>OTP</TitleAccent>
+                    Verify <span className="text-primary">OTP</span>
                   </>
                 ) : (
                   <>
-                    Login <TitleAccent>/ Signup</TitleAccent>
+                    Login <span className="text-primary">/ Signup</span>
                   </>
                 )}
-              </ModalTitle>
-              <ModalSubtitle>
+              </h2>
+              <p className="text-gray-500 text-sm font-semibold text-center mt-1">
                 {step === 'otp'
                   ? 'Enter the verification code sent to'
                   : 'Enter your mobile number to get OTP'}
-              </ModalSubtitle>
+              </p>
               {step === 'otp' && mobileNumber && (
-                <ActiveMobileDisplay>
+                <div className="inline-flex items-center gap-2 mt-1.5 bg-amber-50 border border-amber-200 py-1 px-2.5 rounded-full text-xs font-bold text-amber-900">
                   <span>
                     {countryCode} {mobileNumber}
                   </span>
-                </ActiveMobileDisplay>
+                </div>
               )}
-            </ModalHeader>
+            </div>
 
             {/* Login / OTP Form */}
             <LoginForm onClose={handleClose} onSubmitOtp={onSubmitOtp} />
-          </ModalCard>
-        </Backdrop>
+          </motion.div>
+        </motion.div>
       )}
     </AnimatePresence>,
     document.body

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
 import {
   Calendar,
   ChevronDown,
@@ -32,222 +31,10 @@ import {
   openBookingModal,
   initializeTripDetail,
 } from '@/redux';
-import { colors } from '@/theme/colors';
 
 interface TripBookingSidebarProps {
   trip: TripDetail;
 }
-
-const SidebarContainer = styled.div`
-  width: 100%;
-  flex-shrink: 0;
-  position: sticky;
-  top: 5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-
-  @media (min-width: 768px) {
-    top: 6rem;
-  }
-  @media (min-width: 1024px) {
-    width: 380px;
-  }
-`;
-
-const BookingCard = styled.div`
-  background-color: ${colors.white};
-  border-radius: 1.5rem;
-  border: 1px solid ${colors.gray[100]};
-  padding: 1.25rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-
-  @media (min-width: 640px) {
-    padding: 1.5rem;
-  }
-`;
-
-const DiscountBadge = styled.span`
-  font-size: 10px;
-  font-weight: 900;
-  color: ${colors.red[500]};
-  background-color: ${colors.red[50]};
-  padding: 0.125rem 0.5rem;
-  border-radius: 9999px;
-  border: 1px solid ${colors.red[100]};
-`;
-
-const MonthFilterButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.375rem 0.75rem;
-  border: 1px solid ${colors.gray[300]};
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: ${colors.gray[700]};
-  background: transparent;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-
-  &:hover {
-    background-color: ${colors.gray[50]};
-  }
-`;
-
-const MonthDropdownMenu = styled.div`
-  position: absolute;
-  right: 0;
-  top: 100%;
-  margin-top: 0.375rem;
-  width: 9rem;
-  background-color: ${colors.white};
-  border: 1px solid ${colors.gray[200]};
-  border-radius: 0.75rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  z-index: 20;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-  overflow: hidden;
-`;
-
-const MonthDropdownItem = styled.button<{ $isActive?: boolean }>`
-  width: 100%;
-  text-align: left;
-  padding: 0.375rem 0.875rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  transition: background-color 0.15s ease;
-  border: none;
-  cursor: pointer;
-  background-color: ${({ $isActive }) => ($isActive ? colors.amber[50] : 'transparent')};
-  color: ${({ $isActive }) => ($isActive ? colors.amber[700] : colors.gray[700])};
-
-  &:hover {
-    background-color: ${({ $isActive }) =>
-      $isActive ? colors.amber[50] : colors.gray[50]};
-  }
-`;
-
-const SlotOptionCard = styled.div<{ $isSelected?: boolean }>`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem;
-  border-radius: 1rem;
-  border: 1px solid
-    ${({ $isSelected }) => ($isSelected ? colors.amber[400] : colors.gray[100])};
-  background-color: ${({ $isSelected }) =>
-    $isSelected ? `${colors.amber[50]}66` : colors.white};
-  box-shadow: ${({ $isSelected }) =>
-    $isSelected ? '0 1px 2px 0 rgba(0, 0, 0, 0.05)' : 'none'};
-  transition: all 0.2s ease;
-  cursor: pointer;
-
-  &:hover {
-    border-color: ${({ $isSelected }) =>
-      $isSelected ? colors.amber[400] : colors.gray[200]};
-  }
-`;
-
-const RadioCircle = styled.div<{ $isSelected?: boolean }>`
-  width: 1.25rem;
-  height: 1.25rem;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  background-color: ${({ $isSelected }) =>
-    $isSelected ? colors.gray[900] : 'transparent'};
-  color: ${colors.white};
-  border: ${({ $isSelected }) =>
-    $isSelected ? 'none' : `2px solid ${colors.gray[200]}`};
-
-  ${SlotOptionCard}:hover & {
-    border-color: ${({ $isSelected }) =>
-      $isSelected ? 'none' : colors.gray[300]};
-  }
-`;
-
-const StepCounterButton = styled.button`
-  width: 2rem;
-  height: 2rem;
-  border-radius: 9999px;
-  border: 1px solid ${colors.gray[200]};
-  color: ${colors.gray[500]};
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  cursor: pointer;
-
-  &:hover:not(:disabled) {
-    color: ${colors.gray[900]};
-    background-color: ${colors.gray[50]};
-  }
-
-  &:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-  }
-`;
-
-const BookNowButton = styled.button`
-  width: 100%;
-  background-color: ${colors.amber[400]};
-  color: ${colors.gray[900]};
-  font-weight: 800;
-  padding: 0.875rem 1rem;
-  border-radius: 0.75rem;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  border: none;
-
-  &:hover {
-    background-color: ${colors.black};
-    color: ${colors.white};
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-`;
-
-const WeatherCard = styled.div`
-  background-color: ${colors.white};
-  border: 1px solid ${colors.gray[100]};
-  border-radius: 1.5rem;
-  padding: 1.25rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  position: relative;
-  overflow: hidden;
-  transition: all 0.2s ease;
-
-  &:hover {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  }
-`;
-
-const ForecastItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0.625rem;
-  background-color: ${colors.gray[50]};
-  border-radius: 0.75rem;
-  transition: all 0.2s ease;
-  cursor: default;
-  border: 1px solid transparent;
-
-  &:hover {
-    background-color: ${colors.amber[50]}CC;
-    border-color: ${colors.amber[100]}80;
-  }
-`;
 
 export const TripBookingSidebar: React.FC<TripBookingSidebarProps> = ({ trip }) => {
   const dispatch = useAppDispatch();
@@ -299,241 +86,219 @@ export const TripBookingSidebar: React.FC<TripBookingSidebarProps> = ({ trip }) 
   };
 
   return (
-    <SidebarContainer id="booking-sidebar-section">
+    <div id="booking-sidebar-section" className="w-full shrink-0 sticky top-20 md:top-24 lg:w-[380px] flex flex-col gap-6">
       {/* Booking Form Card */}
-      <BookingCard>
-        <p style={{ fontSize: '0.75rem', fontWeight: 700, color: colors.gray[500], marginBottom: '0.25rem' }}>
+      <div className="bg-white rounded-3xl border border-gray-100 p-5 sm:p-6 shadow-xs">
+        <p className="text-xs font-bold text-gray-500 mb-1">
           Trip Starts From
         </p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-          <span style={{ fontSize: '1.875rem', fontWeight: 900, color: colors.amber[500] }}>
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-3xl font-black text-amber-500">
             ₹{trip.pricing.startingPrice.toLocaleString('en-IN')}
           </span>
-          <span style={{ fontSize: '0.875rem', fontWeight: 700, color: colors.gray[400], textDecoration: 'line-through' }}>
+          <span className="text-sm font-bold text-gray-400 line-through">
             ₹{trip.pricing.originalPrice.toLocaleString('en-IN')}
           </span>
-          <DiscountBadge>{trip.pricing.discount}</DiscountBadge>
+          <span className="text-[10px] font-black text-red-500 bg-red-50 px-2 py-0.5 rounded-full border border-red-100">
+            {trip.pricing.discount}
+          </span>
         </div>
-        <p style={{ fontSize: '10px', fontWeight: 700, color: colors.gray[400], marginBottom: '1.5rem' }}>
+        <p className="text-[10px] font-bold text-gray-400 mb-6">
           Per Person
         </p>
 
         {/* Trip Dates Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'between', marginBottom: '1rem', position: 'relative' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700, color: colors.gray[800], fontSize: '0.875rem', flex: 1 }}>
-            <Calendar style={{ width: '1rem', height: '1rem', color: colors.blue[500] }} />
+        <div className="flex items-center justify-between mb-4 relative">
+          <div className="flex items-center gap-2 font-bold text-gray-800 text-sm flex-1">
+            <Calendar className="w-4 h-4 text-blue-500" />
             <span>Trip Dates</span>
           </div>
 
           {/* Month Filter Dropdown */}
-          <div style={{ position: 'relative' }}>
-            <MonthFilterButton
+          <div className="relative">
+            <button
               type="button"
               onClick={() => dispatch(toggleMonthDropdown())}
+              className="flex items-center gap-1.5 px-3 py-1.5 border border-gray-300 rounded-full text-xs font-bold text-gray-700 bg-transparent hover:bg-gray-50 transition-colors cursor-pointer"
             >
               <span>{selectedMonth}</span>
-              <ChevronDown style={{ width: '0.75rem', height: '0.75rem' }} />
-            </MonthFilterButton>
+              <ChevronDown className="w-3 h-3" />
+            </button>
 
             {isMonthDropdownOpen && (
-              <MonthDropdownMenu>
-                {months.map((m) => (
-                  <MonthDropdownItem
-                    key={m}
-                    type="button"
-                    $isActive={selectedMonth === m}
-                    onClick={() => dispatch(setSelectedMonth(m))}
-                  >
-                    {m}
-                  </MonthDropdownItem>
-                ))}
-              </MonthDropdownMenu>
+              <div className="absolute right-0 top-full mt-1.5 w-36 bg-white border border-gray-200 rounded-xl shadow-lg z-20 py-1 overflow-hidden">
+                {months.map((m) => {
+                  const isActive = selectedMonth === m;
+                  return (
+                    <button
+                      key={m}
+                      type="button"
+                      onClick={() => dispatch(setSelectedMonth(m))}
+                      className={`w-full text-left px-3.5 py-1.5 text-xs font-bold transition-colors cursor-pointer ${
+                        isActive
+                          ? 'bg-amber-50 text-amber-700'
+                          : 'bg-transparent text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      {m}
+                    </button>
+                  );
+                })}
+              </div>
             )}
           </div>
         </div>
 
         {/* Date Slots Radio Selection */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem' }}>
+        <div className="flex flex-col gap-3 mb-6">
           {filteredSlots.map((slot) => {
             const isSelected = selectedSlot?.id === slot.id;
             return (
-              <SlotOptionCard
+              <div
                 key={slot.id}
-                $isSelected={isSelected}
                 onClick={() => dispatch(setSelectedSlotId(slot.id))}
-                className="group"
+                className={`group flex items-center justify-between p-3 rounded-2xl border transition-all cursor-pointer ${
+                  isSelected
+                    ? 'border-amber-400 bg-amber-50/40 shadow-xs'
+                    : 'border-gray-100 bg-white hover:border-gray-200'
+                }`}
               >
                 <div>
                   <p
-                    style={{
-                      fontSize: '0.875rem',
-                      fontWeight: 700,
-                      color: isSelected ? colors.amber[700] : colors.gray[800],
-                      transition: 'color 0.15s ease',
-                    }}
+                    className={`text-sm font-bold transition-colors ${
+                      isSelected ? 'text-amber-700' : 'text-gray-800'
+                    }`}
                   >
                     {slot.date}
                   </p>
-                  <p style={{ fontSize: '10px', fontWeight: 700, color: colors.gray[500], marginTop: '0.125rem' }}>
+                  <p className="text-[10px] font-bold text-gray-500 mt-0.5">
                     Starting ₹{slot.price.toLocaleString('en-IN')} /Person
                   </p>
                 </div>
 
-                <RadioCircle $isSelected={isSelected}>
-                  {isSelected && <Check style={{ width: '0.75rem', height: '0.75rem' }} />}
-                </RadioCircle>
-              </SlotOptionCard>
+                <div
+                  className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${
+                    isSelected
+                      ? 'bg-gray-900 text-white'
+                      : 'border-2 border-gray-200 group-hover:border-gray-300'
+                  }`}
+                >
+                  {isSelected && <Check className="w-3 h-3 stroke-[2.5]" />}
+                </div>
+              </div>
             );
           })}
         </div>
 
         {/* Number of Travellers Counter */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: '1.5rem',
-            paddingTop: '1rem',
-            borderTop: `1px solid ${colors.gray[100]}`,
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700, color: colors.gray[800], fontSize: '0.875rem' }}>
-            <Users style={{ width: '1rem', height: '1rem', color: colors.purple[600] }} />
+        <div className="flex items-center justify-between mb-6 pt-4 border-t border-gray-100">
+          <div className="flex items-center gap-2 font-bold text-gray-800 text-sm">
+            <Users className="w-4 h-4 text-purple-600" />
             <span>No. of Travellers</span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <StepCounterButton
+          <div className="flex items-center gap-3">
+            <button
               type="button"
               onClick={() => handleTravellersChange(-1)}
               disabled={travellers <= 1}
               aria-label="Decrease travellers"
+              className="w-8 h-8 rounded-full border border-gray-200 text-gray-500 bg-transparent flex items-center justify-center transition-all cursor-pointer hover:text-gray-900 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
             >
-              <Minus style={{ width: '0.875rem', height: '0.875rem' }} />
-            </StepCounterButton>
-            <span style={{ fontSize: '0.875rem', fontWeight: 900, width: '1.5rem', textAlign: 'center', color: colors.gray[900] }}>
+              <Minus className="w-3.5 h-3.5" />
+            </button>
+            <span className="text-sm font-black w-6 text-center text-gray-900">
               {travellers}
             </span>
-            <StepCounterButton
+            <button
               type="button"
               onClick={() => handleTravellersChange(1)}
               aria-label="Increase travellers"
+              className="w-8 h-8 rounded-full border border-gray-200 text-gray-500 bg-transparent flex items-center justify-center transition-all cursor-pointer hover:text-gray-900 hover:bg-gray-50"
             >
-              <Plus style={{ width: '0.875rem', height: '0.875rem' }} />
-            </StepCounterButton>
+              <Plus className="w-3.5 h-3.5" />
+            </button>
           </div>
         </div>
 
         {/* Total Price preview */}
         {selectedSlot && (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', paddingLeft: '0.25rem', paddingRight: '0.25rem' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: colors.gray[500] }}>
+          <div className="flex items-center justify-between mb-4 px-1">
+            <span className="text-xs font-bold text-gray-500">
               Total Price
             </span>
-            <span style={{ fontSize: '1.125rem', fontWeight: 900, color: colors.gray[900] }}>
+            <span className="text-lg font-black text-gray-900">
               ₹{(selectedSlot.price * travellers).toLocaleString('en-IN')}
             </span>
           </div>
         )}
 
         {/* Book Now Button */}
-        <BookNowButton
+        <button
           type="button"
           onClick={() => dispatch(openBookingModal())}
+          className="w-full bg-amber-400 hover:bg-black text-gray-900 hover:text-white font-extrabold py-3.5 px-4 rounded-xl transition-all shadow-xs active:scale-98 cursor-pointer"
         >
           Book Now
-        </BookNowButton>
-      </BookingCard>
+        </button>
+      </div>
 
       {/* Live Weather Card */}
-      <WeatherCard className="group">
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            width: '8rem',
-            height: '8rem',
-            backgroundColor: `${colors.amber[400]}0D`,
-            borderRadius: '9999px',
-            filter: 'blur(24px)',
-            marginRight: '-2.5rem',
-            marginTop: '-2.5rem',
-            pointerEvents: 'none',
-          }}
-        />
+      <div className="bg-white border border-gray-100 rounded-3xl p-5 shadow-xs relative overflow-hidden transition-all hover:shadow-md group">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/5 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none" />
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem', position: 'relative', zIndex: 10 }}>
+        <div className="flex justify-between items-start mb-4 relative z-10">
           <div>
-            <p
-              style={{
-                fontSize: '10px',
-                fontWeight: 900,
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                color: colors.gray[400],
-                marginBottom: '0.25rem',
-              }}
-            >
+            <p className="text-[10px] font-black uppercase tracking-wider text-gray-400 mb-1">
               Live Weather
             </p>
-            <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: colors.gray[900], textTransform: 'capitalize' }}>
+            <h3 className="text-lg font-bold text-gray-900 capitalize">
               {trip.weather.location}
             </h3>
           </div>
 
-          <div
-            style={{
-              width: '2.5rem',
-              height: '2.5rem',
-              backgroundColor: colors.amber[50],
-              color: colors.amber[500],
-              borderRadius: '9999px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
-            <CloudRain style={{ width: '1.25rem', height: '1.25rem' }} />
+          <div className="w-10 h-10 bg-amber-50 text-amber-500 rounded-full flex items-center justify-center shrink-0">
+            <CloudRain className="w-5 h-5" />
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', marginBottom: '1.5rem', position: 'relative', zIndex: 10 }}>
-          <span style={{ fontSize: '2.25rem', fontWeight: 900, color: colors.gray[900] }}>
+        <div className="flex items-end gap-2 mb-6 relative z-10">
+          <span className="text-4xl font-black text-gray-900">
             {trip.weather.currentTemp}
           </span>
-          <span style={{ fontSize: '0.875rem', fontWeight: 700, color: colors.gray[500], marginBottom: '0.25rem' }}>
+          <span className="text-sm font-bold text-gray-500 mb-1">
             {trip.weather.condition}
           </span>
         </div>
 
         {/* 3-day Forecast */}
-        <div style={{ paddingTop: '1rem', borderTop: `1px solid ${colors.gray[100]}`, position: 'relative', zIndex: 10 }}>
-          <p style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', color: colors.gray[400], marginBottom: '0.75rem' }}>
+        <div className="pt-4 border-t border-gray-100 relative z-10">
+          <p className="text-[10px] font-black uppercase tracking-wider text-gray-400 mb-3">
             Forecast
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
+          <div className="grid grid-cols-3 gap-2">
             {trip.weather.forecast.map((fc, i) => (
-              <ForecastItem key={i}>
-                <span style={{ fontSize: '10px', fontWeight: 700, color: colors.gray[500], marginBottom: '0.25rem' }}>
+              <div
+                key={i}
+                className="flex flex-col items-center p-2.5 bg-gray-50 rounded-xl transition-all cursor-default border border-transparent hover:bg-amber-50/80 hover:border-amber-100/50"
+              >
+                <span className="text-[10px] font-bold text-gray-500 mb-1">
                   {fc.day}
                 </span>
-                <div style={{ color: colors.gray[400], marginBottom: '0.25rem' }}>
+                <div className="text-gray-400 mb-1">
                   {renderWeatherIcon(fc.icon, 'w-4 h-4')}
                 </div>
-                <span style={{ fontSize: '0.875rem', fontWeight: 900, color: colors.gray[900] }}>
+                <span className="text-sm font-black text-gray-900">
                   {fc.temp}
                 </span>
-              </ForecastItem>
+              </div>
             ))}
           </div>
         </div>
-      </WeatherCard>
+      </div>
 
       {/* Booking Checkout Modal */}
       <TripBookingModal trip={trip} />
-    </SidebarContainer>
+    </div>
   );
 };

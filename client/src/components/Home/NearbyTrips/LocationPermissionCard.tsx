@@ -1,104 +1,46 @@
 'use client';
 
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
 import { MapPin, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/shared';
 import { LocationPermissionCardProps } from './types';
-import { colors } from '@/theme/colors';
-import { typography } from '@/theme/typography';
-
-const spin = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`;
-
-const CardContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem 1.5rem;
-  width: 100%;
-  background-color: rgba(255, 251, 235, 0.5);
-  border-radius: 1.5rem;
-  border: 2px solid ${colors.amber[100]};
-  text-align: center;
-  font-family: ${typography.fonts.jakarta};
-`;
-
-const IconWrapper = styled.div`
-  width: 3.5rem;
-  height: 3.5rem;
-  background-color: ${colors.amber[100]};
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-`;
-
-const CardTitle = styled.p`
-  font-weight: 700;
-  color: ${colors.gray[800]};
-  font-size: 0.875rem;
-  margin-bottom: 0.5rem;
-`;
-
-const CardDescription = styled.p`
-  font-size: 0.75rem;
-  color: ${colors.gray[500]};
-  margin-bottom: 0.5rem;
-  max-width: 20rem;
-  line-height: 1.625;
-`;
-
-const CardHint = styled.p`
-  font-size: 11px;
-  color: ${colors.gray[400]};
-  margin-bottom: 1.25rem;
-  max-width: 20rem;
-`;
-
-const AnimatedRefreshIcon = styled(RefreshCw)<{ $spinning?: boolean }>`
-  width: 0.875rem;
-  height: 0.875rem;
-  animation: ${(props) => (props.$spinning ? spin : 'none')} 1s linear infinite;
-`;
 
 export const LocationPermissionCard: React.FC<LocationPermissionCardProps> = ({
   isLoading = false,
   onRetry,
 }) => {
   return (
-    <CardContainer>
-      <IconWrapper>
-        <MapPin className="w-7 h-7 text-amber-500" aria-hidden="true" />
-      </IconWrapper>
+    <div className="flex flex-col items-center justify-center py-12 px-6 w-full bg-amber-50/40 rounded-3xl border-2 border-amber-100 text-center font-jakarta">
+      <div className="w-14 h-14 bg-amber-100 rounded-full flex items-center justify-center mb-4">
+        <MapPin className="w-7 h-7 text-primary" aria-hidden="true" />
+      </div>
 
-      <CardTitle>Location access needed</CardTitle>
+      <p className="font-bold text-gray-800 text-sm mb-2">
+        Location access needed
+      </p>
 
-      <CardDescription>
+      <p className="text-xs text-gray-500 mb-2 max-w-xs leading-relaxed">
         Location permission denied. Enable it in your browser settings to see trips near you.
-      </CardDescription>
+      </p>
 
-      <CardHint>
+      <p className="text-[11px] text-gray-400 mb-5 max-w-xs">
         On mobile: tap the 🔒 lock icon in your browser address bar → Site Settings → Allow Location.
-      </CardHint>
+      </p>
 
       <Button
         id="nearby-trips-try-again-button"
         type="button"
         disabled={isLoading}
         onClick={onRetry}
-        leftIcon={<AnimatedRefreshIcon $spinning={isLoading} aria-hidden="true" />}
+        leftIcon={
+          <RefreshCw
+            className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`}
+            aria-hidden="true"
+          />
+        }
       >
         {isLoading ? 'Checking...' : 'Try Again'}
       </Button>
-    </CardContainer>
+    </div>
   );
 };

@@ -1,181 +1,75 @@
 'use client';
 
 import React from 'react';
-import styled from 'styled-components';
 import { Check, X } from 'lucide-react';
 import { PackageDetails } from './types';
-import { typography } from '@/theme/typography';
-import { colors } from '@/theme/colors';
 
 interface TripPackageSectionProps {
   packageDetails: PackageDetails;
 }
-
-const SectionTitle = styled.h2`
-  font-size: 1.5rem;
-  color: ${colors.gray[900]};
-  margin-bottom: 1.5rem;
-  font-family: ${typography.fonts.caveat};
-
-  @media (min-width: 640px) {
-    margin-bottom: 2rem;
-  }
-  @media (min-width: 768px) {
-    font-size: 1.875rem;
-  }
-`;
-
-const ColumnsGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-
-  @media (min-width: 768px) {
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-  }
-`;
-
-const ColumnWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
-
-const HeaderRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`;
-
-const CheckIconBox = styled.div`
-  width: 1.25rem;
-  height: 1.25rem;
-  background-color: ${colors.green[500]};
-  border-radius: 0.375rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${colors.white};
-`;
-
-const CrossIconBox = styled.div`
-  width: 1.25rem;
-  height: 1.25rem;
-  background-color: ${colors.red[500]};
-  border-radius: 0.375rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${colors.white};
-`;
-
-const ColumnHeading = styled.h3<{ $isExcluded?: boolean }>`
-  font-size: 0.75rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: ${({ $isExcluded }) => ($isExcluded ? colors.red[700] : colors.green[700])};
-`;
-
-const ItemsList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
-`;
-
-const PackageCard = styled.div<{ $isExcluded?: boolean }>`
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  border-radius: 0.75rem;
-  background-color: ${({ $isExcluded }) =>
-    $isExcluded ? `${colors.red[50]}80` : `${colors.green[50]}80`};
-  border: 1px solid
-    ${({ $isExcluded }) =>
-      $isExcluded ? `${colors.red[100]}80` : `${colors.green[100]}80`};
-
-  @media (min-width: 640px) {
-    padding: 0.875rem;
-  }
-`;
-
-const ItemDescription = styled.span<{ $isExcluded?: boolean }>`
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: ${({ $isExcluded }) => ($isExcluded ? colors.gray[500] : colors.gray[700])};
-  word-break: break-word;
-  flex: 1;
-  line-height: 1.625;
-
-  @media (min-width: 640px) {
-    font-size: 0.875rem;
-  }
-`;
 
 export const TripPackageSection: React.FC<TripPackageSectionProps> = ({
   packageDetails,
 }) => {
   return (
     <section>
-      <SectionTitle>What&apos;s in the Package?</SectionTitle>
+      <h2 className="text-2xl sm:mb-8 md:text-3xl text-gray-900 mb-6 font-caveat font-bold">
+        What&apos;s in the Package?
+      </h2>
 
-      <ColumnsGrid>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         {/* Included Column */}
-        <ColumnWrapper>
-          <HeaderRow>
-            <CheckIconBox>
-              <Check style={{ width: '0.75rem', height: '0.75rem', strokeWidth: 3 }} />
-            </CheckIconBox>
-            <ColumnHeading>Included</ColumnHeading>
-          </HeaderRow>
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-5 h-5 bg-emerald-500 rounded-md flex items-center justify-center text-white">
+              <Check className="w-3 h-3 stroke-[3]" />
+            </div>
+            <h3 className="text-xs font-black uppercase tracking-wider text-emerald-700">
+              Included
+            </h3>
+          </div>
 
-          <ItemsList>
+          <div className="flex flex-col gap-2.5">
             {packageDetails.included.map((item, index) => (
-              <PackageCard key={index}>
-                <Check
-                  style={{
-                    width: '1rem',
-                    height: '1rem',
-                    color: colors.green[500],
-                    marginTop: '0.125rem',
-                    flexShrink: 0,
-                  }}
-                />
-                <ItemDescription>{item}</ItemDescription>
-              </PackageCard>
+              <div
+                key={index}
+                className="flex items-start gap-3 p-3 sm:p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-100/50"
+              >
+                <Check className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
+                <span className="text-xs sm:text-sm font-medium text-gray-700 break-words flex-1 leading-relaxed">
+                  {item}
+                </span>
+              </div>
             ))}
-          </ItemsList>
-        </ColumnWrapper>
+          </div>
+        </div>
 
         {/* Excluded Column */}
-        <ColumnWrapper>
-          <HeaderRow>
-            <CrossIconBox>
-              <X style={{ width: '0.75rem', height: '0.75rem', strokeWidth: 3 }} />
-            </CrossIconBox>
-            <ColumnHeading $isExcluded>Excluded</ColumnHeading>
-          </HeaderRow>
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-5 h-5 bg-red-500 rounded-md flex items-center justify-center text-white">
+              <X className="w-3 h-3 stroke-[3]" />
+            </div>
+            <h3 className="text-xs font-black uppercase tracking-wider text-red-700">
+              Excluded
+            </h3>
+          </div>
 
-          <ItemsList>
+          <div className="flex flex-col gap-2.5">
             {packageDetails.excluded.map((item, index) => (
-              <PackageCard key={index} $isExcluded>
-                <X
-                  style={{
-                    width: '1rem',
-                    height: '1rem',
-                    color: colors.red[400],
-                    marginTop: '0.125rem',
-                    flexShrink: 0,
-                  }}
-                />
-                <ItemDescription $isExcluded>{item}</ItemDescription>
-              </PackageCard>
+              <div
+                key={index}
+                className="flex items-start gap-3 p-3 sm:p-3.5 rounded-xl bg-red-50/50 border border-red-100/50"
+              >
+                <X className="w-4 h-4 text-red-400 mt-0.5 shrink-0" />
+                <span className="text-xs sm:text-sm font-medium text-gray-500 break-words flex-1 leading-relaxed">
+                  {item}
+                </span>
+              </div>
             ))}
-          </ItemsList>
-        </ColumnWrapper>
-      </ColumnsGrid>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };

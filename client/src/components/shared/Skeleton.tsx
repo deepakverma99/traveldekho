@@ -1,17 +1,6 @@
 'use client';
 
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
-import { colors } from '@/theme/colors';
-
-const shimmer = keyframes`
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-`;
 
 export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   width?: string | number;
@@ -20,83 +9,45 @@ export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'rectangular' | 'circular' | 'rounded';
 }
 
-const SkeletonBase = styled.div<{
-  $width?: string | number;
-  $height?: string | number;
-  $radius?: string;
-  $variant?: 'rectangular' | 'circular' | 'rounded';
-}>`
-  display: block;
-  width: ${(props) => (typeof props.$width === 'number' ? `${props.$width}px` : props.$width || '100%')};
-  height: ${(props) => (typeof props.$height === 'number' ? `${props.$height}px` : props.$height || '1rem')};
-  border-radius: ${(props) => {
-    if (props.$radius) return props.$radius;
-    if (props.$variant === 'circular') return '9999px';
-    if (props.$variant === 'rounded') return '0.75rem';
-    return '0.375rem';
-  }};
-  background: linear-gradient(
-    90deg,
-    rgba(226, 216, 198, 0.45) 0%,
-    rgba(255, 251, 240, 0.85) 50%,
-    rgba(226, 216, 198, 0.45) 100%
-  );
-  background-size: 200% 100%;
-  animation: ${shimmer} 1.6s ease-in-out infinite;
-`;
-
 export const Skeleton: React.FC<SkeletonProps> = ({
   width,
   height,
   radius,
   variant = 'rectangular',
-  className,
+  className = '',
   style,
   ...rest
 }) => {
+  const getRadiusClass = () => {
+    if (radius) return '';
+    if (variant === 'circular') return 'rounded-full';
+    if (variant === 'rounded') return 'rounded-xl';
+    return 'rounded-md';
+  };
+
+  const computedStyle: React.CSSProperties = {
+    width: typeof width === 'number' ? `${width}px` : width || '100%',
+    height: typeof height === 'number' ? `${height}px` : height || '1rem',
+    borderRadius: radius,
+    ...style,
+  };
+
   return (
-    <SkeletonBase
-      $width={width}
-      $height={height}
-      $radius={radius}
-      $variant={variant}
-      className={className}
-      style={style}
+    <div
+      style={computedStyle}
+      className={`block bg-amber-100/40 animate-pulse ${getRadiusClass()} ${className}`}
       aria-hidden="true"
       {...rest}
     />
   );
 };
 
-const CardRoot = styled.div`
-  background-color: ${colors.white};
-  border-radius: 0.875rem;
-  overflow: hidden;
-  border: 1px solid rgba(254, 243, 199, 0.7);
-  box-shadow: 0 4px 20px -4px rgba(115, 92, 0, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.04);
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  width: 205px;
-
-  @media (min-width: 375px) {
-    width: 215px;
-  }
-
-  @media (min-width: 440px) {
-    width: 235px;
-  }
-
-  @media (min-width: 640px) {
-    width: 280px;
-    border-radius: 1rem;
-    box-shadow: 0 4px 24px -4px rgba(115, 92, 0, 0.08), 0 1px 4px 0 rgba(0, 0, 0, 0.04);
-  }
-`;
-
 export const TripCardSkeleton: React.FC = () => {
   return (
-    <CardRoot aria-hidden="true">
+    <div
+      aria-hidden="true"
+      className="bg-white rounded-[0.875rem] sm:rounded-2xl overflow-hidden border border-amber-100/70 shadow-[0_4px_20px_-4px_rgba(115,92,0,0.08),0_1px_3px_0_rgba(0,0,0,0.04)] flex flex-col shrink-0 w-[205px] min-[375px]:w-[215px] min-[440px]:w-[235px] sm:w-[280px]"
+    >
       {/* Image Skeleton */}
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         <Skeleton width="100%" height="100%" radius="0" />
@@ -131,6 +82,6 @@ export const TripCardSkeleton: React.FC = () => {
           <Skeleton width="70px" height="24px" radius="8px" />
         </div>
       </div>
-    </CardRoot>
+    </div>
   );
 };

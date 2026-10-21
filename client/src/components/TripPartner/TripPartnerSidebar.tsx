@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useSyncExternalStore } from 'react';
+import React, { useState, useEffect, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -26,8 +26,8 @@ export type { TripPartnerSidebarProps };
 
 const SidebarRoot = styled.aside`
   width: 16rem;
-  background-color: ${colors.offWhite};
-  border-right: 1px solid ${colors.amber[200]}80;
+  background-color: ${colors.white};
+  border-right: 1px solid ${colors.gray[200]};
   height: 100vh;
   display: none;
   flex-direction: column;
@@ -48,7 +48,7 @@ const SidebarBrand = styled.div`
   display: flex;
   align-items: center;
   padding: 0 1.25rem;
-  border-bottom: 1px solid ${colors.amber[200]}80;
+  border-bottom: 1px solid ${colors.gray[200]};
   flex-shrink: 0;
 `;
 
@@ -108,36 +108,43 @@ const NavItemLink = styled(Link) <{ $isActive: boolean }>`
   gap: 0.875rem;
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
-  transition: all 0.2s ease;
   position: relative;
   z-index: 10;
   text-decoration: none;
   background-color: ${colors.white};
   border: 1px solid ${colors.gray[300]}80;
+  user-select: none;
 
   ${({ $isActive }) =>
     $isActive
       ? `
-    color: ${colors.white};
+    color: ${colors.white} !important;
     font-weight: 900;
     box-shadow: 0 4px 12px ${colors.amber[500]}40;
     background: linear-gradient(to right, ${colors.amber[500]}, ${colors.gold});
+    border-color: transparent;
 
     svg {
-      color: ${colors.white};
+      color: ${colors.white} !important;
+      transition: none !important;
+    }
+
+    span {
+      color: ${colors.white} !important;
+      transition: none !important;
     }
   `
       : `
     color: ${colors.gray[600]};
     font-weight: 700;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
 
     svg {
       color: ${colors.gray[400]};
-      transition: all 0.2s ease;
+      transition: color 0.15s ease, transform 0.15s ease;
     }
 
     &:hover {
-      
       color: ${colors.gray[950]};
       box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 
@@ -154,12 +161,13 @@ const NavLabel = styled.span`
   letter-spacing: -0.015em;
   position: relative;
   z-index: 10;
+  transition: none !important;
 `;
 
 const SidebarFooter = styled.div`
   padding: 1rem;
-  border-top: 1px solid ${colors.amber[200]}80;
-  background-color: ${colors.offWhite};
+  border-top: 1px solid ${colors.gray[200]};
+  background-color: ${colors.white};
   flex-shrink: 0;
 `;
 
@@ -173,7 +181,7 @@ const MarketplaceButton = styled(Link)`
   font-weight: 700;
   color: ${colors.gray[700]};
   background-color: ${colors.white};
-  border: 1px solid ${colors.amber[200]}80;
+  border: 1px solid ${colors.gray[200]};
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
@@ -236,13 +244,13 @@ const DrawerContainer = styled.aside<{ $isOpen: boolean }>`
   max-width: 20rem;
   height: 100vh;
   height: 100dvh;
-  background-color: ${colors.offWhite};
+  background-color: ${colors.white};
   box-shadow: 8px 0 36px rgba(0, 0, 0, 0.16);
   display: flex;
   flex-direction: column;
   transform: ${({ $isOpen }) => ($isOpen ? 'translateX(0)' : 'translateX(-100%)')};
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  border-right: 1px solid ${colors.amber[200]}80;
+  border-right: 1px solid ${colors.gray[200]};
 
   @media (min-width: 1024px) {
     display: none;
@@ -255,7 +263,7 @@ const DrawerHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0 1.25rem;
-  border-bottom: 1px solid ${colors.amber[200]}80;
+  border-bottom: 1px solid ${colors.gray[200]};
   flex-shrink: 0;
 
   @media (min-width: 640px) {
@@ -270,7 +278,7 @@ const DrawerCloseButton = styled.button`
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 0.625rem;
-  border: 1px solid ${colors.amber[200]}80;
+  border: 1px solid ${colors.gray[200]};
   background-color: ${colors.white};
   color: ${colors.gray[600]};
   cursor: pointer;
@@ -292,7 +300,7 @@ const DrawerPartnerCard = styled.div`
   margin: 1rem 1rem 0.25rem 1rem;
   padding: 0.875rem 1rem;
   background-color: ${colors.white};
-  border: 1px solid ${colors.amber[200]}80;
+  border: 1px solid ${colors.gray[200]};
   border-radius: 0.75rem;
   display: flex;
   align-items: center;
@@ -358,9 +366,12 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
   const currentPartner = useAppSelector(selectCurrentPartner);
   const isMounted = useIsMounted();
 
-  // Close on route navigation
+  const [optimisticPath, setOptimisticPath] = useState<string | null>(null);
+
+  // Close on route navigation and clear optimistic path
   useEffect(() => {
     dispatch(closeMobileSidebar());
+    setOptimisticPath(null);
   }, [pathname, dispatch]);
 
   // Lock scroll & handle Escape key
@@ -384,7 +395,8 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
 
   const effectiveDisplayName = currentPartner?.displayName || username;
 
-  const navItems = getPartnerNavItems(username, pathname);
+  const activePathname = optimisticPath ?? pathname;
+  const navItems = getPartnerNavItems(username, activePathname);
 
   return (
     <>
@@ -417,6 +429,7 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
                   key={item.label}
                   href={item.href}
                   $isActive={!!item.isActive}
+                  onClick={() => setOptimisticPath(item.href)}
                 >
                   <Icon className="w-5 h-5 shrink-0" aria-hidden="true" />
                   <NavLabel>{item.label}</NavLabel>
@@ -501,7 +514,10 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
                         key={item.label}
                         href={item.href}
                         $isActive={!!item.isActive}
-                        onClick={() => dispatch(closeMobileSidebar())}
+                        onClick={() => {
+                          setOptimisticPath(item.href);
+                          dispatch(closeMobileSidebar());
+                        }}
                       >
                         <Icon className="w-5 h-5 shrink-0" aria-hidden="true" />
                         <NavLabel>{item.label}</NavLabel>

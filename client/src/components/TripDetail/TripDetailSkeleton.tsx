@@ -1,102 +1,53 @@
 'use client';
 
 import React from 'react';
-import styled from 'styled-components';
 import { Skeleton, FloatingBackground } from '@/components/shared';
-import { colors } from '@/theme/colors';
-
-const PageContainer = styled.div`
-  position: relative;
-  min-height: 100vh;
-  width: 100%;
-  background-color: ${colors.cream};
-  overflow-x: hidden;
-`;
-
-const HeroSkeletonCard = styled.div`
-  width: 100%;
-  border-radius: 2.5rem;
-  overflow: hidden;
-  min-height: 360px;
-  background-color: ${colors.amber[100]}66;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border: 1px solid ${colors.amber[200]}66;
-
-  @media (min-width: 768px) {
-    min-height: 460px;
-  }
-`;
-
-const ContentCard = styled.div`
-  background-color: ${colors.white};
-  border-radius: 3rem;
-  padding: 1.5rem;
-  border: 1px solid ${colors.gray[100]};
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-
-  @media (min-width: 768px) {
-    padding: 3rem;
-  }
-`;
-
-const SkeletonSidebarCard = styled.div`
-  background-color: ${colors.white};
-  border-radius: 1.5rem;
-  border: 1px solid ${colors.gray[100]};
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
 
 export const TripDetailSkeleton: React.FC = () => {
   return (
-    <PageContainer>
+    <div className="relative min-h-screen w-full bg-cream overflow-x-hidden">
       <FloatingBackground fixed />
 
-      <main style={{ position: 'relative', zIndex: 10, width: '100%', paddingTop: '1.5rem' }}>
+      <main className="relative z-10 w-full pt-6">
         {/* Breadcrumb Skeleton */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-2 sm:mb-3">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div className="flex items-center gap-2">
             <Skeleton width={60} height={18} radius="6px" />
-            <span style={{ color: colors.gray[300] }}>/</span>
+            <span className="text-gray-300">/</span>
             <Skeleton width={80} height={18} radius="6px" />
-            <span style={{ color: colors.gray[300] }}>/</span>
+            <span className="text-gray-300">/</span>
             <Skeleton width={140} height={18} radius="6px" />
           </div>
         </div>
 
         {/* Hero Banner Skeleton */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 sm:pt-3 pb-8">
-          <HeroSkeletonCard>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="w-full rounded-[2.5rem] overflow-hidden min-h-[360px] md:min-h-[460px] bg-amber-100/40 p-8 flex flex-col justify-between border border-amber-200/40">
+            <div className="flex justify-between items-center">
               <Skeleton width={160} height={40} radius="1rem" />
               <Skeleton width={100} height={36} radius="9999px" />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', margin: 'auto' }}>
+            <div className="flex flex-col items-center justify-center gap-3 m-auto w-full">
               <Skeleton width="55%" height={44} radius="12px" />
               <Skeleton width="65%" height={18} radius="6px" />
-              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem', paddingTop: '0.25rem' }}>
+              <div className="flex flex-wrap justify-center gap-2 pt-1">
                 <Skeleton width={80} height={20} radius="9999px" />
                 <Skeleton width={90} height={20} radius="9999px" />
                 <Skeleton width={60} height={20} radius="9999px" />
                 <Skeleton width={75} height={20} radius="9999px" />
               </div>
             </div>
-          </HeroSkeletonCard>
+          </div>
         </div>
 
         {/* Main Content & Sidebar Skeleton */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-          <ContentCard>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', alignItems: 'flex-start' }} className="lg:flex-row">
+          <div className="bg-white rounded-[3rem] p-6 md:p-12 border border-gray-100 shadow-xs">
+            <div className="flex flex-col lg:flex-row gap-10 items-start">
               {/* Left Column Skeleton */}
-              <div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', gap: '3rem' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div className="flex-1 w-full flex flex-col gap-12">
+                <div className="flex flex-col gap-4">
                   <Skeleton width={200} height={36} radius="10px" />
                   <Skeleton width="100%" height={320} radius="24px" />
                   <Skeleton width="100%" height={20} radius="6px" />
@@ -104,9 +55,9 @@ export const TripDetailSkeleton: React.FC = () => {
                   <Skeleton width="75%" height={20} radius="6px" />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div className="flex flex-col gap-4">
                   <Skeleton width={240} height={36} radius="10px" />
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', paddingLeft: '3.5rem' }}>
+                  <div className="flex flex-col gap-4 pl-14">
                     <Skeleton width="100%" height={120} radius="16px" />
                     <Skeleton width="100%" height={120} radius="16px" />
                   </div>
@@ -114,25 +65,25 @@ export const TripDetailSkeleton: React.FC = () => {
               </div>
 
               {/* Right Sidebar Skeleton */}
-              <div style={{ width: '100%', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '1.5rem' }} className="lg:w-[380px]">
-                <SkeletonSidebarCard>
+              <div className="w-full lg:w-[380px] shrink-0 flex flex-col gap-6">
+                <div className="bg-white rounded-3xl border border-gray-100 p-6 flex flex-col gap-4">
                   <Skeleton width={120} height={16} radius="6px" />
                   <Skeleton width={160} height={40} radius="10px" />
                   <Skeleton width="100%" height={48} radius="12px" />
                   <Skeleton width="100%" height={48} radius="12px" />
                   <Skeleton width="100%" height={50} radius="16px" />
-                </SkeletonSidebarCard>
+                </div>
 
-                <SkeletonSidebarCard>
+                <div className="bg-white rounded-3xl border border-gray-100 p-6 flex flex-col gap-4">
                   <Skeleton width={140} height={20} radius="6px" />
                   <Skeleton width={100} height={44} radius="10px" />
                   <Skeleton width="100%" height={60} radius="12px" />
-                </SkeletonSidebarCard>
+                </div>
               </div>
             </div>
-          </ContentCard>
+          </div>
         </div>
       </main>
-    </PageContainer>
+    </div>
   );
 };

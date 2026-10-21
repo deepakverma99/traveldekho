@@ -24,9 +24,11 @@ const MobileNavRoot = styled.nav`
 `;
 
 const NavInner = styled.div`
-  background-color: ${colors.offWhite};
-  border-top: 1px solid ${colors.amber[200]}80;
-  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.06);
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid ${colors.gray[200]};
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
 `;
 
 const NavScroll = styled.div`

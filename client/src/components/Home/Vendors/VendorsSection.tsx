@@ -1,74 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import styled from 'styled-components';
 import { PartnerCard } from './PartnerCard';
 import { mockPartnersData } from './mockPartners';
-import { typography } from '@/theme/typography';
-
-const SectionWrapper = styled.section`
-  padding-top: 2.5rem;
-  padding-bottom: 3rem;
-  margin-bottom: 3rem;
-  position: relative;
-  overflow: hidden;
-  background-color: transparent;
-  font-family: ${typography.fonts.jakarta};
-
-  @media (min-width: 768px) {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-    margin-bottom: 4rem;
-  }
-`;
-
-const PartnersTrack = styled.div`
-  display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 0.5rem;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  @media (min-width: 640px) {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-    overflow-x: visible;
-    scroll-snap-type: none;
-    padding-bottom: 0;
-  }
-
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 1.25rem;
-  }
-`;
-
-const CardSlide = styled.div`
-  flex: 0 0 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-  scroll-snap-align: center;
-  scroll-snap-stop: always;
-  padding: 0 0.5rem;
-
-  @media (min-width: 640px) {
-    flex: unset;
-    width: 100%;
-    display: block;
-    scroll-snap-align: none;
-    padding: 0;
-  }
-`;
 
 export const VendorsSection: React.FC = () => {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -121,25 +55,23 @@ export const VendorsSection: React.FC = () => {
   }, []);
 
   return (
-    <SectionWrapper
+    <section
       id="vendors"
-      className="selection:bg-amber-400 selection:text-black"
+      className="py-10 md:py-16 mb-12 md:mb-16 relative overflow-hidden bg-transparent font-sans selection:bg-amber-400 selection:text-black"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="flex items-center justify-between mb-4 md:mb-8">
-          <h2
-            className="text-xl sm:text-[28px] md:text-[32px] font-extrabold tracking-tight text-[#191c1d]"
-          >
+          <h2 className="text-xl sm:text-[28px] md:text-[32px] font-extrabold tracking-tight text-charcoal">
             Trip Partner
-            <span className="ml-1 text-amber-500">Network</span>
+            <span className="ml-1 text-primary">Network</span>
           </h2>
         </div>
 
         {/* Partners: 1 Full Card at a Time on Mobile, Grid on Tablet/Desktop */}
-        <PartnersTrack
+        <div
           ref={trackRef}
-          className="mt-6 md:mt-8 lg:mt-10"
+          className="mt-6 md:mt-8 lg:mt-10 flex overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide pb-2 sm:grid sm:grid-cols-2 lg:grid-cols-5 sm:gap-4 lg:gap-5 sm:overflow-x-visible sm:snap-none sm:pb-0"
           onScroll={handleScroll}
           onMouseEnter={() => {
             isInteractingRef.current = true;
@@ -157,11 +89,14 @@ export const VendorsSection: React.FC = () => {
           }}
         >
           {mockPartnersData.map((item) => (
-            <CardSlide key={item.id}>
+            <div
+              key={item.id}
+              className="flex-[0_0_100%] w-full flex justify-center items-stretch snap-center snap-always px-2 sm:flex-initial sm:w-full sm:block sm:snap-none sm:p-0"
+            >
               <PartnerCard item={item} />
-            </CardSlide>
+            </div>
           ))}
-        </PartnersTrack>
+        </div>
 
         {/* Pagination Indicator Dots (Mobile Only) */}
         <div className="flex sm:hidden justify-center items-center gap-2 mt-4">
@@ -173,13 +108,13 @@ export const VendorsSection: React.FC = () => {
               onClick={() => scrollToIndex(idx)}
               className={`h-2 transition-all duration-300 rounded-full ${
                 currentIndex === idx
-                  ? 'w-6 bg-amber-500 shadow-sm'
+                  ? 'w-6 bg-primary shadow-sm'
                   : 'w-2 bg-gray-300 hover:bg-gray-400'
               }`}
             />
           ))}
         </div>
       </div>
-    </SectionWrapper>
+    </section>
   );
 };

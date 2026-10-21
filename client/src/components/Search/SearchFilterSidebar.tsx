@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import {
   Wallet,
   Tags,
@@ -24,8 +23,6 @@ import {
   toggleDifficulty as toggleDifficultyAction,
   setSelectedDate,
 } from '@/redux';
-import { typography } from '@/theme/typography';
-import { colors } from '@/theme/colors';
 
 export interface SearchFilterSidebarProps {
   filters?: FilterState;
@@ -50,196 +47,6 @@ const DURATIONS = ['1-3 Days', '4-7 Days', '8+ Days'];
 
 const DIFFICULTIES = ['Easy', 'Moderate', 'Challenging', 'Extreme'];
 
-const SidebarWrapper = styled.aside`
-  width: 100%;
-  background-color: ${colors.white};
-  border-radius: 0.875rem;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-  padding: 1.125rem;
-  overflow: hidden;
-  height: fit-content;
-  border: 1px solid ${colors.gray[200]};
-`;
-
-const SectionContainer = styled.div<{ $hasBorderTop?: boolean }>`
-  padding-bottom: 1rem;
-  padding-top: ${({ $hasBorderTop }) => ($hasBorderTop ? '1rem' : '0')};
-  border-top: ${({ $hasBorderTop }) => ($hasBorderTop ? `1px solid ${colors.gray[100]}` : 'none')};
-`;
-
-const AccordionButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  padding: 0;
-`;
-
-const IconTitleGroup = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-`;
-
-const SectionIconWrapper = styled.div<{ $bg: string; $color: string }>`
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 0.5rem;
-  background-color: ${({ $bg }) => $bg};
-  color: ${({ $color }) => $color};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-`;
-
-const SectionTitle = styled.span`
-  font-size: 14px;
-  font-weight: 800;
-  color: ${colors.charcoal};
-  font-family: ${typography.fonts.jakarta};
-`;
-
-const ChevronIcon = styled(ChevronDown)<{ $isOpen: boolean }>`
-  width: 1rem;
-  height: 1rem;
-  color: ${colors.gray[500]};
-  transition: transform 0.2s ease;
-  transform: ${({ $isOpen }) => ($isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
-`;
-
-
-
-const ChipsWrap = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.375rem;
-  margin-top: 0.875rem;
-`;
-
-const FilterChip = styled.button<{ $isSelected: boolean }>`
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.3125rem 0.625rem;
-  border-radius: 9999px;
-  font-size: 11px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: ${typography.fonts.vietnam};
-
-  ${({ $isSelected }) =>
-    $isSelected
-      ? `
-    background-color: ${colors.charcoal};
-    border: 1px solid ${colors.charcoal};
-    color: ${colors.white};
-    font-weight: 700;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-
-    &:hover {
-      background-color: ${colors.black};
-      border-color: ${colors.black};
-    }
-  `
-      : `
-    background-color: transparent;
-    border: 1px solid ${colors.gray[200]};
-    color: ${colors.gray[700]};
-    font-weight: 500;
-
-    &:hover {
-      background-color: ${colors.gray[100]};
-      border-color: ${colors.gray[300]};
-      color: ${colors.gray[900]};
-    }
-  `}
-`;
-
-const CalendarBox = styled.div`
-  width: 100%;
-  background-color: ${colors.white};
-  border-radius: 1rem;
-  border: 1px solid ${colors.gray[100]};
-  padding: 1rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  margin-top: 1rem;
-`;
-
-const CalendarHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  padding: 0 0.5rem;
-`;
-
-const MonthLabel = styled.span`
-  font-size: 14px;
-  font-weight: 700;
-  color: ${colors.charcoal};
-  font-family: ${typography.fonts.jakarta};
-`;
-
-const CalendarArrowBtn = styled.button`
-  padding: 0.25rem;
-  border-radius: 9999px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: ${colors.gray[500]};
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: ${colors.gray[100]};
-  }
-`;
-
-const CalendarDayButton = styled.button<{ $isSelected: boolean; $isHighlighted: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 2rem;
-  font-size: 13px;
-  border-radius: 9999px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: ${typography.fonts.vietnam};
-
-  ${({ $isSelected, $isHighlighted }) =>
-    $isSelected
-      ? `
-    background-color: ${colors.amber[500]};
-    color: ${colors.white};
-    font-weight: 700;
-    box-shadow: 0 0 0 2px ${colors.amber[300]};
-  `
-      : $isHighlighted
-      ? `
-    color: ${colors.amber[600]};
-    font-weight: 700;
-    box-shadow: 0 0 0 2px ${colors.amber[200]};
-    background-color: transparent;
-
-    &:hover {
-      background-color: ${colors.amber[50]};
-    }
-  `
-      : `
-    color: ${colors.charcoal};
-    background-color: transparent;
-
-    &:hover {
-      background-color: ${colors.gray[100]};
-    }
-  `}
-`;
-
 export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
   filters: propFilters,
   onFilterChange,
@@ -248,8 +55,6 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
   const dispatch = useAppDispatch();
   const reduxFilters = useAppSelector(selectSearchFilters);
   const filters = propFilters ?? reduxFilters;
-
-
 
   // Accordion state
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
@@ -323,23 +128,32 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
   };
 
   return (
-    <SidebarWrapper className={className || ''}>
+    <aside
+      className={`w-full bg-white rounded-2xl shadow-xs p-4.5 overflow-hidden h-fit border border-gray-200 ${
+        className || ''
+      }`}
+    >
       {/* 1. Budget (₹) */}
-      <SectionContainer>
-        <AccordionButton
+      <div className="pb-4">
+        <button
           type="button"
           onClick={() => toggleSection('budget')}
+          className="flex items-center justify-between w-full text-left cursor-pointer bg-transparent border-none p-0"
         >
-          <IconTitleGroup>
-            <SectionIconWrapper $bg={colors.green[50]} $color={colors.green[600]}>
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
               <Wallet className="w-4 h-4" />
-            </SectionIconWrapper>
-            <SectionTitle>
+            </div>
+            <span className="text-sm font-extrabold text-charcoal font-jakarta">
               Budget (₹)
-            </SectionTitle>
-          </IconTitleGroup>
-          <ChevronIcon $isOpen={!!openSections.budget} />
-        </AccordionButton>
+            </span>
+          </div>
+          <ChevronDown
+            className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
+              openSections.budget ? 'rotate-180' : 'rotate-0'
+            }`}
+          />
+        </button>
         {openSections.budget && (
           <BudgetTrackbar
             minBudget={filters.minBudget}
@@ -347,157 +161,190 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
             onChange={handleBudgetChange}
           />
         )}
-      </SectionContainer>
+      </div>
 
-      {/* 3. Trip Category */}
-      <SectionContainer $hasBorderTop>
-        <AccordionButton
+      {/* 2. Trip Category */}
+      <div className="pb-4 pt-4 border-t border-gray-100">
+        <button
           type="button"
           onClick={() => toggleSection('category')}
+          className="flex items-center justify-between w-full text-left cursor-pointer bg-transparent border-none p-0"
         >
-          <IconTitleGroup>
-            <SectionIconWrapper $bg={colors.amber[50]} $color={colors.amber[600]}>
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
               <Tags className="w-4 h-4" />
-            </SectionIconWrapper>
-            <SectionTitle>
+            </div>
+            <span className="text-sm font-extrabold text-charcoal font-jakarta">
               Trip Category
-            </SectionTitle>
-          </IconTitleGroup>
-          <ChevronIcon $isOpen={!!openSections.category} />
-        </AccordionButton>
+            </span>
+          </div>
+          <ChevronDown
+            className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
+              openSections.category ? 'rotate-180' : 'rotate-0'
+            }`}
+          />
+        </button>
         {openSections.category && (
-          <ChipsWrap>
+          <div className="flex flex-wrap gap-1.5 mt-3.5">
             {CATEGORIES.map((cat) => {
               const isSelected = filters.selectedCategories.includes(cat);
               return (
-                <FilterChip
+                <button
                   key={cat}
                   type="button"
                   onClick={() => toggleCategory(cat)}
-                  $isSelected={isSelected}
+                  className={`flex items-center gap-1 py-1.5 px-2.5 rounded-full text-[11px] cursor-pointer transition-all duration-200 font-vietnam ${
+                    isSelected
+                      ? 'bg-charcoal border border-charcoal text-white font-bold shadow-xs hover:bg-black hover:border-black'
+                      : 'bg-transparent border border-gray-200 text-gray-700 font-medium hover:bg-gray-100 hover:border-gray-300 hover:text-gray-900'
+                  }`}
                 >
                   <span>{cat}</span>
-                </FilterChip>
+                </button>
               );
             })}
-          </ChipsWrap>
+          </div>
         )}
-      </SectionContainer>
+      </div>
 
-      {/* 4. Duration */}
-      <SectionContainer $hasBorderTop>
-        <AccordionButton
+      {/* 3. Duration */}
+      <div className="pb-4 pt-4 border-t border-gray-100">
+        <button
           type="button"
           onClick={() => toggleSection('duration')}
+          className="flex items-center justify-between w-full text-left cursor-pointer bg-transparent border-none p-0"
         >
-          <IconTitleGroup>
-            <SectionIconWrapper $bg={colors.blue[50]} $color={colors.blue[600]}>
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
               <Clock className="w-4 h-4" />
-            </SectionIconWrapper>
-            <SectionTitle>
+            </div>
+            <span className="text-sm font-extrabold text-charcoal font-jakarta">
               Duration
-            </SectionTitle>
-          </IconTitleGroup>
-          <ChevronIcon $isOpen={!!openSections.duration} />
-        </AccordionButton>
+            </span>
+          </div>
+          <ChevronDown
+            className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
+              openSections.duration ? 'rotate-180' : 'rotate-0'
+            }`}
+          />
+        </button>
         {openSections.duration && (
-          <ChipsWrap>
+          <div className="flex flex-wrap gap-1.5 mt-3.5">
             {DURATIONS.map((dur) => {
               const isSelected = filters.selectedDurations.includes(dur);
               return (
-                <FilterChip
+                <button
                   key={dur}
                   type="button"
                   onClick={() => toggleDuration(dur)}
-                  $isSelected={isSelected}
+                  className={`flex items-center gap-1 py-1.5 px-2.5 rounded-full text-[11px] cursor-pointer transition-all duration-200 font-vietnam ${
+                    isSelected
+                      ? 'bg-charcoal border border-charcoal text-white font-bold shadow-xs hover:bg-black hover:border-black'
+                      : 'bg-transparent border border-gray-200 text-gray-700 font-medium hover:bg-gray-100 hover:border-gray-300 hover:text-gray-900'
+                  }`}
                 >
                   <span>{dur}</span>
-                </FilterChip>
+                </button>
               );
             })}
-          </ChipsWrap>
+          </div>
         )}
-      </SectionContainer>
+      </div>
 
-      {/* 5. Difficulty */}
-      <SectionContainer $hasBorderTop>
-        <AccordionButton
+      {/* 4. Difficulty */}
+      <div className="pb-4 pt-4 border-t border-gray-100">
+        <button
           type="button"
           onClick={() => toggleSection('difficulty')}
+          className="flex items-center justify-between w-full text-left cursor-pointer bg-transparent border-none p-0"
         >
-          <IconTitleGroup>
-            <SectionIconWrapper $bg={colors.red[50]} $color={colors.red[500]}>
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-red-50 text-red-500 flex items-center justify-center shrink-0">
               <Mountain className="w-4 h-4" />
-            </SectionIconWrapper>
-            <SectionTitle>
+            </div>
+            <span className="text-sm font-extrabold text-charcoal font-jakarta">
               Difficulty
-            </SectionTitle>
-          </IconTitleGroup>
-          <ChevronIcon $isOpen={!!openSections.difficulty} />
-        </AccordionButton>
+            </span>
+          </div>
+          <ChevronDown
+            className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
+              openSections.difficulty ? 'rotate-180' : 'rotate-0'
+            }`}
+          />
+        </button>
         {openSections.difficulty && (
-          <ChipsWrap>
+          <div className="flex flex-wrap gap-1.5 mt-3.5">
             {DIFFICULTIES.map((diff) => {
               const isSelected = filters.selectedDifficulties.includes(diff);
               return (
-                <FilterChip
+                <button
                   key={diff}
                   type="button"
                   onClick={() => toggleDifficulty(diff)}
-                  $isSelected={isSelected}
+                  className={`flex items-center gap-1 py-1.5 px-2.5 rounded-full text-[11px] cursor-pointer transition-all duration-200 font-vietnam ${
+                    isSelected
+                      ? 'bg-charcoal border border-charcoal text-white font-bold shadow-xs hover:bg-black hover:border-black'
+                      : 'bg-transparent border border-gray-200 text-gray-700 font-medium hover:bg-gray-100 hover:border-gray-300 hover:text-gray-900'
+                  }`}
                 >
                   <span>{diff}</span>
-                </FilterChip>
+                </button>
               );
             })}
-          </ChipsWrap>
+          </div>
         )}
-      </SectionContainer>
+      </div>
 
-      {/* 6. Departure Date */}
-      <SectionContainer $hasBorderTop>
-        <AccordionButton
+      {/* 5. Departure Date */}
+      <div className="pb-4 pt-4 border-t border-gray-100">
+        <button
           type="button"
           onClick={() => toggleSection('departureDate')}
+          className="flex items-center justify-between w-full text-left cursor-pointer bg-transparent border-none p-0"
         >
-          <IconTitleGroup>
-            <SectionIconWrapper $bg={colors.blue[50]} $color={colors.blue[500]}>
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center shrink-0">
               <CalendarIcon className="w-4 h-4" />
-            </SectionIconWrapper>
-            <SectionTitle>
+            </div>
+            <span className="text-sm font-extrabold text-charcoal font-jakarta">
               Departure Date
-            </SectionTitle>
-          </IconTitleGroup>
-          <ChevronIcon $isOpen={!!openSections.departureDate} />
-        </AccordionButton>
+            </span>
+          </div>
+          <ChevronDown
+            className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
+              openSections.departureDate ? 'rotate-180' : 'rotate-0'
+            }`}
+          />
+        </button>
         {openSections.departureDate && (
-          <CalendarBox>
+          <div className="w-full bg-white rounded-2xl border border-gray-100 p-4 shadow-xs mt-4">
             {/* Calendar Month Header */}
-            <CalendarHeader>
-              <CalendarArrowBtn
+            <div className="flex justify-between items-center mb-4 px-2">
+              <button
                 type="button"
                 aria-label="Previous Month"
+                className="p-1 rounded-full border-none bg-transparent cursor-pointer text-gray-500 hover:bg-gray-100 transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" />
-              </CalendarArrowBtn>
-              <MonthLabel>
+              </button>
+              <span className="text-sm font-bold text-charcoal font-jakarta">
                 October 2026
-              </MonthLabel>
-              <CalendarArrowBtn
+              </span>
+              <button
                 type="button"
                 aria-label="Next Month"
+                className="p-1 rounded-full border-none bg-transparent cursor-pointer text-gray-500 hover:bg-gray-100 transition-colors"
               >
                 <ChevronRight className="w-4 h-4" />
-              </CalendarArrowBtn>
-            </CalendarHeader>
+              </button>
+            </div>
 
             {/* Day of Week Headers */}
             <div className="grid grid-cols-7 mb-2">
               {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
                 <div
                   key={d}
-                  className="text-center text-[12px] font-medium py-1"
-                  style={{ color: colors.gray[400] }}
+                  className="text-center text-[12px] font-medium py-1 text-gray-400"
                 >
                   {d}
                 </div>
@@ -510,11 +357,7 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
               {[27, 28, 29, 30].map((prevDay) => (
                 <div
                   key={`prev-${prevDay}`}
-                  className="flex justify-center items-center h-8 text-[13px] cursor-default"
-                  style={{
-                    fontFamily: typography.fonts.vietnam,
-                    color: colors.gray[300],
-                  }}
+                  className="flex justify-center items-center h-8 text-[13px] cursor-default font-vietnam text-gray-300"
                 >
                   {prevDay}
                 </div>
@@ -524,11 +367,7 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
               {Array.from({ length: 13 }, (_, i) => i + 1).map((day) => (
                 <div
                   key={`past-${day}`}
-                  className="flex justify-center items-center h-8 text-[13px] cursor-not-allowed line-through"
-                  style={{
-                    fontFamily: typography.fonts.vietnam,
-                    color: colors.gray[300],
-                  }}
+                  className="flex justify-center items-center h-8 text-[13px] cursor-not-allowed line-through font-vietnam text-gray-300"
                 >
                   {day}
                 </div>
@@ -540,15 +379,20 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
                 const isHighlighted = day === 14;
 
                 return (
-                  <CalendarDayButton
+                  <button
                     key={`day-${day}`}
                     type="button"
                     onClick={() => handleDateClick(day)}
-                    $isSelected={isSelected}
-                    $isHighlighted={isHighlighted}
+                    className={`flex justify-center items-center h-8 text-[13px] rounded-full border-none cursor-pointer transition-all duration-200 font-vietnam ${
+                      isSelected
+                        ? 'bg-amber-500 text-white font-bold ring-2 ring-amber-300'
+                        : isHighlighted
+                        ? 'text-amber-600 font-bold ring-2 ring-amber-200 hover:bg-amber-50'
+                        : 'text-charcoal hover:bg-gray-100'
+                    }`}
                   >
                     {day}
-                  </CalendarDayButton>
+                  </button>
                 );
               })}
 
@@ -556,20 +400,15 @@ export const SearchFilterSidebar: React.FC<SearchFilterSidebarProps> = ({
               {[1, 2, 3, 4, 5, 6, 7].map((nextDay) => (
                 <div
                   key={`next-${nextDay}`}
-                  className="flex justify-center items-center h-8 text-[13px] cursor-default"
-                  style={{
-                    fontFamily: typography.fonts.vietnam,
-                    color: colors.gray[300],
-                  }}
+                  className="flex justify-center items-center h-8 text-[13px] cursor-default font-vietnam text-gray-300"
                 >
                   {nextDay}
                 </div>
               ))}
             </div>
-          </CalendarBox>
+          </div>
         )}
-      </SectionContainer>
-    </SidebarWrapper>
+      </div>
+    </aside>
   );
 };
-

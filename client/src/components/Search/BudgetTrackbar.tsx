@@ -1,10 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import styled from 'styled-components';
 import { RotateCcw } from 'lucide-react';
-import { colors } from '@/theme/colors';
-import { typography } from '@/theme/typography';
 
 export interface BudgetTrackbarProps {
   minBudget?: number | null;
@@ -21,208 +18,21 @@ const DEFAULT_MAX = 40000;
 const DEFAULT_STEP = 500;
 const MIN_GAP = 1000;
 
-const Root = styled.div`
-  width: 100%;
-  padding-top: 0.5rem;
-  padding-bottom: 0.25rem;
-  font-family: ${typography.fonts.jakarta};
-`;
-
-const HeaderRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-`;
-
-const RangeDisplay = styled.div`
-  display: flex;
-  align-items: baseline;
-  gap: 0.25rem;
-`;
-
-const PriceValue = styled.span`
-  font-size: 0.9375rem;
-  font-weight: 800;
-  color: ${colors.charcoal};
-  letter-spacing: -0.01em;
-`;
-
-const RangeSeparator = styled.span`
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: ${colors.gray[400]};
-  padding: 0 0.125rem;
-`;
-
-const ResetTrackBtn = styled.button`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 11px;
-  font-weight: 700;
-  color: ${colors.amber[600]};
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0.125rem 0.25rem;
-  border-radius: 0.25rem;
-  transition: all 0.15s ease;
-
-  &:hover {
-    color: ${colors.amber[700]};
-    background-color: ${colors.amber[50]};
-  }
-
-  svg {
-    width: 0.75rem;
-    height: 0.75rem;
-  }
-`;
-
-const TrackContainer = styled.div`
-  position: relative;
-  width: 100%;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  user-select: none;
-`;
-
-const BaseTrack = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 6px;
-  border-radius: 9999px;
-  background-color: ${colors.gray[200]};
-`;
-
-const ActiveTrack = styled.div<{ $left: number; $width: number }>`
-  position: absolute;
-  left: ${({ $left }) => $left}%;
-  width: ${({ $width }) => $width}%;
-  height: 6px;
-  border-radius: 9999px;
-  background: linear-gradient(90deg, ${colors.amber[400]} 0%, ${colors.amber[500]} 100%);
-  box-shadow: 0 1px 3px rgba(244, 140, 6, 0.25);
-  transition: background 0.15s ease;
-`;
-
-const RangeInput = styled.input<{ $zIndex: number }>`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 100%;
-  height: 6px;
-  background: none;
-  pointer-events: none;
-  appearance: none;
-  -webkit-appearance: none;
-  outline: none;
-  margin: 0;
-  z-index: ${({ $zIndex }) => $zIndex};
-
-  &::-webkit-slider-thumb {
-    appearance: none;
-    -webkit-appearance: none;
-    pointer-events: auto;
-    width: 20px;
-    height: 20px;
-    border-radius: 9999px;
-    background-color: ${colors.white};
-    border: 2.5px solid ${colors.amber[500]};
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.04);
-    cursor: grab;
-    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-
-    &:hover {
-      transform: scale(1.15);
-      border-color: ${colors.amber[600]};
-      box-shadow: 0 2px 8px rgba(244, 140, 6, 0.35);
-    }
-
-    &:active {
-      cursor: grabbing;
-      transform: scale(1.22);
-      box-shadow: 0 0 0 4px ${colors.amber[100]};
-    }
-  }
-
-  &::-moz-range-thumb {
-    pointer-events: auto;
-    width: 20px;
-    height: 20px;
-    border-radius: 9999px;
-    background-color: ${colors.white};
-    border: 2.5px solid ${colors.amber[500]};
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    cursor: grab;
-    transition: transform 0.15s ease;
-
-    &:hover {
-      transform: scale(1.15);
-      border-color: ${colors.amber[600]};
-    }
-
-    &:active {
-      cursor: grabbing;
-      transform: scale(1.22);
-      box-shadow: 0 0 0 4px ${colors.amber[100]};
-    }
-  }
-
-  &::-webkit-slider-runnable-track {
-    background: transparent;
-    border: none;
-  }
-
-  &::-moz-range-track {
-    background: transparent;
-    border: none;
-  }
-`;
-
-const MinMaxLegend = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 0.25rem;
-  font-size: 11px;
-  font-weight: 600;
-  color: ${colors.gray[400]};
-`;
-
-const PresetsContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.375rem;
-  margin-top: 0.875rem;
-`;
-
-const PresetButton = styled.button<{ $isActive: boolean }>`
-  padding: 0.3125rem 0.25rem;
-  font-size: 10px;
-  font-weight: 700;
-  border-radius: 0.5rem;
-  text-align: center;
-  border: 1px solid ${({ $isActive }) => ($isActive ? colors.charcoal : colors.gray[200])};
-  background-color: ${({ $isActive }) => ($isActive ? colors.charcoal : colors.white)};
-  color: ${({ $isActive }) => ($isActive ? colors.white : colors.gray[700])};
-  cursor: pointer;
-  transition: all 0.15s ease;
-  white-space: nowrap;
-  box-shadow: ${({ $isActive }) => ($isActive ? '0 1px 3px rgba(0, 0, 0, 0.15)' : 'none')};
-
-  &:hover {
-    border-color: ${({ $isActive }) => ($isActive ? colors.black : colors.gray[300])};
-    background-color: ${({ $isActive }) => ($isActive ? colors.black : colors.gray[100])};
-    color: ${({ $isActive }) => ($isActive ? colors.white : colors.gray[900])};
-  }
-`;
-
 const formatCurrency = (val: number): string => {
   return `₹${val.toLocaleString('en-IN')}`;
 };
+
+const rangeInputClasses =
+  'absolute top-1/2 -translate-y-1/2 w-full h-1.5 bg-transparent pointer-events-none appearance-none outline-none m-0 ' +
+  '[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto ' +
+  '[&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full ' +
+  '[&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-[2.5px] [&::-webkit-slider-thumb]:border-primary ' +
+  '[&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-grab active:[&::-webkit-slider-thumb]:cursor-grabbing ' +
+  '[&::-webkit-slider-thumb]:transition-transform hover:[&::-webkit-slider-thumb]:scale-115 active:[&::-webkit-slider-thumb]:scale-125 ' +
+  '[&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 ' +
+  '[&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-[2.5px] ' +
+  '[&::-moz-range-thumb]:border-primary [&::-moz-range-thumb]:shadow-md [&::-moz-range-thumb]:cursor-grab ' +
+  'active:[&::-moz-range-thumb]:cursor-grabbing [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-track]:bg-transparent';
 
 export const BudgetTrackbar: React.FC<BudgetTrackbarProps> = ({
   minBudget,
@@ -321,90 +131,127 @@ export const BudgetTrackbar: React.FC<BudgetTrackbarProps> = ({
   const isFiltered = minVal > minLimit || maxVal < maxLimit;
 
   return (
-    <Root className={className}>
-      <HeaderRow>
-        <RangeDisplay>
-          <PriceValue>{formatCurrency(minVal)}</PriceValue>
-          <RangeSeparator>–</RangeSeparator>
-          <PriceValue>
+    <div className={`w-full pt-2 pb-1 font-jakarta ${className}`}>
+      {/* Header Row */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-baseline gap-1">
+          <span className="text-[15px] font-extrabold text-charcoal tracking-tight">
+            {formatCurrency(minVal)}
+          </span>
+          <span className="text-xs font-bold text-gray-400 px-0.5">–</span>
+          <span className="text-[15px] font-extrabold text-charcoal tracking-tight">
             {formatCurrency(maxVal)}
             {maxVal >= maxLimit ? '+' : ''}
-          </PriceValue>
-        </RangeDisplay>
+          </span>
+        </div>
 
         {isFiltered && (
-          <ResetTrackBtn type="button" onClick={handleReset} title="Reset budget">
-            <RotateCcw />
+          <button
+            type="button"
+            onClick={handleReset}
+            title="Reset budget"
+            className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-600 hover:text-amber-700 hover:bg-amber-50 px-1 py-0.5 rounded cursor-pointer transition-all"
+          >
+            <RotateCcw className="w-3 h-3" />
             <span>Reset</span>
-          </ResetTrackBtn>
+          </button>
         )}
-      </HeaderRow>
+      </div>
 
-      <TrackContainer>
-        <BaseTrack />
-        <ActiveTrack
-          $left={minPercent}
-          $width={Math.max(0, maxPercent - minPercent)}
+      {/* Track Container */}
+      <div className="relative w-full h-7 flex items-center select-none">
+        {/* Base Track */}
+        <div className="absolute w-full h-1.5 rounded-full bg-gray-200" />
+
+        {/* Active Colored Track */}
+        <div
+          className="absolute h-1.5 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 shadow-[0_1px_3px_rgba(244,140,6,0.25)] transition-all duration-150"
+          style={{
+            left: `${minPercent}%`,
+            width: `${Math.max(0, maxPercent - minPercent)}%`,
+          }}
         />
 
-        <RangeInput
+        {/* Min Input Slider */}
+        <input
           type="range"
           min={minLimit}
           max={maxLimit}
           step={step}
           value={minVal}
           onChange={handleMinChange}
-          $zIndex={minVal > maxLimit - 1000 ? 5 : 3}
+          style={{ zIndex: minVal > maxLimit - 1000 ? 5 : 3 }}
           aria-label="Minimum budget"
+          className={rangeInputClasses}
         />
 
-        <RangeInput
+        {/* Max Input Slider */}
+        <input
           type="range"
           min={minLimit}
           max={maxLimit}
           step={step}
           value={maxVal}
           onChange={handleMaxChange}
-          $zIndex={4}
+          style={{ zIndex: 4 }}
           aria-label="Maximum budget"
+          className={rangeInputClasses}
         />
-      </TrackContainer>
+      </div>
 
-      <MinMaxLegend>
+      {/* Min/Max Legend */}
+      <div className="flex items-center justify-between mt-1 text-[11px] font-semibold text-gray-400">
         <span>{formatCurrency(minLimit)}</span>
         <span>{formatCurrency(maxLimit)}+</span>
-      </MinMaxLegend>
+      </div>
 
-      <PresetsContainer>
-        <PresetButton
+      {/* Presets Container */}
+      <div className="grid grid-cols-4 gap-1.5 mt-3.5">
+        <button
           type="button"
-          $isActive={!isFiltered}
           onClick={() => applyPreset(minLimit, maxLimit)}
+          className={`py-1.5 px-1 text-[10px] font-bold rounded-lg text-center cursor-pointer transition-all whitespace-nowrap ${
+            !isFiltered
+              ? 'bg-charcoal text-white border border-charcoal shadow-xs'
+              : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300 hover:bg-gray-100 hover:text-gray-900'
+          }`}
         >
           All
-        </PresetButton>
-        <PresetButton
+        </button>
+        <button
           type="button"
-          $isActive={minVal === minLimit && maxVal === 8000}
           onClick={() => applyPreset(minLimit, 8000)}
+          className={`py-1.5 px-1 text-[10px] font-bold rounded-lg text-center cursor-pointer transition-all whitespace-nowrap ${
+            minVal === minLimit && maxVal === 8000
+              ? 'bg-charcoal text-white border border-charcoal shadow-xs'
+              : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300 hover:bg-gray-100 hover:text-gray-900'
+          }`}
         >
           &lt; ₹8k
-        </PresetButton>
-        <PresetButton
+        </button>
+        <button
           type="button"
-          $isActive={minVal === 8000 && maxVal === 20000}
           onClick={() => applyPreset(8000, 20000)}
+          className={`py-1.5 px-1 text-[10px] font-bold rounded-lg text-center cursor-pointer transition-all whitespace-nowrap ${
+            minVal === 8000 && maxVal === 20000
+              ? 'bg-charcoal text-white border border-charcoal shadow-xs'
+              : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300 hover:bg-gray-100 hover:text-gray-900'
+          }`}
         >
           ₹8k - ₹20k
-        </PresetButton>
-        <PresetButton
+        </button>
+        <button
           type="button"
-          $isActive={minVal === 20000 && maxVal === maxLimit}
           onClick={() => applyPreset(20000, maxLimit)}
+          className={`py-1.5 px-1 text-[10px] font-bold rounded-lg text-center cursor-pointer transition-all whitespace-nowrap ${
+            minVal === 20000 && maxVal === maxLimit
+              ? 'bg-charcoal text-white border border-charcoal shadow-xs'
+              : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300 hover:bg-gray-100 hover:text-gray-900'
+          }`}
         >
           ₹20k+
-        </PresetButton>
-      </PresetsContainer>
-    </Root>
+        </button>
+      </div>
+    </div>
   );
 };

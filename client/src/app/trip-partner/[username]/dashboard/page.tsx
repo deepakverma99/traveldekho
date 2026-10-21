@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
-import { TripPartnerLayout, TripPartnerDashboard, formatPartnerDisplayName } from '@/components/TripPartner';
+import { TripPartnerDashboard, formatPartnerDisplayName } from '@/components/TripPartner';
 
 export const instant = false;
 
@@ -23,11 +23,7 @@ async function DashboardContent({ params }: DashboardPageProps) {
   const { username } = await params;
   const displayName = formatPartnerDisplayName(username);
 
-  return (
-    <TripPartnerLayout username={username}>
-      <TripPartnerDashboard username={username} displayName={displayName} />
-    </TripPartnerLayout>
-  );
+  return <TripPartnerDashboard username={username} displayName={displayName} />;
 }
 
 export default function PartnerDashboardPage(props: DashboardPageProps) {

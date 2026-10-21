@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styled from 'styled-components';
 import { colors } from '@/theme/colors';
 import { typography } from '@/theme/typography';
@@ -230,86 +231,300 @@ export const ResetFiltersButton = styled.button`
 
 
 /* Accordion Trip Group Card */
-export const TripGroupCard = styled.div`
+export const TripGroupCard = styled.div<{ $isOpen?: boolean }>`
   background-color: ${colors.white};
-  border: 1px solid ${colors.gray[200]};
+  border: 1px solid ${({ $isOpen }) => ($isOpen ? colors.amber[300] : colors.gray[200])};
+  border-left: ${({ $isOpen }) => ($isOpen ? `4px solid ${colors.amber[500]}` : `1px solid ${colors.gray[200]}`)};
   border-radius: 1.25rem;
   overflow: hidden;
   margin-bottom: 1.25rem;
-  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.04);
-  transition: all 0.2s ease;
+  box-shadow: ${({ $isOpen }) =>
+    $isOpen
+      ? '0 10px 25px -5px rgba(244, 140, 6, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03)'
+      : '0 2px 8px -2px rgba(0, 0, 0, 0.04)'};
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover {
-    border-color: ${colors.amber[200]};
+    border-color: ${colors.amber[400]};
+    box-shadow: 0 8px 24px -4px rgba(244, 140, 6, 0.08);
   }
 `;
 
-export const TripGroupHeader = styled.div`
-  padding: 1rem 1.25rem;
+export const TripGroupHeader = styled.div<{ $isOpen?: boolean }>`
+  padding: 1.125rem 1.25rem;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 1.125rem;
   cursor: pointer;
-  background-color: ${colors.white};
+  background: ${({ $isOpen }) => ($isOpen ? 'linear-gradient(to right, #fffbf5, #ffffff)' : colors.white)};
   user-select: none;
+  transition: background 0.2s ease;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.25rem 1.5rem;
+  }
+
+  &:hover {
+    background: #fffdfa;
+  }
 `;
 
 export const TripInfoLeft = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.125rem;
   min-width: 0;
+  flex: 1 1 auto;
 `;
 
 export const TripThumbnail = styled.div`
   position: relative;
-  width: 3.5rem;
-  height: 3.5rem;
-  border-radius: 0.75rem;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 0.875rem;
   overflow: hidden;
   background-color: ${colors.gray[100]};
   border: 1px solid ${colors.gray[200]};
   flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+  @media (min-width: 640px) {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 1rem;
+  }
+`;
+
+export const TripThumbnailBadge = styled.span`
+  position: absolute;
+  bottom: 0.35rem;
+  left: 0.35rem;
+  padding: 0.15rem 0.4rem;
+  background-color: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: ${colors.white};
+  font-size: 0.625rem;
+  font-weight: 800;
+  border-radius: 0.375rem;
+  letter-spacing: 0.02em;
+  pointer-events: none;
 `;
 
 export const TripTitleArea = styled.div`
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 
   h2 {
-    font-size: 1rem;
-    font-weight: 800;
+    font-size: 1.0625rem;
+    font-weight: 900;
     color: ${colors.gray[900]};
     line-height: 1.25;
+    letter-spacing: -0.015em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 
     @media (min-width: 640px) {
-      font-size: 1.125rem;
+      font-size: 1.1875rem;
     }
   }
+`;
 
-  p {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: ${colors.gray[500]};
-    margin-top: 0.25rem;
+export const TripMetaTagsRow = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+
+  span.dot {
+    color: ${colors.gray[300]};
+    font-weight: 700;
   }
+`;
+
+export const TripMetaTag = styled.span<{ $highlight?: boolean }>`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 700;
+  color: ${({ $highlight }) => ($highlight ? colors.amber[800] : colors.gray[600])};
+  background-color: ${({ $highlight }) => ($highlight ? colors.amber[50] : 'transparent')};
+  padding: ${({ $highlight }) => ($highlight ? '0.15rem 0.5rem' : '0')};
+  border-radius: 0.375rem;
+  border: ${({ $highlight }) => ($highlight ? `1px solid ${colors.amber[200]}` : 'none')};
+`;
+
+export const TripCenterProgress = styled.div`
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 13rem;
+  max-width: 17rem;
+  width: 100%;
+  padding: 0 0.5rem;
+
+  @media (min-width: 1200px) {
+    display: flex;
+  }
+`;
+
+export const ProgressHeaderRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+
+  span.title {
+    color: ${colors.gray[400]};
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  span.stats {
+    color: ${colors.gray[800]};
+  }
+`;
+
+export const ProgressBarTrack = styled.div`
+  width: 100%;
+  height: 0.375rem;
+  background-color: ${colors.gray[100]};
+  border-radius: 9999px;
+  overflow: hidden;
+`;
+
+export const ProgressBarFill = styled.div<{ $percent: number }>`
+  height: 100%;
+  width: ${({ $percent }) => Math.min(100, Math.max(0, $percent))}%;
+  background: linear-gradient(to right, #10b981, #059669);
+  border-radius: 9999px;
+  transition: width 0.4s ease;
 `;
 
 export const TripStatsRight = styled.div`
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 0.625rem;
+  flex-wrap: wrap;
   flex-shrink: 0;
 
   @media (min-width: 640px) {
-    gap: 2rem;
+    gap: 0.875rem;
   }
+`;
+
+export const MetricCardlet = styled.div<{ $variant?: 'green' | 'amber' | 'neutral' | 'default' }>`
+  display: flex;
+  flex-direction: column;
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.75rem;
+  min-width: 4.75rem;
+  transition: all 0.2s ease;
+
+  ${({ $variant }) => {
+    switch ($variant) {
+      case 'green':
+        return `
+          background-color: #f0fdf4;
+          border: 1px solid #bbf7d0;
+          span.label { color: #15803d; }
+          span.value { color: #166534; font-weight: 900; }
+        `;
+      case 'amber':
+        return `
+          background-color: #fff8ec;
+          border: 1px solid #fed7a1;
+          span.label { color: #b45309; }
+          span.value { color: #9a3412; font-weight: 900; }
+        `;
+      case 'neutral':
+        return `
+          background-color: #f9fafb;
+          border: 1px solid #e5e7eb;
+          span.label { color: #6b7280; }
+          span.value { color: #374151; font-weight: 800; }
+        `;
+      default:
+        return `
+          background-color: #f9fafb;
+          border: 1px solid #e5e7eb;
+          span.label { color: #6b7280; }
+          span.value { color: #111827; font-weight: 900; }
+        `;
+    }
+  }}
+
+  span.label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    margin-bottom: 0.2rem;
+  }
+
+  span.value {
+    font-size: 0.9375rem;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+
+    @media (min-width: 640px) {
+      font-size: 1.0625rem;
+    }
+  }
+`;
+
+export const ChevronToggleButton = styled.button<{ $isOpen: boolean }>`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  height: 2.25rem;
+  padding: 0 0.75rem;
+  border-radius: 0.625rem;
+  background-color: ${({ $isOpen }) => ($isOpen ? colors.amber[500] : colors.amber[50])};
+  color: ${({ $isOpen }) => ($isOpen ? colors.white : colors.amber[800])};
+  border: 1px solid ${({ $isOpen }) => ($isOpen ? colors.amber[600] : colors.amber[200])};
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 800;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: ${({ $isOpen }) => ($isOpen ? '0 2px 8px rgba(244, 140, 6, 0.3)' : 'none')};
+
+  &:hover {
+    background-color: ${({ $isOpen }) => ($isOpen ? colors.amber[600] : colors.amber[100])};
+    color: ${({ $isOpen }) => ($isOpen ? colors.white : colors.amber[900])};
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  svg.chevron-icon {
+    transition: transform 0.25s ease;
+    transform: ${({ $isOpen }) => ($isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
+  }
+`;
+
+export const ManifestHeaderBar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #fae8d4;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 `;
 
 export const StatBlock = styled.div<{ $colorVariant?: 'green' | 'amber' | 'default' }>`
@@ -335,10 +550,6 @@ export const StatBlock = styled.div<{ $colorVariant?: 'green' | 'amber' | 'defau
         : $colorVariant === 'amber'
         ? colors.amber[500]
         : colors.gray[800]};
-
-    @media (min-width: 640px) {
-      font-size: 1.0625rem;
-    }
   }
 `;
 
@@ -419,12 +630,15 @@ export const TravelerAvatar = styled.div`
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 0.75rem;
-  background-color: ${colors.gray[100]};
+  background: linear-gradient(135deg, ${colors.amber[400]}, ${colors.amber[500]});
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${colors.gray[400]};
+  color: ${colors.black};
+  font-weight: 900;
+  font-size: 0.875rem;
   flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(244, 140, 6, 0.2);
 `;
 
 export const TravelerTextMeta = styled.div`
@@ -586,6 +800,32 @@ export const ActionIconButton = styled.button<{ $variant?: 'danger' | 'default' 
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: ${({ $variant }) => ($variant === 'danger' ? '#ffe4e6' : colors.gray[50])};
+    color: ${({ $variant }) => ($variant === 'danger' ? '#e11d48' : colors.gray[700])};
+    border-color: ${({ $variant }) => ($variant === 'danger' ? '#fda4af' : colors.gray[300])};
+  }
+
+  svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+`;
+
+export const ActionIconLink = styled(Link)<{ $variant?: 'danger' | 'default' }>`
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  border: 1px solid ${({ $variant }) => ($variant === 'danger' ? '#fecdd3' : colors.gray[200])};
+  background-color: ${colors.white};
+  color: ${({ $variant }) => ($variant === 'danger' ? '#f43f5e' : colors.gray[400])};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   cursor: pointer;
   transition: all 0.2s ease;
 

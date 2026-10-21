@@ -1,79 +1,12 @@
 'use client';
 
 import React from 'react';
-import styled from 'styled-components';
 import Image from 'next/image';
-import { typography } from '@/theme/typography';
-import { colors } from '@/theme/colors';
 
 interface TripAboutSectionProps {
   description: string;
   mapImage?: string;
 }
-
-const SectionTitle = styled.h2`
-  font-size: 1.875rem;
-  color: ${colors.gray[900]};
-  margin-bottom: 1.5rem;
-  font-family: ${typography.fonts.caveat};
-
-  @media (min-width: 640px) {
-    margin-bottom: 2rem;
-  }
-  @media (min-width: 768px) {
-    font-size: 2.25rem;
-  }
-`;
-
-const MapWrapper = styled.div`
-  width: 100%;
-  background-color: ${colors.warmCream};
-  border-radius: 1.5rem;
-  border: 1px solid ${colors.gray[100]};
-  overflow: hidden;
-  position: relative;
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 260px;
-
-  @media (min-width: 640px) {
-    min-height: 320px;
-  }
-  @media (min-width: 768px) {
-    min-height: 400px;
-  }
-
-  img {
-    width: 100%;
-    height: auto;
-    max-height: 600px;
-    object-fit: contain;
-    transition: transform 0.7s ease;
-
-    &:hover {
-      transform: scale(1.02);
-    }
-  }
-`;
-
-const DescriptionText = styled.div`
-  max-width: none;
-  color: ${colors.gray[600]};
-  line-height: 1.625;
-  font-weight: 500;
-  white-space: pre-wrap;
-  margin-bottom: 2rem;
-  font-size: 0.875rem;
-
-  @media (min-width: 640px) {
-    font-size: 1rem;
-  }
-  @media (min-width: 768px) {
-    font-size: 1.125rem;
-  }
-`;
 
 export const TripAboutSection: React.FC<TripAboutSectionProps> = ({
   description,
@@ -81,21 +14,26 @@ export const TripAboutSection: React.FC<TripAboutSectionProps> = ({
 }) => {
   return (
     <section>
-      <SectionTitle>About the trip</SectionTitle>
+      <h2 className="text-3xl md:text-4xl text-gray-900 mb-6 sm:mb-8 font-caveat">
+        About the trip
+      </h2>
 
       {mapImage && (
-        <MapWrapper className="group">
+        <div className="group w-full bg-warm-cream rounded-3xl border border-gray-100 overflow-hidden relative mb-8 flex items-center justify-center min-h-[260px] sm:min-h-[320px] md:min-h-[400px]">
           <Image
             src={mapImage}
             alt="Route Map"
             width={1200}
             height={600}
             priority={false}
+            className="w-full h-auto max-h-[600px] object-contain transition-transform duration-700 group-hover:scale-[1.02]"
           />
-        </MapWrapper>
+        </div>
       )}
 
-      <DescriptionText>{description}</DescriptionText>
+      <div className="max-w-none text-gray-600 leading-relaxed font-medium whitespace-pre-wrap mb-8 text-sm sm:text-base md:text-lg">
+        {description}
+      </div>
     </section>
   );
 };

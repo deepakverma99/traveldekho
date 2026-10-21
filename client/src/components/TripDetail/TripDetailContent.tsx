@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import styled from 'styled-components';
 import { TripDetail } from './types';
 import { TripDetailHero } from './TripDetailHero';
 import { TripAboutSection } from './TripAboutSection';
@@ -15,79 +14,10 @@ import { TripPartnerCard } from './TripPartnerCard';
 import { TripReviewsSection } from './TripReviewsSection';
 import { TripBookingSidebar } from './TripBookingSidebar';
 import { Breadcrumb, BreadcrumbItem, FloatingBackground } from '@/components/shared';
-import { colors } from '@/theme/colors';
 
 interface TripDetailContentProps {
   trip: TripDetail;
 }
-
-const PageRoot = styled.div`
-  position: relative;
-  min-height: 100vh;
-  width: 100%;
-  background-color: ${colors.cream};
-  overflow-x: hidden;
-`;
-
-const MainContentWrapper = styled.div`
-  background-color: ${colors.white};
-  border-radius: 2rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
-  padding: 1.25rem;
-  border: 1px solid ${colors.gray[100]};
-
-  @media (min-width: 640px) {
-    border-radius: 3rem;
-    padding: 2rem;
-  }
-  @media (min-width: 768px) {
-    padding: 3rem;
-  }
-`;
-
-const MobileStickyBar = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 40;
-  background-color: ${colors.white}F2;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid ${colors.amber[200]}80;
-  padding: 0.75rem 1rem;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  @media (min-width: 1024px) {
-    display: none;
-  }
-`;
-
-const MobileSelectDatesButton = styled.button`
-  padding: 0.625rem 1.5rem;
-  background-color: ${colors.amber[400]};
-  color: ${colors.gray[900]};
-  font-weight: 800;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-radius: 0.75rem;
-  border: none;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${colors.black};
-    color: ${colors.white};
-  }
-  &:active {
-    transform: scale(0.95);
-  }
-`;
 
 export const TripDetailContent: React.FC<TripDetailContentProps> = ({ trip }) => {
   const breadcrumbItems: BreadcrumbItem[] = [
@@ -98,11 +28,11 @@ export const TripDetailContent: React.FC<TripDetailContentProps> = ({ trip }) =>
   ];
 
   return (
-    <PageRoot>
+    <div className="relative min-h-screen w-full bg-cream overflow-x-hidden">
       {/* Floating Animated Travel Icons Background */}
       <FloatingBackground fixed />
 
-      <main style={{ position: 'relative', zIndex: 10, width: '100%', paddingTop: '1.5rem' }}>
+      <main className="relative z-10 w-full pt-6">
         {/* Breadcrumb Navigation */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-2 sm:mb-3">
           <Breadcrumb items={breadcrumbItems} />
@@ -113,7 +43,7 @@ export const TripDetailContent: React.FC<TripDetailContentProps> = ({ trip }) =>
 
         {/* Main Content & Sidebar Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24">
-          <MainContentWrapper>
+          <div className="bg-white rounded-[2rem] sm:rounded-[3rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] p-5 sm:p-8 md:p-12 border border-gray-100">
             <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 relative items-start">
               {/* Left Column: Details & Itinerary */}
               <div className="flex-1 w-full space-y-12 sm:space-y-16">
@@ -144,34 +74,26 @@ export const TripDetailContent: React.FC<TripDetailContentProps> = ({ trip }) =>
               {/* Right Column: Sticky Booking Widget & Live Weather */}
               <TripBookingSidebar trip={trip} />
             </div>
-          </MainContentWrapper>
+          </div>
         </div>
 
         {/* Mobile Sticky Booking Bar */}
-        <MobileStickyBar>
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-amber-200/50 py-3 px-4 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] flex items-center justify-between lg:hidden">
           <div>
-            <p
-              style={{
-                fontSize: '10px',
-                fontWeight: 700,
-                color: colors.gray[500],
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-              }}
-            >
+            <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">
               Trip Starts From
             </p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-              <span style={{ fontSize: '1.25rem', fontWeight: 900, color: colors.amber[500] }}>
+            <div className="flex items-center gap-1.5">
+              <span className="text-xl font-black text-amber-500">
                 ₹{trip.pricing.startingPrice.toLocaleString('en-IN')}
               </span>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: colors.gray[400], textDecoration: 'line-through' }}>
+              <span className="text-xs font-bold text-gray-400 line-through">
                 ₹{trip.pricing.originalPrice.toLocaleString('en-IN')}
               </span>
             </div>
           </div>
 
-          <MobileSelectDatesButton
+          <button
             type="button"
             onClick={() => {
               const sidebar = document.getElementById('booking-sidebar-section');
@@ -179,11 +101,12 @@ export const TripDetailContent: React.FC<TripDetailContentProps> = ({ trip }) =>
                 sidebar.scrollIntoView({ behavior: 'smooth' });
               }
             }}
+            className="py-2.5 px-6 bg-amber-400 hover:bg-black text-gray-900 hover:text-white font-extrabold text-xs uppercase tracking-wider rounded-xl border-0 shadow-md transition-all active:scale-95 cursor-pointer"
           >
             Select Dates
-          </MobileSelectDatesButton>
-        </MobileStickyBar>
+          </button>
+        </div>
       </main>
-    </PageRoot>
+    </div>
   );
 };

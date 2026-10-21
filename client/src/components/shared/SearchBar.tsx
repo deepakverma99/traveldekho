@@ -1,10 +1,7 @@
 'use client';
 
 import React from 'react';
-import styled from 'styled-components';
 import { Search, X } from 'lucide-react';
-import { colors } from '@/theme/colors';
-import { typography } from '@/theme/typography';
 
 export interface SearchBarProps {
   value?: string;
@@ -24,154 +21,6 @@ export interface SearchBarProps {
   'aria-label'?: string;
 }
 
-/* Header variant container */
-const HeaderContainer = styled.form`
-  display: none;
-  align-items: center;
-  margin-left: 1rem;
-  flex: 1;
-  max-width: 24rem;
-
-  @media (min-width: 768px) {
-    display: flex;
-  }
-
-  @media (min-width: 1024px) {
-    margin-left: 2rem;
-    max-width: 28rem;
-  }
-`;
-
-const HeaderInputWrapper = styled.div`
-  position: relative;
-  width: 100%;
-`;
-
-const HeaderInput = styled.input`
-  width: 100%;
-  height: 2.5rem;
-  padding-left: 1.125rem;
-  padding-right: 2.75rem;
-  font-size: ${typography.sizes.sm};
-  color: ${colors.gray[800]};
-  background-color: ${colors.white};
-  border: 1px solid ${colors.gray[300]};
-  border-radius: 9999px;
-  outline: none;
-  transition: all 0.2s ease;
-  font-weight: ${typography.weights.medium};
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-
-  &::placeholder {
-    color: ${colors.gray[400]};
-  }
-
-  &:hover {
-    border-color: ${colors.gray[400]};
-  }
-
-  &:focus {
-    border-color: ${colors.amber[500]};
-    box-shadow: 0 0 0 3px ${colors.amber[100]};
-  }
-`;
-
-const HeaderSubmitButton = styled.button`
-  position: absolute;
-  right: 0.25rem;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 2rem;
-  width: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: ${colors.white};
-  border-radius: 9999px;
-  transition: all 0.2s ease;
-  border: 1px solid ${colors.gray[200]};
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${colors.amber[500]};
-    border-color: ${colors.amber[500]};
-
-    svg {
-      color: ${colors.white};
-    }
-  }
-
-  svg {
-    transition: color 0.2s;
-  }
-`;
-
-/* Filter/Standard variant container */
-const FilterContainer = styled.div<{ $maxWidth?: string; $minWidth?: string }>`
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex: 1;
-  min-width: ${({ $minWidth }) => $minWidth || '180px'};
-  max-width: ${({ $maxWidth }) => $maxWidth || '260px'};
-
-  .search-icon-left {
-    position: absolute;
-    left: 0.875rem;
-    color: ${colors.gray[400]};
-    width: 1rem;
-    height: 1rem;
-    pointer-events: none;
-  }
-`;
-
-const FilterInput = styled.input<{ $hasClear?: boolean }>`
-  width: 100%;
-  padding: 0.5625rem ${({ $hasClear }) => ($hasClear ? '2.25rem' : '0.875rem')} 0.5625rem 2.375rem;
-  background-color: ${colors.white};
-  border: 1px solid ${colors.gray[200]};
-  border-radius: 0.75rem;
-  font-size: 0.8125rem;
-  color: ${colors.gray[800]};
-  font-family: ${typography.fonts.jakarta};
-  outline: none;
-  transition: all 0.2s ease;
-
-  &::placeholder {
-    color: ${colors.gray[400]};
-    font-weight: 500;
-  }
-
-  &:focus {
-    border-color: ${colors.amber[400]};
-    box-shadow: 0 0 0 3px ${colors.amber[100]}80;
-  }
-`;
-
-const ClearButton = styled.button`
-  position: absolute;
-  right: 0.625rem;
-  background: transparent;
-  border: none;
-  color: ${colors.gray[400]};
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.125rem;
-  transition: color 0.15s ease;
-
-  &:hover {
-    color: ${colors.gray[600]};
-  }
-
-  svg {
-    width: 0.875rem;
-    height: 0.875rem;
-  }
-`;
-
 export const SearchBar: React.FC<SearchBarProps> = ({
   value,
   onChange,
@@ -181,7 +30,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   action = '/search',
   method = 'GET',
   name = 'q',
-  className,
+  className = '',
   variant = 'header',
   maxWidth,
   minWidth,
@@ -191,13 +40,15 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
   if (variant === 'filter') {
     return (
-      <FilterContainer
-        $maxWidth={maxWidth}
-        $minWidth={minWidth}
-        className={className}
+      <div
+        style={{
+          minWidth: minWidth || '180px',
+          maxWidth: maxWidth || '260px',
+        }}
+        className={`relative flex items-center flex-1 ${className}`}
       >
-        <Search className="search-icon-left" />
-        <FilterInput
+        <Search className="absolute left-3.5 text-gray-400 w-4 h-4 pointer-events-none" />
+        <input
           type="text"
           name={name}
           placeholder={placeholder}
@@ -206,30 +57,33 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           autoComplete={autoComplete}
           autoFocus={autoFocus}
           aria-label={ariaLabel}
-          $hasClear={Boolean(value && onClear)}
+          className={`w-full py-2.25 bg-white border border-gray-200 rounded-xl text-[13px] text-gray-800 font-jakarta outline-none transition-all placeholder:text-gray-400 placeholder:font-medium focus:border-amber-400 focus:ring-3 focus:ring-amber-100/50 pl-9.5 ${
+            value && onClear ? 'pr-9' : 'pr-3.5'
+          }`}
         />
         {value && onClear && (
-          <ClearButton
+          <button
             type="button"
             onClick={onClear}
             aria-label="Clear search"
+            className="absolute right-2.5 bg-transparent border-0 text-gray-400 cursor-pointer flex items-center justify-center p-0.5 transition-colors hover:text-gray-600 [&>svg]:w-3.5 [&>svg]:h-3.5"
           >
             <X />
-          </ClearButton>
+          </button>
         )}
-      </FilterContainer>
+      </div>
     );
   }
 
   return (
-    <HeaderContainer
+    <form
       action={action}
       method={method}
       onSubmit={onSubmit}
-      className={className}
+      className={`hidden md:flex items-center ml-4 lg:ml-8 flex-1 max-w-sm lg:max-w-md ${className}`}
     >
-      <HeaderInputWrapper>
-        <HeaderInput
+      <div className="relative w-full">
+        <input
           placeholder={placeholder}
           type="text"
           name={name}
@@ -238,11 +92,16 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           autoComplete={autoComplete}
           autoFocus={autoFocus}
           aria-label={ariaLabel}
+          className="w-full h-10 pl-4.5 pr-11 text-sm text-gray-800 bg-white border border-gray-300 rounded-full outline-none transition-all font-medium shadow-xs placeholder:text-gray-400 hover:border-gray-400 focus:border-amber-500 focus:ring-3 focus:ring-amber-100"
         />
-        <HeaderSubmitButton type="submit" aria-label="Submit Search">
-          <Search className="w-4 h-4 text-gray-400" />
-        </HeaderSubmitButton>
-      </HeaderInputWrapper>
-    </HeaderContainer>
+        <button
+          type="submit"
+          aria-label="Submit Search"
+          className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 flex items-center justify-center bg-white rounded-full transition-all border border-gray-200 shadow-xs cursor-pointer hover:bg-amber-500 hover:border-amber-500 [&:hover_svg]:text-white"
+        >
+          <Search className="w-4 h-4 text-gray-400 transition-colors" />
+        </button>
+      </div>
+    </form>
   );
 };

@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 import {
-  TripPartnerLayout,
   formatPartnerDisplayName,
   TripPartnerBookingsView,
 } from '@/components/TripPartner';
@@ -22,11 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 async function BookingsContent({ params }: PageProps) {
   const { username } = await params;
 
-  return (
-    <TripPartnerLayout username={username}>
-      <TripPartnerBookingsView username={username} />
-    </TripPartnerLayout>
-  );
+  return <TripPartnerBookingsView username={username} />;
 }
 
 export default function PartnerBookingsPage(props: PageProps) {

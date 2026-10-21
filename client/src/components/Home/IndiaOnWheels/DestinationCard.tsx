@@ -3,89 +3,33 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import styled from 'styled-components';
 import { DestinationCardProps } from './types';
-import { colors } from '@/theme/colors';
-import { typography } from '@/theme/typography';
-
-const CardLink = styled(Link)`
-  display: block;
-  text-decoration: none;
-`;
-
-const ArticleWrapper = styled.article`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  width: 100%;
-`;
-
-const ImageContainer = styled.div`
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  border-radius: 1rem;
-  overflow: hidden;
-  margin-bottom: 0.75rem;
-  background-color: ${colors.gray[100]};
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  ${CardLink}:hover & {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
-  }
-`;
-
-const StyledImage = styled(Image)`
-  object-fit: cover;
-  transition: transform 0.5s ease;
-
-  ${CardLink}:hover & {
-    transform: scale(1.05);
-  }
-`;
-
-const DestinationTitle = styled.h3`
-  font-size: 15px;
-  font-weight: 700;
-  text-align: center;
-  line-height: 1.375;
-  color: ${colors.charcoal};
-  font-family: ${typography.fonts.jakarta};
-  transition: color 0.2s ease;
-
-  ${CardLink}:hover & {
-    color: ${colors.primary};
-  }
-`;
-
-const DestinationSlogan = styled.p`
-  font-size: 12px;
-  text-align: center;
-  margin-top: 0.125rem;
-  color: #5e5e5e;
-  font-family: ${typography.fonts.vietnam};
-`;
 
 export const DestinationCard: React.FC<DestinationCardProps> = ({ destination }) => {
   return (
-    <CardLink href={`/search?q=${encodeURIComponent(destination.query)}`} className="group">
-      <ArticleWrapper id={destination.id}>
-        <ImageContainer>
-          <StyledImage
+    <Link
+      href={`/search?q=${encodeURIComponent(destination.query)}`}
+      className="group block no-underline"
+    >
+      <article id={destination.id} className="flex flex-col items-center cursor-pointer w-full">
+        <div className="relative w-full aspect-square rounded-2xl overflow-hidden mb-3 bg-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.06),0_4px_16px_rgba(0,0,0,0.04)] transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_6px_20px_rgba(0,0,0,0.1),0_2px_8px_rgba(0,0,0,0.06)]">
+          <Image
             alt={destination.name}
             fill
             sizes="(max-width: 768px) 200px, 250px"
             src={destination.image}
             loading="lazy"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
-        </ImageContainer>
+        </div>
 
-        <DestinationTitle>{destination.name}</DestinationTitle>
-        <DestinationSlogan>{destination.slogan}</DestinationSlogan>
-      </ArticleWrapper>
-    </CardLink>
+        <h3 className="text-[15px] font-bold text-center leading-snug text-charcoal font-jakarta transition-colors duration-200 group-hover:text-primary">
+          {destination.name}
+        </h3>
+        <p className="text-xs text-center mt-0.5 text-[#5e5e5e] font-vietnam">
+          {destination.slogan}
+        </p>
+      </article>
+    </Link>
   );
 };

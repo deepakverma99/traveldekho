@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import styled from 'styled-components';
 import { X, CheckCircle, Calendar, Users, ShieldCheck, ArrowRight } from 'lucide-react';
 import { TripDetail, DateSlot } from './types';
 import {
@@ -17,8 +16,6 @@ import {
   closeBookingModal,
   resetBookingModal,
 } from '@/redux';
-import { typography } from '@/theme/typography';
-import { colors } from '@/theme/colors';
 
 export interface TripBookingModalProps {
   trip: TripDetail;
@@ -27,152 +24,6 @@ export interface TripBookingModalProps {
   isOpen?: boolean;
   onClose?: () => void;
 }
-
-const ModalOverlay = styled.div`
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-`;
-
-const Backdrop = styled.div`
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  transition: opacity 0.2s ease;
-`;
-
-const ModalCard = styled.div`
-  position: relative;
-  background-color: ${colors.white};
-  border-radius: 1.5rem;
-  max-width: 32rem;
-  width: 100%;
-  padding: 1.5rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  border: 1px solid ${colors.gray[100]};
-  z-index: 10;
-  overflow: hidden;
-
-  @media (min-width: 640px) {
-    padding: 2rem;
-  }
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
-  padding: 0.5rem;
-  border-radius: 9999px;
-  background-color: ${colors.gray[100]};
-  color: ${colors.gray[500]};
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-
-  &:hover {
-    background-color: ${colors.gray[200]};
-  }
-`;
-
-const ReservationBadge = styled.span`
-  font-size: 10px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: ${colors.amber[600]};
-  background-color: ${colors.amber[50]};
-  padding: 0.25rem 0.625rem;
-  border-radius: 9999px;
-  border: 1px solid ${colors.amber[200]}80;
-`;
-
-const ModalTitle = styled.h3`
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: ${colors.gray[900]};
-  margin-top: 0.5rem;
-  letter-spacing: -0.01em;
-  font-family: ${typography.fonts.jakarta};
-`;
-
-const BookingInfoPill = styled.div`
-  background-color: ${colors.gray[50]};
-  border-radius: 1rem;
-  padding: 1rem;
-  border: 1px solid ${colors.gray[100]};
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const CalendarSquare = styled.div`
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 0.75rem;
-  background-color: ${colors.amber[100]};
-  color: ${colors.amber[700]};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-`;
-
-const FormInput = styled.input`
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
-  border: 1px solid ${colors.gray[200]};
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: ${colors.gray[900]};
-  outline: none;
-  transition: border-color 0.15s ease;
-
-  &:focus {
-    border-color: ${colors.amber[400]};
-  }
-`;
-
-const FormLabel = styled.label`
-  display: block;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: ${colors.gray[700]};
-  margin-bottom: 0.375rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-`;
-
-const CheckoutButton = styled.button`
-  width: 100%;
-  margin-top: 0.5rem;
-  padding: 0.875rem 1rem;
-  background-color: ${colors.amber[400]};
-  color: ${colors.gray[900]};
-  font-weight: 800;
-  border-radius: 0.75rem;
-  border: none;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background-color: ${colors.black};
-    color: ${colors.white};
-  }
-`;
 
 export const TripBookingModal: React.FC<TripBookingModalProps> = ({
   trip,
@@ -215,57 +66,68 @@ export const TripBookingModal: React.FC<TripBookingModalProps> = ({
   };
 
   return (
-    <ModalOverlay>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <Backdrop onClick={handleClose} aria-hidden="true" />
+      <div
+        onClick={handleClose}
+        aria-hidden="true"
+        className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
+      />
 
       {/* Modal Card */}
-      <ModalCard className="animate-fade-in-up">
+      <div className="relative bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 z-10 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         {/* Close Button */}
-        <CloseButton
+        <button
           type="button"
           onClick={handleClose}
           aria-label="Close booking modal"
+          className="absolute top-5 right-5 p-2 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors cursor-pointer border-0"
         >
-          <X style={{ width: '1rem', height: '1rem' }} />
-        </CloseButton>
+          <X className="w-4 h-4" />
+        </button>
 
         {!isSuccess ? (
           <div>
-            <div style={{ marginBottom: '1.5rem' }}>
-              <ReservationBadge>Confirm Reservation</ReservationBadge>
-              <ModalTitle>{trip.title}</ModalTitle>
+            <div className="mb-6">
+              <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200/50">
+                Confirm Reservation
+              </span>
+              <h3 className="text-2xl font-black text-gray-900 mt-2 tracking-tight">
+                {trip.title}
+              </h3>
             </div>
 
             {/* Selected Booking Info Pill */}
-            <BookingInfoPill>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-                <CalendarSquare>
-                  <Calendar style={{ width: '1rem', height: '1rem' }} />
-                </CalendarSquare>
+            <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100 mb-6 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                  <Calendar className="w-4 h-4" />
+                </div>
                 <div>
-                  <p style={{ fontSize: '0.75rem', fontWeight: 700, color: colors.gray[900] }}>
+                  <p className="text-xs font-bold text-gray-900">
                     {effectiveSlot.date}
                   </p>
-                  <p style={{ fontSize: '11px', color: colors.gray[500], fontWeight: 500 }}>
+                  <p className="text-[11px] text-gray-500 font-medium">
                     {trip.duration}
                   </p>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Users style={{ width: '1rem', height: '1rem', color: colors.purple[600] }} />
-                <span style={{ fontSize: '0.75rem', fontWeight: 900, color: colors.gray[900] }}>
+              <div className="flex items-center gap-2">
+                <Users className="w-4 h-4 text-purple-600" />
+                <span className="text-xs font-black text-gray-900">
                   {effectiveTravellers} {effectiveTravellers === 1 ? 'Traveller' : 'Travellers'}
                 </span>
               </div>
-            </BookingInfoPill>
+            </div>
 
             {/* Booking Form */}
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div>
-                <FormLabel>Full Name</FormLabel>
-                <FormInput
+                <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wide">
+                  Full Name
+                </label>
+                <input
                   type="text"
                   required
                   placeholder="e.g. Deepak Verma"
@@ -275,12 +137,15 @@ export const TripBookingModal: React.FC<TripBookingModalProps> = ({
                       setBookingFormField({ field: 'name', value: e.target.value })
                     )
                   }
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-medium text-gray-900 outline-none transition-colors focus:border-amber-400"
                 />
               </div>
 
               <div>
-                <FormLabel>Email Address</FormLabel>
-                <FormInput
+                <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wide">
+                  Email Address
+                </label>
+                <input
                   type="email"
                   required
                   placeholder="e.g. traveller@example.com"
@@ -290,12 +155,15 @@ export const TripBookingModal: React.FC<TripBookingModalProps> = ({
                       setBookingFormField({ field: 'email', value: e.target.value })
                     )
                   }
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-medium text-gray-900 outline-none transition-colors focus:border-amber-400"
                 />
               </div>
 
               <div>
-                <FormLabel>Phone Number</FormLabel>
-                <FormInput
+                <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wide">
+                  Phone Number
+                </label>
+                <input
                   type="tel"
                   required
                   placeholder="+91 98765 43210"
@@ -305,111 +173,56 @@ export const TripBookingModal: React.FC<TripBookingModalProps> = ({
                       setBookingFormField({ field: 'phone', value: e.target.value })
                     )
                   }
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-medium text-gray-900 outline-none transition-colors focus:border-amber-400"
                 />
               </div>
 
               {/* Price Breakdown */}
-              <div
-                style={{
-                  paddingTop: '0.75rem',
-                  borderTop: `1px solid ${colors.gray[100]}`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
+              <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
                 <div>
-                  <p
-                    style={{
-                      fontSize: '11px',
-                      fontWeight: 700,
-                      color: colors.gray[400],
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                    }}
-                  >
+                  <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wide">
                     Total Payable Amount
                   </p>
-                  <p style={{ fontSize: '1.5rem', fontWeight: 900, color: colors.gray[900] }}>
+                  <p className="text-2xl font-black text-gray-900">
                     ₹{totalAmount.toLocaleString('en-IN')}
                   </p>
                 </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.375rem',
-                    fontSize: '0.75rem',
-                    color: colors.green[700],
-                    backgroundColor: colors.green[50],
-                    padding: '0.375rem 0.75rem',
-                    borderRadius: '9999px',
-                    border: `1px solid ${colors.green[100]}`,
-                  }}
-                >
-                  <ShieldCheck style={{ width: '1rem', height: '1rem' }} />
-                  <span style={{ fontWeight: 700 }}>Scout Protected</span>
+                <div className="flex items-center gap-1.5 text-xs text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span className="font-bold">Scout Protected</span>
                 </div>
               </div>
 
-              <CheckoutButton type="submit">
+              <button
+                type="submit"
+                className="w-full mt-2 py-3.5 px-4 bg-amber-400 hover:bg-black text-gray-900 hover:text-white font-extrabold rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-98 border-0"
+              >
                 <span>Proceed to Secure Checkout</span>
-                <ArrowRight style={{ width: '1rem', height: '1rem' }} />
-              </CheckoutButton>
+                <ArrowRight className="w-4 h-4" />
+              </button>
             </form>
           </div>
         ) : (
-          <div style={{ textAlign: 'center', paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
-            <div
-              style={{
-                width: '4rem',
-                height: '4rem',
-                backgroundColor: colors.green[100],
-                color: colors.green[600],
-                borderRadius: '9999px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 1rem',
-              }}
-              className="animate-bounce"
-            >
-              <CheckCircle style={{ width: '2rem', height: '2rem' }} />
+          <div className="text-center py-6">
+            <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+              <CheckCircle className="w-8 h-8" />
             </div>
-            <h3
-              style={{
-                fontSize: '1.5rem',
-                fontWeight: 900,
-                color: colors.gray[900],
-                marginBottom: '0.5rem',
-                fontFamily: typography.fonts.jakarta,
-              }}
-            >
+            <h3 className="text-2xl font-black text-gray-900 mb-2">
               Booking Request Received!
             </h3>
-            <p style={{ fontSize: '0.875rem', color: colors.gray[600], marginBottom: '1.5rem', lineHeight: 1.625 }}>
-              Thank you, <span style={{ fontWeight: 700, color: colors.gray[900] }}>{bookingForm.name || 'Traveler'}</span>! Our certified Scout Captain will contact you via WhatsApp / Phone at <span style={{ fontWeight: 700, color: colors.gray[900] }}>{bookingForm.phone || 'your registered number'}</span> with your itinerary details and confirmation voucher.
+            <p className="text-sm text-gray-600 mb-6 leading-relaxed">
+              Thank you, <span className="font-bold text-gray-900">{bookingForm.name || 'Traveler'}</span>! Our certified Scout Captain will contact you via WhatsApp / Phone at <span className="font-bold text-gray-900">{bookingForm.phone || 'your registered number'}</span> with your itinerary details and confirmation voucher.
             </p>
             <button
               type="button"
               onClick={handleBackToDetails}
-              style={{
-                padding: '0.75rem 1.5rem',
-                backgroundColor: colors.amber[400],
-                color: colors.black,
-                fontWeight: 800,
-                fontSize: '0.875rem',
-                borderRadius: '0.75rem',
-                border: 'none',
-                cursor: 'pointer',
-                transition: 'background-color 0.15s ease',
-              }}
+              className="py-3 px-6 bg-amber-400 hover:bg-black hover:text-white text-black font-extrabold text-sm rounded-xl border-0 cursor-pointer transition-colors"
             >
               Back to Trip Details
             </button>
           </div>
         )}
-      </ModalCard>
-    </ModalOverlay>
+      </div>
+    </div>
   );
 };

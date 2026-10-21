@@ -2,121 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
-import styled from 'styled-components';
 import { Sun, Cloud, CloudRain, Snowflake } from 'lucide-react';
 import { WeatherCardProps, WeatherIconType } from './types';
-import { colors } from '@/theme/colors';
-import { typography } from '@/theme/typography';
-
-const CardLink = styled(Link)`
-  display: block;
-  height: 100%;
-  text-decoration: none;
-  flex-shrink: 0;
-  width: 205px;
-
-  @media (min-width: 375px) {
-    width: 215px;
-  }
-
-  @media (min-width: 440px) {
-    width: 235px;
-  }
-
-  @media (min-width: 640px) {
-    width: 100%;
-    flex-shrink: 1;
-  }
-`;
-
-const CardRoot = styled.div`
-  background-color: ${colors.white};
-  border: 1px solid ${colors.gray[100]};
-  border-radius: 1rem;
-  padding: 0.875rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-  position: relative;
-  overflow: hidden;
-  height: 100%;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: ${typography.fonts.jakarta};
-
-  @media (min-width: 640px) {
-    border-radius: 1.5rem;
-    padding: 1.25rem;
-  }
-
-  &:hover {
-    border-color: ${colors.amber[400]};
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.12), 0 2px 4px rgba(0, 0, 0, 0.04);
-    transform: translateY(-2px);
-  }
-`;
-
-const GlowOrb = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 8rem;
-  height: 8rem;
-  background-color: rgba(251, 191, 36, 0.05);
-  border-radius: 9999px;
-  filter: blur(32px);
-  margin-right: -2.5rem;
-  margin-top: -2.5rem;
-  transition: background-color 0.3s ease;
-
-  ${CardRoot}:hover & {
-    background-color: rgba(251, 191, 36, 0.12);
-  }
-`;
-
-const FloatingIconBadge = styled.div`
-  width: 2rem;
-  height: 2rem;
-  background-color: ${colors.amber[50]};
-  color: ${colors.amber[500]};
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
-  transition: background-color 0.3s ease, transform 0.3s ease;
-
-  @media (min-width: 640px) {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-
-  ${CardRoot}:hover & {
-    background-color: ${colors.amber[100]};
-    transform: translateY(-2px);
-  }
-`;
-
-const ForecastItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0.375rem 0.25rem;
-  background-color: ${colors.gray[50]};
-  border-radius: 0.5rem;
-  border: 1px solid transparent;
-  transition: all 0.2s ease;
-  cursor: default;
-
-  @media (min-width: 640px) {
-    padding: 0.5rem;
-    border-radius: 0.75rem;
-  }
-
-  &:hover {
-    background-color: rgba(254, 243, 199, 0.8);
-    border-color: rgba(253, 230, 138, 0.5);
-  }
-`;
 
 interface WeatherIconProps {
   type: WeatherIconType;
@@ -141,10 +28,13 @@ const WeatherIcon: React.FC<WeatherIconProps> = ({ type, className, size = 16 })
 
 export const WeatherCard: React.FC<WeatherCardProps> = ({ destination }) => {
   return (
-    <CardLink href={destination.href} className="group">
-      <CardRoot>
+    <Link
+      href={destination.href}
+      className="group block h-full no-underline shrink-0 w-[205px] min-[375px]:w-[215px] min-[440px]:w-[235px] sm:w-full sm:shrink"
+    >
+      <div className="bg-white border border-gray-100 rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-sm relative overflow-hidden h-full cursor-pointer transition-all duration-300 font-jakarta group-hover:border-amber-400 group-hover:shadow-[0_4px_12px_rgba(245,158,11,0.12),0_2px_4px_rgba(0,0,0,0.04)] group-hover:-translate-y-0.5">
         {/* Ambient Top Glow */}
-        <GlowOrb />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/5 group-hover:bg-amber-400/12 rounded-full blur-2xl -mr-10 -mt-10 transition-colors duration-300 pointer-events-none" />
 
         {/* Card Header: Category & City + Floating Weather Icon */}
         <div className="flex justify-between items-start mb-2.5 sm:mb-4 relative z-10">
@@ -157,9 +47,9 @@ export const WeatherCard: React.FC<WeatherCardProps> = ({ destination }) => {
             </h3>
           </div>
 
-          <FloatingIconBadge>
+          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-amber-50 group-hover:bg-amber-100 text-amber-500 rounded-full flex items-center justify-center shrink-0 shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] transition-all duration-300 group-hover:-translate-y-0.5">
             <WeatherIcon type={destination.currentIcon} className="w-4 h-4 sm:w-5 sm:h-5" />
-          </FloatingIconBadge>
+          </div>
         </div>
 
         {/* Current Temperature & Condition */}
@@ -179,7 +69,10 @@ export const WeatherCard: React.FC<WeatherCardProps> = ({ destination }) => {
           </p>
           <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
             {destination.forecast.map((fc, index) => (
-              <ForecastItem key={`${destination.id}-fc-${index}`}>
+              <div
+                key={`${destination.id}-fc-${index}`}
+                className="flex flex-col items-center p-1.5 sm:p-2 bg-gray-50 hover:bg-amber-50/80 rounded-lg sm:rounded-xl border border-transparent hover:border-amber-200/50 transition-all duration-200 cursor-default"
+              >
                 <span className="text-[9px] sm:text-[10px] font-bold text-gray-500 mb-0.5 sm:mb-1">
                   {fc.day}
                 </span>
@@ -192,11 +85,11 @@ export const WeatherCard: React.FC<WeatherCardProps> = ({ destination }) => {
                 <span className="text-xs sm:text-sm font-black text-gray-900">
                   {fc.temp}
                 </span>
-              </ForecastItem>
+              </div>
             ))}
           </div>
         </div>
-      </CardRoot>
-    </CardLink>
+      </div>
+    </Link>
   );
 };

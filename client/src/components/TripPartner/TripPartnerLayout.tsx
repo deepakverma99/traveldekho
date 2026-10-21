@@ -3,6 +3,7 @@
 import React, { useEffect, Suspense } from 'react';
 import styled from 'styled-components';
 import { colors } from '@/theme/colors';
+import { FloatingBackground } from '@/components/shared';
 import { TripPartnerHeader } from './TripPartnerHeader';
 import { TripPartnerSidebar } from './TripPartnerSidebar';
 import { formatPartnerDisplayName } from './utils/partnerAuth';
@@ -18,9 +19,10 @@ export type { TripPartnerLayoutProps };
 
 const LayoutRoot = styled.div`
   min-height: 100vh;
-  background-color: ${colors.cream};
+  background-color: ${colors.white};
   display: flex;
   width: 100%;
+  position: relative;
 `;
 
 const ContentContainer = styled.div`
@@ -28,14 +30,16 @@ const ContentContainer = styled.div`
   flex: 1;
   width: 100%;
   min-height: 100vh;
+  position: relative;
+  z-index: 1;
 `;
 
 const SidebarFallback = styled.div`
   width: 16rem;
   height: 100vh;
   display: none;
-  background-color: ${colors.offWhite};
-  border-right: 1px solid ${colors.amber[200]}80;
+  background-color: ${colors.white};
+  border-right: 1px solid ${colors.gray[200]};
   flex-shrink: 0;
   position: sticky;
   top: 0;
@@ -83,6 +87,7 @@ export const TripPartnerLayout: React.FC<TripPartnerLayoutProps> = ({
 
   return (
     <LayoutRoot>
+      <FloatingBackground fixed />
       <ContentContainer>
         <Suspense fallback={<SidebarFallback />}>
           <TripPartnerSidebar username={username} />

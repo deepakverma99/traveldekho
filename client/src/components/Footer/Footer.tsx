@@ -4,7 +4,6 @@ import React, { Suspense } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import styled from 'styled-components';
 import {
   Plane,
   Sparkles,
@@ -25,120 +24,6 @@ import {
   subscribeSuccess,
 } from '@/redux';
 import { FOOTER_POLICIES, PAYMENT_METHODS, CURRENT_YEAR } from './footerData';
-import { colors } from '@/theme/colors';
-import { typography } from '@/theme/typography';
-
-const FooterWrapper = styled.footer`
-  position: relative;
-  z-index: 20;
-  width: 100%;
-  background-color: ${colors.darkBg};
-  color: ${colors.white};
-  font-family: ${typography.fonts.sans};
-  margin-top: 0;
-  border-top: 1px solid ${colors.gray[800]};
-  isolation: isolate;
-`;
-
-const AppDownloadBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  background-color: ${colors.darkCard};
-  padding: 1.5rem;
-  border-radius: 1rem;
-  border: 1px solid ${colors.gray[800]};
-  height: 100%;
-  justify-content: center;
-`;
-
-const NewsletterInput = styled.input`
-  width: 100%;
-  height: 3.5rem;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
-  padding-left: 1.25rem;
-  padding-right: 6.5rem;
-  font-size: 0.75rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: ${colors.white};
-  outline: none;
-  transition: all 0.2s ease;
-
-  &::placeholder {
-    color: ${colors.gray[600]};
-  }
-
-  &:focus {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: ${colors.amber[400]};
-  }
-`;
-
-const NewsletterSubmitButton = styled.button`
-  position: absolute;
-  right: 0.5rem;
-  top: 0.5rem;
-  height: 2.5rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  background-color: ${colors.amber[400]};
-  color: ${colors.white};
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 10px;
-  border-radius: 0.75rem;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 10px 15px -3px rgba(251, 191, 36, 0.2);
-
-  &:hover {
-    background-color: ${colors.black};
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-`;
-
-const ContactIconBox = styled.div`
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 0.75rem;
-  background-color: rgba(255, 255, 255, 0.06);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${colors.amber[500]};
-  flex-shrink: 0;
-  transition: all 0.2s ease;
-
-  svg {
-    width: 1rem;
-    height: 1rem;
-    display: block;
-  }
-`;
-
-const SubscribedFeedback = styled.p`
-  color: ${colors.amber[400]};
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-top: 0.5rem;
-`;
-
-const BottomBar = styled.div`
-  border-top: 1px solid ${colors.gray[800]};
-  background-color: ${colors.black};
-  width: 100%;
-  padding: 1.25rem 1.5rem;
-`;
 
 const FooterContent: React.FC = () => {
   const pathname = usePathname();
@@ -161,7 +46,7 @@ const FooterContent: React.FC = () => {
   };
 
   return (
-    <FooterWrapper className="isolate">
+    <footer className="relative z-20 w-full bg-dark-bg text-white font-sans mt-0 border-t border-gray-800 isolate">
       <div className="w-full px-6 md:px-12 pt-10 md:pt-12 pb-12 md:pb-16">
         <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-y-12 md:gap-x-8 lg:gap-x-4">
           {/* Column 1: Brand & App Download */}
@@ -193,7 +78,7 @@ const FooterContent: React.FC = () => {
             </div>
 
             <div className="w-full max-w-[320px]">
-              <AppDownloadBox>
+              <div className="flex flex-col gap-5 bg-dark-card p-6 rounded-2xl border border-gray-800 h-full justify-center">
                 <div>
                   <h4 className="text-white font-bold text-lg leading-tight">Get the TravelDekho App</h4>
                   <p className="text-gray-400 text-xs mt-1">Book trips seamlessly on the go.</p>
@@ -202,7 +87,7 @@ const FooterContent: React.FC = () => {
                   <button
                     type="button"
                     aria-label="Download on the App Store"
-                    className="w-full bg-white hover:bg-gray-200 text-black rounded-lg h-10 flex items-center justify-center transition-colors shadow-sm"
+                    className="w-full bg-white hover:bg-gray-200 text-black rounded-lg h-10 flex items-center justify-center transition-colors shadow-sm cursor-pointer"
                   >
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="black" className="mr-1">
                       <path d="M15.4 12.3 c 0 -2.4 2 -3.3 2 -3.3 c -1.1 -1.6 -2.8 -1.8 -3.4 -1.9 c -1.5 -0.1 -2.9 0.9 -3.7 0.9 c -0.7 0 -1.9 -0.9 -3.1 -0.9 c -1.6 0 -3.1 0.9 -3.9 2.3 c -1.7 3 -0.4 7.4 1.2 9.8 c 0.8 1.2 1.7 2.5 3 2.5 c 1.2 -0.1 1.7 -0.8 3.1 -0.8 c 1.4 0 1.9 0.8 3.2 0.8 c 1.3 0 2.2 -1.4 2.9 -2.5 c 0.9 -1.3 1.2 -2.5 1.2 -2.5 c -0.1 0 -2.3 -0.9 -2.3 -3.4" />
@@ -214,7 +99,7 @@ const FooterContent: React.FC = () => {
                   <button
                     type="button"
                     aria-label="Download on Google Play Store"
-                    className="w-full bg-white hover:bg-gray-200 text-black rounded-lg h-10 flex items-center justify-center transition-colors shadow-sm"
+                    className="w-full bg-white hover:bg-gray-200 text-black rounded-lg h-10 flex items-center justify-center transition-colors shadow-sm cursor-pointer"
                   >
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="mr-1 -ml-1">
                       <path d="M3 4l10 10L3 24V4z" fill="#4CAF50" />
@@ -225,7 +110,7 @@ const FooterContent: React.FC = () => {
                     <span className="font-semibold text-xs sm:text-sm">Play Store</span>
                   </button>
                 </div>
-              </AppDownloadBox>
+              </div>
             </div>
           </div>
 
@@ -241,25 +126,30 @@ const FooterContent: React.FC = () => {
               </p>
               <form noValidate onSubmit={handleSubscribe} className="max-w-sm">
                 <div className="relative group">
-                  <NewsletterInput
+                  <input
                     type="email"
                     value={email}
                     onChange={(e) => dispatch(setNewsletterEmail(e.target.value))}
                     placeholder="ENTER YOUR EMAIL"
                     aria-label="Email address for exclusive deals"
                     required
+                    className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl pl-5 pr-26 text-xs font-black uppercase tracking-wider text-white outline-none transition-all placeholder:text-gray-600 focus:bg-white/10 focus:border-amber-400"
                   />
-                  <NewsletterSubmitButton type="submit" disabled={!canSubmit || isLoading}>
+                  <button
+                    type="submit"
+                    disabled={!canSubmit || isLoading}
+                    className="absolute right-2 top-2 h-10 px-6 bg-amber-400 hover:bg-black text-white font-black uppercase tracking-wider text-[10px] rounded-xl border-0 cursor-pointer transition-all shadow-[0_10px_15px_-3px_rgba(251,191,36,0.2)] disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
                     <div className="flex items-center gap-2">
                       {isLoading ? 'Joining...' : 'Join'}
                       <Send className="w-3 h-3" aria-hidden="true" />
                     </div>
-                  </NewsletterSubmitButton>
+                  </button>
                 </div>
                 {isSubscribed && (
-                  <SubscribedFeedback>
+                  <p className="text-amber-400 text-xs font-semibold mt-2">
                     Thank you for subscribing!
-                  </SubscribedFeedback>
+                  </p>
                 )}
               </form>
             </div>
@@ -268,10 +158,7 @@ const FooterContent: React.FC = () => {
           {/* Column 3: Policies */}
           <div className="lg:col-span-2 lg:pl-4">
             <div className="flex flex-col gap-4">
-              <h2
-                className="font-bold text-sm tracking-wide uppercase mb-2"
-                style={{ color: colors.brandYellow }}
-              >
+              <h2 className="font-bold text-sm tracking-wide uppercase mb-2 text-primary">
                 Policies
               </h2>
               <ul className="flex flex-col gap-3">
@@ -298,9 +185,9 @@ const FooterContent: React.FC = () => {
                   href="tel:+919899558944"
                   className="flex items-center gap-3.5 group transition-colors"
                 >
-                  <ContactIconBox className="group-hover:bg-amber-500 group-hover:text-black">
+                  <div className="w-9 h-9 rounded-xl bg-white/[0.06] flex items-center justify-center text-amber-500 shrink-0 transition-all group-hover:bg-amber-500 group-hover:text-black [&>svg]:w-4 [&>svg]:h-4">
                     <Phone className="w-4 h-4 shrink-0" aria-hidden="true" />
-                  </ContactIconBox>
+                  </div>
                   <span className="text-[#888888] text-xs font-bold group-hover:text-white transition-colors flex-1 break-all">
                     +91 9899558944
                   </span>
@@ -311,9 +198,9 @@ const FooterContent: React.FC = () => {
                   href="mailto:business.traveldekho@gmail.com"
                   className="flex items-center gap-3.5 group transition-colors"
                 >
-                  <ContactIconBox className="group-hover:bg-amber-500 group-hover:text-black">
+                  <div className="w-9 h-9 rounded-xl bg-white/[0.06] flex items-center justify-center text-amber-500 shrink-0 transition-all group-hover:bg-amber-500 group-hover:text-black [&>svg]:w-4 [&>svg]:h-4">
                     <Mail className="w-4 h-4 shrink-0" aria-hidden="true" />
-                  </ContactIconBox>
+                  </div>
                   <span className="text-[#888888] text-xs font-bold group-hover:text-white transition-colors flex-1 break-all">
                     business.traveldekho@gmail.com
                   </span>
@@ -351,7 +238,7 @@ const FooterContent: React.FC = () => {
       </div>
 
       {/* Copyright Sub-footer */}
-      <BottomBar>
+      <div className="border-t border-gray-800 bg-black w-full py-5 px-6">
         <div className="max-w-[1240px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-400 text-xs text-center md:text-left">
             TravelDekho &copy; <span>{CURRENT_YEAR}</span> All Rights Reserved
@@ -365,8 +252,8 @@ const FooterContent: React.FC = () => {
             </Link>
           </div>
         </div>
-      </BottomBar>
-    </FooterWrapper>
+      </div>
+    </footer>
   );
 };
 

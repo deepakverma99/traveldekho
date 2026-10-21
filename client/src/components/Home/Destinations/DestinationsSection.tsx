@@ -1,238 +1,66 @@
 'use client';
 
 import React from 'react';
-import styled from 'styled-components';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCarouselScroll } from '@/redux';
 import { CityCard } from './CityCard';
 import { citiesData } from './citiesData';
-import { colors } from '@/theme/colors';
-import { typography } from '@/theme/typography';
-
-const SectionWrapper = styled.section`
-  position: relative;
-  width: 100%;
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-  overflow: hidden;
-  background-color: transparent;
-  font-family: ${typography.fonts.jakarta};
-
-  @media (min-width: 768px) {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-  }
-`;
-
-const Container = styled.div`
-  max-width: 80rem;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  position: relative;
-  z-index: 10;
-
-  @media (min-width: 640px) {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-
-  @media (min-width: 1024px) {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-`;
-
-const SectionHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-
-  @media (min-width: 768px) {
-    margin-bottom: 2rem;
-  }
-`;
-
-const Title = styled.h2`
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  color: ${colors.charcoal};
-  font-family: ${typography.fonts.jakarta};
-
-  @media (min-width: 640px) {
-    font-size: 28px;
-  }
-
-  @media (min-width: 768px) {
-    font-size: 32px;
-  }
-`;
-
-const HighlightText = styled.span`
-  margin-left: 0.35rem;
-  color: ${colors.amber[500]};
-`;
-
-const CarouselContainer = styled.div`
-  position: relative;
-`;
-
-const ScrollButton = styled.button<{ $disabled: boolean }>`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 20;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 9999px;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(8px);
-  border: none;
-  transition: all 0.2s ease;
-  cursor: ${(props) => (props.$disabled ? 'not-allowed' : 'pointer')};
-  opacity: ${(props) => (props.$disabled ? 0.4 : 1)};
-
-  @media (min-width: 640px) {
-    display: flex;
-  }
-
-  ${(props) =>
-    !props.$disabled &&
-    `
-    &:hover {
-      background: #ffffff;
-      transform: translateY(-50%) scale(1.1);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    }
-    &:active {
-      transform: translateY(-50%) scale(0.95);
-    }
-  `}
-`;
-
-const EdgeGradient = styled.div<{ $side: 'left' | 'right'; $visible: boolean }>`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 4rem;
-  z-index: 10;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  opacity: ${(props) => (props.$visible ? 1 : 0)};
-
-  ${(props) =>
-    props.$side === 'left'
-      ? `
-    left: 0;
-    background: linear-gradient(to right, ${colors.cream}, transparent);
-  `
-      : `
-    right: 0;
-    background: linear-gradient(to left, ${colors.cream}, transparent);
-  `}
-`;
-
-const ScrollTrack = styled.div`
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding-bottom: 1rem;
-  user-select: none;
-  cursor: grab;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  -webkit-overflow-scrolling: touch;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  &:active {
-    cursor: grabbing;
-  }
-`;
-
-const GridFlow = styled.div`
-  display: grid;
-  grid-template-rows: repeat(2, minmax(0, 1fr));
-  grid-auto-flow: column;
-  gap: 1rem;
-  grid-auto-columns: minmax(150px, 1fr);
-
-  @media (min-width: 480px) {
-    gap: 1.25rem;
-    grid-auto-columns: minmax(190px, 1fr);
-  }
-
-  @media (min-width: 768px) {
-    gap: 1.5rem;
-    grid-auto-columns: minmax(210px, 1fr);
-  }
-`;
+import { CarouselScrollButton, CarouselEdgeGradient } from '../common';
 
 export const DestinationsSection: React.FC = () => {
   const { trackRef, canScrollLeft, canScrollRight, handleScroll } =
     useCarouselScroll('destinations');
 
   return (
-    <SectionWrapper id="destinations-section">
-      <Container>
+    <section
+      id="destinations-section"
+      className="relative w-full py-12 md:py-16 overflow-hidden bg-transparent font-sans"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
-        <SectionHeader>
-          <Title>
+        <div className="flex items-center justify-between mb-6 md:mb-8">
+          <h2 className="text-xl sm:text-[28px] md:text-[32px] font-black tracking-tight text-charcoal">
             Popular
-            <HighlightText>Destinations</HighlightText>
-          </Title>
-        </SectionHeader>
+            <span className="ml-1 text-primary">Destinations</span>
+          </h2>
+        </div>
 
         {/* Carousel */}
-        <CarouselContainer>
+        <div className="relative">
           {/* Scroll Left Button */}
-          <ScrollButton
+          <CarouselScrollButton
             id="destinations-scroll-left"
-            type="button"
-            aria-label="Scroll left"
-            $disabled={!canScrollLeft}
+            direction="left"
             disabled={!canScrollLeft}
             onClick={() => handleScroll('left')}
-            className="left-0 -translate-x-3"
-          >
-            <ChevronLeft className="w-5 h-5 text-[#191c1d]" strokeWidth={2.5} />
-          </ScrollButton>
+            ariaLabel="Scroll destinations left"
+          />
 
           {/* Scroll Right Button */}
-          <ScrollButton
+          <CarouselScrollButton
             id="destinations-scroll-right"
-            type="button"
-            aria-label="Scroll right"
-            $disabled={!canScrollRight}
+            direction="right"
             disabled={!canScrollRight}
             onClick={() => handleScroll('right')}
-            className="right-0 translate-x-3"
-          >
-            <ChevronRight className="w-5 h-5 text-[#191c1d]" strokeWidth={2.5} />
-          </ScrollButton>
+            ariaLabel="Scroll destinations right"
+          />
 
           {/* Edge Fade Gradients */}
-          <EdgeGradient $side="left" $visible={canScrollLeft} />
-          <EdgeGradient $side="right" $visible={canScrollRight} />
+          <CarouselEdgeGradient side="left" visible={canScrollLeft} />
+          <CarouselEdgeGradient side="right" visible={canScrollRight} />
 
           {/* 2-Row Horizontal Scroll Track */}
-          <ScrollTrack ref={trackRef}>
-            <GridFlow>
+          <div
+            ref={trackRef}
+            className="overflow-x-auto scroll-smooth pb-4 select-none cursor-grab active:cursor-grabbing scrollbar-hide"
+          >
+            <div className="grid grid-rows-2 grid-flow-col gap-4 sm:gap-5 md:gap-6 auto-cols-[minmax(150px,1fr)] min-[480px]:auto-cols-[minmax(190px,1fr)] md:auto-cols-[minmax(210px,1fr)]">
               {citiesData.map((city) => (
                 <CityCard key={city.id} city={city} />
               ))}
-            </GridFlow>
-          </ScrollTrack>
-        </CarouselContainer>
-      </Container>
-    </SectionWrapper>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
