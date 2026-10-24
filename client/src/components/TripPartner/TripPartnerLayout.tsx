@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useEffect, Suspense } from 'react';
-import styled from 'styled-components';
-import { colors } from '@/theme/colors';
 import { FloatingBackground } from '@/components/shared';
 import { TripPartnerHeader } from './TripPartnerHeader';
 import { TripPartnerSidebar } from './TripPartnerSidebar';
@@ -16,61 +14,6 @@ import {
 import { type TripPartnerLayoutProps } from './types/';
 
 export type { TripPartnerLayoutProps };
-
-const LayoutRoot = styled.div`
-  min-height: 100vh;
-  background-color: ${colors.white};
-  display: flex;
-  width: 100%;
-  position: relative;
-`;
-
-const ContentContainer = styled.div`
-  display: flex;
-  flex: 1;
-  width: 100%;
-  min-height: 100vh;
-  position: relative;
-  z-index: 1;
-`;
-
-const SidebarFallback = styled.div`
-  width: 16rem;
-  height: 100vh;
-  display: none;
-  background-color: ${colors.white};
-  border-right: 1px solid ${colors.gray[200]};
-  flex-shrink: 0;
-  position: sticky;
-  top: 0;
-
-  @media (min-width: 1024px) {
-    display: flex;
-  }
-`;
-
-const MainWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 0;
-  width: 100%;
-  min-height: 100vh;
-`;
-
-const MainContent = styled.main`
-  flex-grow: 1;
-  width: 100%;
-  max-width: 1600px;
-  margin: 0 auto;
-  min-width: 0;
-  overflow-x: hidden;
-  padding-bottom: 2.5rem;
-
-  @media (min-width: 768px) {
-    padding-bottom: 3rem;
-  }
-`;
 
 export const TripPartnerLayout: React.FC<TripPartnerLayoutProps> = ({
   children,
@@ -86,19 +29,19 @@ export const TripPartnerLayout: React.FC<TripPartnerLayoutProps> = ({
   const displayName = currentPartner?.displayName || formatPartnerDisplayName(username);
 
   return (
-    <LayoutRoot>
+    <div className="min-h-screen bg-white flex w-full relative">
       <FloatingBackground fixed />
-      <ContentContainer>
-        <Suspense fallback={<SidebarFallback />}>
+      <div className="flex flex-1 w-full min-h-screen relative z-1">
+        <Suspense fallback={<div className="w-64 h-screen hidden lg:flex bg-white border-r border-gray-200 shrink-0 sticky top-0" />}>
           <TripPartnerSidebar username={username} />
         </Suspense>
-        <MainWrapper>
+        <div className="flex flex-col flex-1 min-w-0 w-full min-h-screen">
           <TripPartnerHeader username={username} displayName={displayName} />
-          <MainContent>
+          <main className="grow w-full max-w-[1600px] mx-auto min-w-0 overflow-x-hidden pb-10 md:pb-12">
             {children}
-          </MainContent>
-        </MainWrapper>
-      </ContentContainer>
-    </LayoutRoot>
+          </main>
+        </div>
+      </div>
+    </div>
   );
 };

@@ -1,110 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { colors } from '@/theme/colors';
 import { useAppSelector } from '@/redux/hooks';
 import { selectPartnerBookingTrends } from '@/redux/slices/tripPartnerSlice';
-
-const ChartCard = styled.div`
-  background-color: ${colors.white};
-  border: 1px solid ${colors.gray[200]};
-  border-radius: 1rem;
-  padding: 1.125rem 1.25rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  min-width: 0;
-  overflow: hidden;
-  transition: all 0.25s ease;
-
-  &:hover {
-    box-shadow: 0 10px 25px -5px ${colors.amber[100]}80, 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-    border-color: ${colors.amber[200]};
-  }
-
-  @media (min-width: 640px) {
-    padding: 1.5rem 1.75rem;
-  }
-`;
-
-const HeaderRow = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-
-  @media (min-width: 480px) {
-    flex-direction: row;
-    align-items: center;
-  }
-`;
-
-const Title = styled.h3`
-  font-size: 1.125rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  color: ${colors.gray[900]};
-
-  @media (min-width: 640px) {
-    font-size: 1.25rem;
-  }
-`;
-
-const Highlight = styled.span`
-  color: ${colors.amber[500]};
-`;
-
-const Subtitle = styled.p`
-  font-size: 10px;
-  font-weight: 900;
-  color: ${colors.gray[400]};
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  margin-top: 0.25rem;
-`;
-
-const LegendRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-`;
-
-const LegendItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`;
-
-const LegendDot = styled.div<{ $color: string }>`
-  width: 0.75rem;
-  height: 0.75rem;
-  border-radius: 9999px;
-  background-color: ${({ $color }) => $color};
-`;
-
-const LegendText = styled.span`
-  font-size: 10px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: ${colors.gray[400]};
-`;
-
-const SvgContainer = styled.div`
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  position: relative;
-  overflow: hidden;
-  flex: 1;
-  display: flex;
-  align-items: center;
-`;
 
 export const TripPartnerBookingChart: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -152,32 +51,43 @@ export const TripPartnerBookingChart: React.FC = () => {
   const areaPath = `${linePath} L ${points[points.length - 1].x},${paddingTop + chartHeight} L ${points[0].x},${paddingTop + chartHeight} Z`;
 
   return (
-    <ChartCard>
+    <div className="bg-white border border-gray-200 rounded-2xl p-4.5 sm:p-6 shadow-[0_1px_3px_0_rgba(0,0,0,0.04),0_1px_2px_-1px_rgba(0,0,0,0.02)] flex flex-col justify-between h-full min-w-0 overflow-hidden transition-all duration-250 ease-out hover:shadow-[0_10px_25px_-5px_rgba(255,237,208,0.5),0_8px_10px_-6px_rgba(0,0,0,0.04)] hover:border-amber-200">
       {/* Header */}
-      <HeaderRow>
+      <div className="flex flex-col min-[480px]:flex-row min-[480px]:items-center justify-between gap-3 mb-4">
         <div>
-          <Title>
-            Booking <Highlight>Volume</Highlight>
-          </Title>
-          <Subtitle>
+          <h3 className="text-lg sm:text-xl font-black uppercase tracking-tight text-gray-900">
+            Booking <span className="text-amber-500">Volume</span>
+          </h3>
+          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">
             Real-time performance analytics
-          </Subtitle>
+          </p>
         </div>
 
-        <LegendRow>
-          <LegendItem>
-            <LegendDot $color={colors.amber[500]} />
-            <LegendText>Reserved</LegendText>
-          </LegendItem>
-          <LegendItem>
-            <LegendDot $color={colors.gray[200]} />
-            <LegendText>Drafts</LegendText>
-          </LegendItem>
-        </LegendRow>
-      </HeaderRow>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div
+              className="w-3 h-3 rounded-full"
+              style={{ backgroundColor: colors.amber[500] }}
+            />
+            <span className="text-[10px] font-black uppercase tracking-wider text-gray-400">
+              Reserved
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div
+              className="w-3 h-3 rounded-full"
+              style={{ backgroundColor: colors.gray[200] }}
+            />
+            <span className="text-[10px] font-black uppercase tracking-wider text-gray-400">
+              Drafts
+            </span>
+          </div>
+        </div>
+      </div>
 
       {/* SVG Responsive Chart */}
-      <SvgContainer>
+      <div className="w-full max-w-full min-w-0 relative overflow-hidden flex-1 flex items-center">
+
         <svg
           role="img"
           aria-label="Booking Volume Chart"
@@ -313,8 +223,8 @@ export const TripPartnerBookingChart: React.FC = () => {
             );
           })}
         </svg>
-      </SvgContainer>
-    </ChartCard>
+      </div>
+    </div>
   );
 };
 

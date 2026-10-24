@@ -41,6 +41,18 @@
   --color-amber-800: #914109;
   --color-amber-900: #77350c;
   --color-amber-950: #431904;
+  --color-partner-dark: #0b132b;
+  --color-partner-dark-hover: #1c2541;
+  --color-partner-accent: #f48c06;
+  --color-partner-accent-light: #fff8ec;
+  --color-partner-surface: #ffffff;
+  --color-partner-surface-muted: #f8fafc;
+  --color-partner-border: #e2e8f0;
+  --color-partner-verified: #10b981;
+  --color-partner-verified-bg: #ecfdf5;
+  --color-partner-text-primary: #0f172a;
+  --color-partner-text-secondary: #64748b;
+  --color-partner-text-muted: #94a3b8;
   --font-sans: var(--font-montserrat);
 }
 

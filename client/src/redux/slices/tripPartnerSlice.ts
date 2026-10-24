@@ -250,6 +250,21 @@ export const tripPartnerSlice = createSlice({
     copyPartnerTripDetails: (state, action: PayloadAction<PartnerTripItem>) => {
       state.tripsToastMessage = `Details for "${action.payload.title}" copied to clipboard!`;
     },
+    addDateToPartnerTrip: (
+      state,
+      action: PayloadAction<{ tripId?: string; tripTitle?: string; date: string }>
+    ) => {
+      const { tripId, tripTitle, date } = action.payload;
+      const trip = state.myTrips.find(
+        (t) =>
+          (tripId && t.id.toLowerCase() === tripId.toLowerCase()) ||
+          (tripTitle && t.title.toLowerCase().includes(tripTitle.toLowerCase())) ||
+          (tripTitle && tripTitle.toLowerCase().includes(t.title.toLowerCase()))
+      );
+      if (trip) {
+        trip.date = date;
+      }
+    },
   },
 });
 
@@ -288,6 +303,7 @@ export const {
   archivePartnerTrip,
   editPartnerTrip,
   copyPartnerTripDetails,
+  addDateToPartnerTrip,
 } = tripPartnerSlice.actions;
 
 // Defensive Selectors with fallbacks for SSR and fast refresh safety

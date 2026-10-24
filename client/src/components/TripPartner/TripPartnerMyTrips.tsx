@@ -2,7 +2,6 @@
 
 import React, { useEffect } from 'react';
 import Link from 'next/link';
-import styled from 'styled-components';
 import {
   Plus,
   Download,
@@ -17,8 +16,6 @@ import {
   SearchBar,
   Select,
 } from '@/components/shared';
-import { colors } from '@/theme/colors';
-import { typography } from '@/theme/typography';
 import { TripPartnerTripCard } from './TripPartnerTripCard';
 import {
   type TripPartnerMyTripsProps,
@@ -48,316 +45,10 @@ import {
 
 export type { TripPartnerMyTripsProps };
 
-const PageRoot = styled.div`
-  max-width: 80rem;
-  margin: 0 auto;
-  width: 100%;
-  min-width: 0;
-  padding: 0.875rem 0.625rem 2.5rem 0.625rem;
-
-  @media (min-width: 480px) {
-    padding: 1rem 0.75rem 2.5rem 0.75rem;
-  }
-  @media (min-width: 640px) {
-    padding: 1.25rem 1rem 2.5rem 1rem;
-  }
-  @media (min-width: 768px) {
-    padding: 1.5rem 1.5rem 3rem 1.5rem;
-  }
-`;
-
-const BannerWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1.25rem;
-  gap: 1.25rem;
-  width: 100%;
-  min-width: 0;
-
-  @media (min-width: 640px) {
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 1.75rem;
-    gap: 1.5rem;
-  }
-`;
-
-const BreadcrumbScroll = styled.div`
-  overflow-x: auto;
-  white-space: nowrap;
-  max-width: 100%;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const Heading = styled.h1`
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-  font-weight: 900;
-  color: ${colors.gray[900]};
-  letter-spacing: -0.025em;
-  text-transform: uppercase;
-  word-break: break-word;
-`;
-
-const AmberText = styled.span`
-  color: ${colors.amber[500]};
-`;
-
-const SubtitleText = styled.p`
-  font-size: 0.75rem;
-  line-height: 1rem;
-  font-weight: 700;
-  color: ${colors.gray[400]};
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-top: 0.25rem;
-`;
-
-/* Search, Filters & Export Container */
-const FilterBarCard = styled.div`
-  background-color: ${colors.white};
-  border: 1px solid ${colors.gray[200]};
-  border-radius: 1rem;
-  padding: 0.75rem 0.875rem;
-  margin-bottom: 1.5rem;
-  display: grid;
-  gap: 0.625rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
-
-  /* Mobile (< 640px): 3 stacked rows */
-  grid-template-columns: 1fr;
-  grid-template-areas:
-    "search"
-    "selects"
-    "actions";
-
-  /* Tablet (640px to 1199px): Top row has search and actions, bottom row has selects */
-  @media (min-width: 640px) {
-    padding: 0.875rem 1rem;
-    gap: 0.75rem;
-    grid-template-columns: 1fr auto;
-    grid-template-areas:
-      "search actions"
-      "selects selects";
-  }
-
-  /* Desktop (>= 1200px): Unified single continuous row */
-  @media (min-width: 1200px) {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.625rem;
-  }
-`;
-
-const SearchWrapper = styled.div`
-  grid-area: search;
-  width: 100%;
-
-  @media (min-width: 1200px) {
-    flex: 1 1 200px;
-    max-width: 280px;
-    min-width: 180px;
-  }
-
-  /* Force inner SearchBar FilterContainer to expand to wrapper width */
-  > div {
-    max-width: 100% !important;
-    width: 100%;
-  }
-`;
-
-const FilterSelectsGrid = styled.div`
-  grid-area: selects;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.5rem;
-  width: 100%;
-
-  @media (min-width: 640px) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.5rem;
-  }
-
-  @media (min-width: 1200px) {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    width: auto;
-    flex-shrink: 0;
-  }
-`;
-
-const SelectItemWrapper = styled.div`
-  width: 100%;
-
-  @media (min-width: 1200px) {
-    width: auto;
-  }
-`;
-
-const ActionButtonsWrapper = styled.div`
-  grid-area: actions;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  width: 100%;
-
-  @media (min-width: 640px) {
-    width: auto;
-    flex-shrink: 0;
-    justify-content: flex-end;
-  }
-
-  @media (min-width: 1200px) {
-    margin-left: auto;
-  }
-`;
-
-const ExportButton = styled.button`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.5625rem 1.125rem;
-  background-color: #0b132b;
-  color: ${colors.amber[400]};
-  border-radius: 0.75rem;
-  font-size: 0.8125rem;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  font-family: ${typography.fonts.jakarta};
-  border: 1px solid rgba(251, 191, 36, 0.2);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  width: 100%;
-
-  @media (min-width: 640px) {
-    width: auto;
-  }
-
-  svg {
-    width: 0.9375rem;
-    height: 0.9375rem;
-    stroke-width: 2.25px;
-  }
-
-  &:hover {
-    background-color: #1c2541;
-    color: ${colors.amber[300]};
-    border-color: rgba(251, 191, 36, 0.4);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(11, 19, 43, 0.15);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-`;
-
-const ResetFiltersButton = styled.button`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.375rem;
-  padding: 0.5625rem 0.875rem;
-  background-color: ${colors.amber[50]};
-  color: ${colors.amber[800]};
-  border: 1px solid ${colors.amber[200]};
-  border-radius: 0.75rem;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  font-family: ${typography.fonts.jakarta};
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  flex-shrink: 0;
-
-  &:hover {
-    background-color: ${colors.amber[100]};
-    color: ${colors.amber[900]};
-    border-color: ${colors.amber[300]};
-  }
-
-  svg {
-    width: 0.875rem;
-    height: 0.875rem;
-  }
-`;
-
-/* Trips Grid - 2 cards per row on small devices matching search page */
-const TripsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.625rem;
-  width: 100%;
-  min-width: 0;
-
-  @media (min-width: 640px) {
-    gap: 1rem;
-  }
-
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.25rem;
-  }
-
-  @media (min-width: 1280px) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1.25rem;
-  }
-`;
-
-const EmptyContainer = styled.div`
-  background-color: ${colors.white};
-  border: 1px dashed ${colors.gray[300]};
-  border-radius: 1.25rem;
-  padding: 3.5rem 1.5rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-`;
-
-const ToastMessage = styled.div<{ $variant?: 'success' | 'info' }>`
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  padding: 0.75rem 1.25rem;
-  background-color: #0b132b;
-  color: ${colors.white};
-  border-radius: 0.75rem;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
-  font-size: 0.8125rem;
-  font-weight: 700;
-  font-family: ${typography.fonts.jakarta};
-  animation: slideIn 0.25s ease-out;
-
-  svg {
-    width: 1rem;
-    height: 1rem;
-    color: ${colors.amber[400]};
-    flex-shrink: 0;
-  }
-`;
-
 export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username }) => {
   const dispatch = useAppDispatch();
 
-  // Redux Selectors replacing local useState hooks
+  // Redux Selectors
   const filteredTrips = useAppSelector(selectFilteredPartnerTrips);
   const searchQuery = useAppSelector(selectTripsSearchQuery);
   const statusFilter = useAppSelector(selectTripsStatusFilter);
@@ -453,21 +144,21 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
   );
 
   return (
-    <PageRoot>
+    <div className="max-w-7xl mx-auto w-full min-w-0 px-2.5 sm:px-4 md:px-6 pt-3.5 sm:pt-5 md:pt-6 pb-10 sm:pb-12 font-jakarta">
       {/* Top Banner / Welcome Header */}
-      <BannerWrapper>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 sm:mb-7 gap-5 sm:gap-6 w-full min-w-0">
         <div className="w-full sm:w-auto">
-          <BreadcrumbScroll>
+          <div className="overflow-x-auto whitespace-nowrap max-w-full scrollbar-hide">
             <Breadcrumb items={breadcrumbItems} />
-          </BreadcrumbScroll>
+          </div>
 
           <div className="mt-2">
-            <Heading className="text-3xl font-black text-gray-900 tracking-tight uppercase">
-              My <AmberText className="text-amber-500">Trips</AmberText>
-            </Heading>
-            <SubtitleText className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">
+            <h1 className="text-3xl font-black text-gray-900 tracking-tight uppercase break-words">
+              My <span className="text-amber-500">Trips</span>
+            </h1>
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">
               Manage and track all your Active Trips, Upcoming Departures, and Published Itineraries
-            </SubtitleText>
+            </p>
           </div>
         </div>
 
@@ -483,12 +174,12 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
             </Button>
           </Link>
         </div>
-      </BannerWrapper>
+      </div>
 
-      {/* Search, Filters, and Export Bar (Matching User Screenshot) */}
-      <FilterBarCard>
+      {/* Search, Filters, and Export Bar */}
+      <div className="bg-white border border-gray-200 rounded-2xl p-3 sm:p-3.5 mb-6 shadow-xs grid gap-2.5 sm:gap-3 grid-cols-1 sm:grid-cols-[1fr_auto] xl:flex xl:flex-row xl:items-center xl:justify-between">
         {/* Search Input using shared SearchBar */}
-        <SearchWrapper>
+        <div className="w-full sm:col-start-1 sm:row-start-1 xl:flex-1 xl:max-w-[280px] xl:min-w-[180px] [&>div]:!max-w-full [&>div]:w-full">
           <SearchBar
             variant="filter"
             placeholder="Search by title or destination..."
@@ -499,11 +190,11 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
             maxWidth="100%"
             minWidth="100%"
           />
-        </SearchWrapper>
+        </div>
 
         {/* 4 Category Selects */}
-        <FilterSelectsGrid>
-          <SelectItemWrapper>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full sm:col-span-2 sm:row-start-2 xl:flex xl:items-center xl:w-auto xl:shrink-0">
+          <div className="w-full xl:w-auto">
             <Select
               aria-label="Filter by Status"
               value={statusFilter}
@@ -516,9 +207,9 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
               <option value="Published">Published</option>
               <option value="Expired">Expired</option>
             </Select>
-          </SelectItemWrapper>
+          </div>
 
-          <SelectItemWrapper>
+          <div className="w-full xl:w-auto">
             <Select
               aria-label="Filter by Category"
               value={categoryFilter}
@@ -534,9 +225,9 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
               <option value="Mountains">Mountains</option>
               <option value="Weekend Escapes">Weekend Escapes</option>
             </Select>
-          </SelectItemWrapper>
+          </div>
 
-          <SelectItemWrapper>
+          <div className="w-full xl:w-auto">
             <Select
               aria-label="Filter by Difficulty"
               value={difficultyFilter}
@@ -548,9 +239,9 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
               <option value="Moderate">Moderate</option>
               <option value="Hard">Hard</option>
             </Select>
-          </SelectItemWrapper>
+          </div>
 
-          <SelectItemWrapper>
+          <div className="w-full xl:w-auto">
             <Select
               aria-label="Sort Trips"
               value={sortBy}
@@ -563,27 +254,36 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
               <option value="price_high">Price: High to Low</option>
               <option value="bookings">Most Booked</option>
             </Select>
-          </SelectItemWrapper>
-        </FilterSelectsGrid>
+          </div>
+        </div>
 
         {/* Action Buttons: Reset & Export */}
-        <ActionButtonsWrapper>
+        <div className="flex items-center gap-2 w-full sm:w-auto sm:shrink-0 sm:justify-end sm:col-start-2 sm:row-start-1 xl:ml-auto">
           {hasActiveFilters && (
-            <ResetFiltersButton type="button" onClick={handleResetFilters} title="Reset all filters">
-              <RotateCcw />
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              title="Reset all filters"
+              className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3.5 bg-amber-50 hover:bg-amber-100 text-amber-800 hover:text-amber-900 border border-amber-200 hover:border-amber-300 rounded-xl text-[13px] font-bold font-jakarta cursor-pointer transition-all duration-200 whitespace-nowrap shrink-0"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset</span>
-            </ResetFiltersButton>
+            </button>
           )}
-          <ExportButton type="button" onClick={handleExport}>
-            <Download />
-            <span>Export</span>
-          </ExportButton>
-        </ActionButtonsWrapper>
-      </FilterBarCard>
+          <button
+            type="button"
+            onClick={handleExport}
+            className="inline-flex items-center justify-center gap-2 py-2.5 px-4.5 bg-[#0b132b] hover:bg-[#1c2541] text-white hover:text-amber-300 rounded-xl text-[13px] font-extrabold tracking-tight font-jakarta border border-amber-400/20 hover:border-amber-400/40 cursor-pointer transition-all duration-200 shrink-0 w-full sm:w-auto hover:-translate-y-0.5 active:translate-y-0 shadow-xs hover:shadow-md"
+          >
+            <Download className="w-3.5 h-3.5 text-amber-400 stroke-[2.25]" />
+            <span>Export Trips</span>
+          </button>
+        </div>
+      </div>
 
       {/* Trips Grid */}
       {filteredTrips.length > 0 ? (
-        <TripsGrid>
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-4 md:gap-5 w-full min-w-0">
           {filteredTrips.map((trip, idx) => (
             <TripPartnerTripCard
               key={trip.id}
@@ -595,73 +295,37 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
               onArchive={handleArchive}
             />
           ))}
-        </TripsGrid>
+        </div>
       ) : (
-        <EmptyContainer>
-          <div
-            style={{
-              width: '3.5rem',
-              height: '3.5rem',
-              borderRadius: '9999px',
-              backgroundColor: colors.amber[50],
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: colors.amber[600],
-            }}
-          >
+        <div className="bg-white border border-dashed border-gray-300 rounded-2.5xl py-14 px-6 text-center flex flex-col items-center justify-center gap-4">
+          <div className="w-14 h-14 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
             <AlertCircle className="w-7 h-7" />
           </div>
           <div>
-            <h4
-              style={{
-                fontSize: '1.125rem',
-                fontWeight: 800,
-                color: colors.gray[900],
-                marginBottom: '0.25rem',
-              }}
-            >
+            <h4 className="text-lg font-extrabold text-gray-900 mb-1">
               No trips match your filters
             </h4>
-            <p
-              style={{
-                fontSize: '0.8125rem',
-                color: colors.gray[500],
-                fontWeight: 500,
-              }}
-            >
+            <p className="text-[13px] text-gray-500 font-medium">
               Try adjusting your search query, status, or category filters.
             </p>
           </div>
           <button
             type="button"
             onClick={handleResetFilters}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.375rem',
-              padding: '0.5rem 1rem',
-              backgroundColor: colors.gray[900],
-              color: colors.white,
-              borderRadius: '9999px',
-              fontSize: '0.75rem',
-              fontWeight: 800,
-              border: 'none',
-              cursor: 'pointer',
-            }}
+            className="inline-flex items-center gap-1.5 py-2 px-4 bg-gray-900 hover:bg-gray-800 text-white rounded-full text-xs font-extrabold border-none cursor-pointer transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" /> Reset Filters
           </button>
-        </EmptyContainer>
+        </div>
       )}
 
       {/* Toast Notification */}
       {toastText && (
-        <ToastMessage>
-          <CheckCircle2 />
+        <div className="fixed bottom-8 right-8 z-[100] flex items-center gap-2.5 py-3 px-5 bg-[#0b132b] text-white rounded-xl shadow-xl text-[13px] font-bold font-jakarta animate-bounce">
+          <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
           <span>{toastText}</span>
-        </ToastMessage>
+        </div>
       )}
-    </PageRoot>
+    </div>
   );
 };

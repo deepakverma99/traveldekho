@@ -10,18 +10,6 @@ import {
   Rocket,
   FileCheck,
 } from 'lucide-react';
-import {
-  FormRoot,
-  BackNavButton,
-  HeaderContainer,
-  MainTitle,
-  AmberText,
-  Subtitle,
-  CardContainer,
-  ActionFooter,
-  SecondaryActionButton,
-  ValidationAlert,
-} from './styles';
 import { Button } from '@/components/shared';
 import { StepIndicator } from './StepIndicator';
 import { StepBasic } from './StepBasic';
@@ -431,22 +419,27 @@ export const TripPartnerNewTripForm: React.FC<TripPartnerNewTripFormProps> = ({
   };
 
   return (
-    <FormRoot>
+    <div className="w-full max-w-5xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pt-5 sm:pt-8 pb-14 sm:pb-20 font-jakarta min-w-0">
       {/* Top Breadcrumb Navigation */}
-      <Link href={`/trip-partner/${username}/trips`}>
-        <BackNavButton type="button">
+      <div className="mb-4 sm:mb-6">
+        <Link
+          href={`/trip-partner/${username}/trips`}
+          className="inline-flex items-center gap-1.5 h-6 py-2 px-2.5 bg-white border border-gray-200 rounded-full text-gray-600 text-[11px] sm:text-xs font-medium cursor-pointer shadow-2xs transition-all hover:bg-gray-50 hover:text-amber-600 hover:border-amber-300 hover:-translate-x-0.5 [&>svg]:w-3 [&>svg]:h-3"
+        >
           <ArrowLeft />
-          Back to My Trips
-        </BackNavButton>
-      </Link>
+          <span>Back to My Trips</span>
+        </Link>
+      </div>
 
       {/* Main Header Matching User Screenshot */}
-      <HeaderContainer>
-        <MainTitle>
-          Launch Your <AmberText>Journey</AmberText>
-        </MainTitle>
-        <Subtitle>Fill in the details to publish your next big trip</Subtitle>
-      </HeaderContainer>
+      <header className="text-center mb-7 sm:mb-9">
+        <h1 className="text-2xl min-[400px]:text-[1.75rem] sm:text-4xl md:text-[2.5rem] font-black text-gray-900 tracking-tight leading-tight">
+          Launch Your <span className="text-amber-500">Journey</span>
+        </h1>
+        <p className="mt-1.5 text-[13px] sm:text-[15px] font-normal text-gray-500 tracking-tight leading-relaxed">
+          Fill in the details to publish your next big trip
+        </p>
+      </header>
 
       {/* 5-Step Stepper Progress Bar */}
       <StepIndicator
@@ -456,17 +449,18 @@ export const TripPartnerNewTripForm: React.FC<TripPartnerNewTripFormProps> = ({
       />
 
       {/* Form Card Container */}
-      <CardContainer
+      <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
+        className="bg-white rounded-2xl min-[480px]:rounded-3xl sm:rounded-4xl border border-amber-500/12 shadow-[0_8px_30px_-4px_rgba(115,92,0,0.06),0_1px_4px_0_rgba(0,0,0,0.02)] p-3.5 sm:p-8 md:p-11 min-h-auto sm:min-h-[26rem] flex flex-col justify-between w-full box-border"
       >
         {/* Validation Error Message */}
         {validationError && (
-          <ValidationAlert role="alert">
+          <div role="alert" className="flex items-center gap-2 p-3 sm:px-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-[13px] font-bold mb-4 [&>svg]:w-4 [&>svg]:h-4 [&>svg]:shrink-0">
             <AlertCircle />
             <span>{validationError}</span>
-          </ValidationAlert>
+          </div>
         )}
 
         {/* Dynamic Step Content with Transitions */}
@@ -497,16 +491,16 @@ export const TripPartnerNewTripForm: React.FC<TripPartnerNewTripFormProps> = ({
         </AnimatePresence>
 
         {/* Bottom Navigation Actions */}
-        <ActionFooter>
+        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center sm:justify-between gap-3 sm:gap-4 mt-8 sm:mt-10 pt-5 sm:pt-6 border-t border-gray-100 w-full">
           {currentStep > 1 ? (
-            <SecondaryActionButton
+            <button
               type="button"
               onClick={handleBack}
               disabled={isSubmitting}
-              className="w-full sm:w-auto justify-center"
+              className="inline-flex items-center justify-center gap-2 py-3.5 px-7 bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-black font-extrabold text-[13px] uppercase tracking-wide font-jakarta rounded-full cursor-pointer transition-all duration-200 [&>svg]:w-4 [&>svg]:h-4 w-full sm:w-auto"
             >
               <ArrowLeft /> Previous
-            </SecondaryActionButton>
+            </button>
           ) : (
             <div className="hidden sm:block" />
           )}
@@ -523,14 +517,14 @@ export const TripPartnerNewTripForm: React.FC<TripPartnerNewTripFormProps> = ({
             </Button>
           ) : (
             <div className="flex flex-col sm:flex-row items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
-              <SecondaryActionButton
+              <button
                 type="button"
                 onClick={() => handleSave(true)}
                 disabled={isSubmitting}
-                className="w-full sm:w-auto justify-center"
+                className="inline-flex items-center justify-center gap-2 py-3.5 px-7 bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-black font-extrabold text-[13px] uppercase tracking-wide font-jakarta rounded-full cursor-pointer transition-all duration-200 [&>svg]:w-4 [&>svg]:h-4 w-full sm:w-auto"
               >
                 <FileCheck /> {isSubmitting ? 'Saving...' : 'Save Draft'}
-              </SecondaryActionButton>
+              </button>
 
               <Button
                 size="lg"
@@ -544,8 +538,8 @@ export const TripPartnerNewTripForm: React.FC<TripPartnerNewTripFormProps> = ({
               </Button>
             </div>
           )}
-        </ActionFooter>
-      </CardContainer>
-    </FormRoot>
+        </div>
+      </motion.div>
+    </div>
   );
 };

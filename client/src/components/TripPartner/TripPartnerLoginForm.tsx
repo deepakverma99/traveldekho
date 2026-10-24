@@ -2,11 +2,8 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Loader2, CheckCircle2 } from 'lucide-react';
-import { colors } from '@/theme/colors';
-import { typography } from '@/theme/typography';
 import { extractUsernameFromEmail, savePartnerSession } from './utils/partnerAuth';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import {
@@ -21,139 +18,6 @@ import {
   partnerLoginStart,
   partnerLoginSuccess,
 } from '@/redux/slices/tripPartnerSlice';
-
-const FormRoot = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
-
-const SuccessAlert = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  background-color: ${colors.green[50]};
-  border: 1px solid ${colors.green[100]};
-  color: ${colors.green[700]};
-  font-size: 0.75rem;
-  font-weight: 700;
-  border-radius: 0.75rem;
-`;
-
-const SuccessIcon = styled(CheckCircle2)`
-  width: 1rem;
-  height: 1rem;
-  color: ${colors.green[600]};
-  flex-shrink: 0;
-`;
-
-const InputWrapper = styled.div`
-  position: relative;
-  width: 100%;
-`;
-
-const StyledInput = styled.input<{ $hasRightIcon?: boolean }>`
-  width: 100%;
-  background-color: ${colors.gray[100]};
-  border: 2px solid ${colors.transparent};
-  border-radius: 0.75rem;
-  padding: 1rem 1.25rem;
-  padding-right: ${({ $hasRightIcon }) => ($hasRightIcon ? '3rem' : '1.25rem')};
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: ${colors.gray[900]};
-  outline: none;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
-  font-family: ${typography.fonts.sans};
-
-  &::placeholder {
-    color: ${colors.gray[400]};
-  }
-
-  &:hover {
-    border-color: ${colors.gray[300]};
-  }
-
-  &:focus {
-    border-color: ${colors.primaryContainer};
-    box-shadow: 0 0 0 4px ${colors.primaryContainer}33;
-  }
-`;
-
-const ToggleVisibilityBtn = styled.button`
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: ${colors.gray[400]};
-  padding: 0.25rem;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: ${colors.black};
-  }
-`;
-
-const SearchSubmitButton = styled(motion.button)`
-  width: 100%;
-  border-radius: 0.75rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.875rem;
-  font-size: 0.875rem;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  cursor: pointer;
-  margin-top: 1rem;
-  position: relative;
-  overflow: hidden;
-  background-color: ${colors.gold};
-  color: ${colors.charcoal};
-  border: none;
-  font-family: ${typography.fonts.jakarta};
-  transition: color 0.4s ease, box-shadow 0.4s ease;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-color: ${colors.black};
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 0;
-  }
-
-  &:hover:not(:disabled) {
-    color: ${colors.white};
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-
-    &::before {
-      transform: scaleX(1);
-    }
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    box-shadow: none;
-  }
-
-  > span,
-  > svg {
-    position: relative;
-    z-index: 10;
-  }
-`;
 
 export const TripPartnerLoginForm: React.FC = () => {
   const router = useRouter();
@@ -183,16 +47,16 @@ export const TripPartnerLoginForm: React.FC = () => {
   };
 
   return (
-    <FormRoot onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 font-jakarta">
       {isSuccess && (
-        <SuccessAlert className="animate-fade-in-up">
-          <SuccessIcon />
+        <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 text-green-700 text-xs font-bold rounded-xl animate-fade-in-up">
+          <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />
           <span>Login successful! Redirecting to partner dashboard...</span>
-        </SuccessAlert>
+        </div>
       )}
 
       <div>
-        <StyledInput
+        <input
           placeholder="Trip Partner Email"
           type="email"
           required
@@ -201,12 +65,12 @@ export const TripPartnerLoginForm: React.FC = () => {
           onChange={(e) => dispatch(setPartnerLoginEmail(e.target.value))}
           autoComplete="email"
           aria-label="Trip Partner Email"
+          className="w-full bg-gray-100 border-2 border-transparent rounded-xl py-3.5 px-5 text-sm font-bold text-gray-900 outline-none shadow-xs transition-all duration-200 placeholder:text-gray-400 hover:border-gray-300 focus:border-primary focus:ring-4 focus:ring-primary/20"
         />
       </div>
 
-      <InputWrapper>
-        <StyledInput
-          $hasRightIcon
+      <div className="relative w-full">
+        <input
           placeholder="Trip Partner Password"
           type={showPassword ? 'text' : 'password'}
           required
@@ -214,25 +78,28 @@ export const TripPartnerLoginForm: React.FC = () => {
           onChange={(e) => dispatch(setPartnerLoginPassword(e.target.value))}
           autoComplete="current-password"
           aria-label="Trip Partner Password"
+          className="w-full bg-gray-100 border-2 border-transparent rounded-xl py-3.5 pl-5 pr-12 text-sm font-bold text-gray-900 outline-none shadow-xs transition-all duration-200 placeholder:text-gray-400 hover:border-gray-300 focus:border-primary focus:ring-4 focus:ring-primary/20"
         />
-        <ToggleVisibilityBtn
+        <button
           type="button"
           onClick={() => dispatch(togglePartnerLoginShowPassword())}
           aria-label={showPassword ? 'Hide password' : 'Show password'}
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 p-1 cursor-pointer bg-transparent border-none flex items-center justify-center transition-colors hover:text-black"
         >
           {showPassword ? (
             <EyeOff className="w-4 h-4" aria-hidden="true" />
           ) : (
             <Eye className="w-4 h-4" aria-hidden="true" />
           )}
-        </ToggleVisibilityBtn>
-      </InputWrapper>
+        </button>
+      </div>
 
-      <SearchSubmitButton
+      <motion.button
         type="submit"
         disabled={isLoading}
         whileHover={isLoading ? {} : { scale: 1.01 }}
         whileTap={isLoading ? {} : { scale: 0.98 }}
+        className="w-full rounded-xl flex justify-center items-center p-3.5 text-sm font-black tracking-widest cursor-pointer mt-4 relative overflow-hidden bg-primary text-charcoal border-none font-jakarta transition-all duration-300 hover:bg-neutral-900 hover:text-white hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
       >
         {isLoading ? (
           <>
@@ -242,8 +109,7 @@ export const TripPartnerLoginForm: React.FC = () => {
         ) : (
           <span>SECURE LOGIN</span>
         )}
-      </SearchSubmitButton>
-    </FormRoot>
+      </motion.button>
+    </form>
   );
 };
-

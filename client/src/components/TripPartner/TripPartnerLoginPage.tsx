@@ -3,152 +3,36 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import styled from 'styled-components';
 import { ArrowLeft } from 'lucide-react';
-import { colors } from '@/theme/colors';
-import { typography } from '@/theme/typography';
 import { TripPartnerBackground } from './TripPartnerBackground';
 import { TripPartnerLoginForm } from './TripPartnerLoginForm';
 
-const PageRoot = styled.main`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-height: 100vh;
-`;
-
-const LoginSection = styled.div`
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  position: relative;
-  overflow: hidden;
-  background-color: ${colors.cream};
-`;
-
-const LoginCard = styled.div`
-  width: 100%;
-  max-width: 420px;
-  background-color: ${colors.white};
-  border: 1px solid ${colors.gray[100]};
-  border-radius: 2.5rem;
-  box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.08);
-  padding: 3.5rem 2rem 2rem 2rem;
-  position: relative;
-  z-index: 10;
-
-  @media (min-width: 640px) {
-    padding: 4rem 2.5rem 2.5rem 2.5rem;
-  }
-`;
-
-const BackLink = styled(Link)`
-  position: absolute;
-  top: 1.25rem;
-  left: 1.25rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: ${colors.gray[500]};
-  transition: color 0.2s ease;
-  cursor: pointer;
-
-  &:hover {
-    color: ${colors.amber[700]};
-
-    svg {
-      transform: translateX(-4px);
-      color: ${colors.amber[400]};
-    }
-  }
-
-  @media (min-width: 640px) {
-    top: 1.5rem;
-    left: 1.75rem;
-  }
-`;
-
-const BackIcon = styled(ArrowLeft)`
-  width: 0.875rem;
-  height: 0.875rem;
-  color: ${colors.gray[400]};
-  transition: transform 0.2s ease, color 0.2s ease;
-`;
-
-const LogoContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 0.75rem;
-`;
-
-const LogoLink = styled(Link)`
-  position: relative;
-  height: 2.75rem;
-  width: 11rem;
-  display: block;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-
-  @media (min-width: 640px) {
-    height: 3rem;
-    width: 12rem;
-  }
-`;
-
-const HeaderBox = styled.div`
-  text-align: center;
-  margin-bottom: 1.5rem;
-`;
-
-const PageTitle = styled.h1`
-  font-size: 1.5rem;
-  font-weight: 900;
-  font-family: ${typography.fonts.jakarta};
-  color: ${colors.charcoal};
-  letter-spacing: -0.025em;
-  margin-bottom: 0.25rem;
-`;
-
-const GoldHighlight = styled.span`
-  color: ${colors.gold};
-`;
-
-const PageSubtitle = styled.p`
-  color: ${colors.gray[600]};
-  font-size: 0.875rem;
-  font-weight: 600;
-`;
-
 export const TripPartnerLoginPage: React.FC = () => {
   return (
-    <PageRoot>
-      <LoginSection>
+    <main className="flex-1 flex flex-col w-full min-h-screen font-jakarta">
+      <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-cream">
         {/* Background Ambient Glows and Exact Homepage Floating Icons */}
         <TripPartnerBackground />
 
         {/* Login Card */}
-        <LoginCard className="animate-fade-in-up">
+        <div className="w-full max-w-[420px] bg-white border border-gray-100 rounded-[2.5rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.08)] pt-14 px-8 pb-8 sm:pt-16 sm:px-10 sm:pb-10 relative z-10 animate-fade-in-up">
           {/* Top-left: Back to Home Button */}
-          <BackLink href="/" title="Return to TravelDekho Homepage">
-            <BackIcon />
+          <Link
+            href="/"
+            title="Return to TravelDekho Homepage"
+            className="absolute top-5 left-5 sm:top-6 sm:left-7 inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-amber-700 transition-colors cursor-pointer group/back"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 text-gray-400 group-hover/back:text-amber-500 group-hover/back:-translate-x-1 transition-all" />
             <span>Back to Home</span>
-          </BackLink>
+          </Link>
 
           {/* Logo */}
-          <LogoContainer>
-            <LogoLink href="/" title="TravelDekho Homepage">
+          <div className="flex justify-center mb-3">
+            <Link
+              href="/"
+              title="TravelDekho Homepage"
+              className="relative h-11 w-44 sm:h-12 sm:w-48 block transition-transform hover:scale-105 active:scale-95"
+            >
               <Image
                 alt="TravelDekho"
                 src="/TravelDekho-logo.png"
@@ -157,24 +41,23 @@ export const TripPartnerLoginPage: React.FC = () => {
                 className="object-contain"
                 sizes="192px"
               />
-            </LogoLink>
-          </LogoContainer>
+            </Link>
+          </div>
 
           {/* Title & Subtitle */}
-          <HeaderBox>
-            <PageTitle>
-              Trip <GoldHighlight>Partner Portal</GoldHighlight>
-            </PageTitle>
-            <PageSubtitle>
+          <div className="text-center mb-6">
+            <h1 className="text-2xl font-black text-charcoal tracking-tight mb-1">
+              Trip <span className="text-primary">Partner Portal</span>
+            </h1>
+            <p className="text-gray-600 text-sm font-semibold">
               Manage your trips and bookings
-            </PageSubtitle>
-          </HeaderBox>
+            </p>
+          </div>
 
           {/* Credentials Form */}
           <TripPartnerLoginForm />
-        </LoginCard>
-      </LoginSection>
-    </PageRoot>
+        </div>
+      </div>
+    </main>
   );
 };
-

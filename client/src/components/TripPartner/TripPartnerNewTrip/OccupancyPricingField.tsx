@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Plus, Trash2, BedDouble, ChevronDown } from 'lucide-react';
-import { FormGroup, FieldLabelRow, AddItemLinkButton } from './styles';
 import {
   OccupancyPricingOption,
   ROOM_SHARING_OPTIONS,
@@ -118,24 +117,25 @@ export const OccupancyPricingField: React.FC<OccupancyPricingFieldProps> = ({
   }, [activeOptions]);
 
   return (
-    <FormGroup className={className}>
+    <div className={`flex flex-col gap-2 w-full font-jakarta ${className}`}>
       {/* Header: OCCUPANCY & TRANSPORTATION PRICING with + ADD OPTION */}
-      <FieldLabelRow className="pb-1">
+      <div className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between select-none pb-1">
         <span className="flex items-center gap-1.5 text-gray-800 text-xs font-black uppercase tracking-wider">
           <BedDouble className="w-3.5 h-3.5 text-amber-500" />
           Occupancy & Transportation Pricing
         </span>
         {canAddOption && (
-          <AddItemLinkButton
+          <button
             type="button"
             onClick={handleAddOption}
             title="Add another occupancy sharing option"
+            className="inline-flex items-center gap-1.5 bg-transparent border-none text-amber-500 hover:text-amber-600 text-xs font-black tracking-wider uppercase cursor-pointer transition-all duration-150 hover:-translate-y-0.5 [&>svg]:w-3.5 [&>svg]:h-3.5 [&>svg]:stroke-[2.5]"
           >
             <Plus />
             <span>Add Option</span>
-          </AddItemLinkButton>
+          </button>
         )}
-      </FieldLabelRow>
+      </div>
 
       {/* Option Rows */}
       <div className="space-y-4">
@@ -335,6 +335,6 @@ export const OccupancyPricingField: React.FC<OccupancyPricingFieldProps> = ({
           </div>
         </div>
       </div>
-    </FormGroup>
+    </div>
   );
 };

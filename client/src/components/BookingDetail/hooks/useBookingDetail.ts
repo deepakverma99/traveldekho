@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAppSelector } from '@/redux/hooks';
 import { selectPartnerBookings, selectCurrentPartner } from '@/redux/slices/tripPartnerSlice';
 import { MOCK_PARTNER_BOOKINGS } from '@/components/TripPartner/data/bookings.data';
+import { useClipboard } from '@/hooks';
 import { BookingDetailData } from '../types';
 
 export const useBookingDetail = (bookingId: string) => {
@@ -12,8 +13,14 @@ export const useBookingDetail = (bookingId: string) => {
   const reduxBookings = useAppSelector(selectPartnerBookings);
   const currentPartner = useAppSelector(selectCurrentPartner);
 
-  const [isCopied, setIsCopied] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const { copy: copyLink, hasCopied: isCopied } = useClipboard({
+    timeout: 2500,
+    onSuccess: () => {
+      setToastMessage('Booking link copied to clipboard!');
+      setTimeout(() => setToastMessage(null), 2500);
+    },
+  });
 
   // Find booking data or create robust fallback
   const bookingData = useMemo<BookingDetailData>(() => {
@@ -93,21 +100,13 @@ export const useBookingDetail = (bookingId: string) => {
     }
   }, [router]);
 
-  const handlePrintInvoice = useCallback(() => {
-    window.print();
-  }, []);
+
 
   const handleShare = useCallback(() => {
     if (typeof window !== 'undefined') {
-      navigator.clipboard.writeText(window.location.href);
-      setIsCopied(true);
-      setToastMessage('Booking link copied to clipboard!');
-      setTimeout(() => {
-        setIsCopied(false);
-        setToastMessage(null);
-      }, 2500);
+      copyLink(window.location.href);
     }
-  }, []);
+  }, [copyLink]);
 
   const handleCallPartner = useCallback(() => {
     if (typeof window !== 'undefined') {
@@ -120,7 +119,6 @@ export const useBookingDetail = (bookingId: string) => {
     isCopied,
     toastMessage,
     handleBack,
-    handlePrintInvoice,
     handleShare,
     handleCallPartner,
   };

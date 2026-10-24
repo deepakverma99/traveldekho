@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import styled from 'styled-components';
 import {
   ArrowUpRight,
   IndianRupee,
@@ -31,395 +30,6 @@ import { type TripPartnerDashboardProps } from './types/';
 
 export type { TripPartnerDashboardProps };
 
-const DashboardRoot = styled.div`
-  max-width: 80rem;
-  margin: 0 auto;
-  width: 100%;
-  min-width: 0;
-  padding: 1.25rem 0.875rem 2.5rem 0.875rem;
-
-  @media (min-width: 640px) {
-    padding: 1.5rem 1.25rem 2.5rem 1.25rem;
-  }
-  @media (min-width: 768px) {
-    padding: 1.5rem 1.5rem 3rem 1.5rem;
-  }
-`;
-
-const BannerWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1.25rem;
-  gap: 1.25rem;
-  width: 100%;
-  min-width: 0;
-
-  @media (min-width: 768px) {
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    gap: 1.5rem;
-  }
-`;
-
-const Heading = styled.h1`
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-  font-weight: 900;
-  color: ${colors.gray[900]};
-  letter-spacing: -0.025em;
-  text-transform: uppercase;
-  word-break: break-word;
-`;
-
-const AmberText = styled.span`
-  color: ${colors.amber[500]};
-`;
-
-const SubtitleText = styled.p`
-  font-size: 0.75rem;
-  line-height: 1rem;
-  font-weight: 700;
-  color: ${colors.gray[400]};
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-top: 0.25rem;
-`;
-
-
-const StatsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
-  width: 100%;
-  min-width: 0;
-
-  @media (min-width: 640px) {
-    gap: 1.25rem;
-  }
-
-  @media (min-width: 1120px) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1.25rem;
-    margin-bottom: 1.5rem;
-  }
-`;
-
-const AnalyticsGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.25rem;
-  margin-bottom: 1.5rem;
-  width: 100%;
-  min-width: 0;
-
-  @media (min-width: 1120px) {
-    grid-template-columns: 1.8fr 1.2fr;
-    gap: 1.5rem;
-    align-items: stretch;
-  }
-`;
-
-const BookingsCard = styled.div`
-  background-color: ${colors.white};
-  border: 1px solid ${colors.gray[200]};
-  border-radius: 1rem;
-  overflow: hidden;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
-  transition: all 0.25s ease;
-  margin-bottom: 2.5rem;
-  width: 100%;
-  min-width: 0;
-
-  &:hover {
-    box-shadow: 0 10px 25px -5px ${colors.amber[100]}80, 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-    border-color: ${colors.amber[200]};
-  }
-`;
-
-const CardHeader = styled.div`
-  padding: 1.125rem 1.25rem;
-  border-bottom: 1px solid ${colors.gray[50]};
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  @media (min-width: 640px) {
-    padding: 1.5rem 2rem;
-  }
-`;
-
-const CardTitle = styled.h3`
-  font-size: 1.125rem;
-  font-weight: 900;
-  color: ${colors.gray[900]};
-  text-transform: uppercase;
-  letter-spacing: -0.025em;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  @media (min-width: 640px) {
-    font-size: 1.25rem;
-    gap: 0.75rem;
-  }
-
-  svg {
-    color: ${colors.amber[500]};
-    width: 1.25rem;
-    height: 1.25rem;
-
-    @media (min-width: 640px) {
-      width: 1.5rem;
-      height: 1.5rem;
-    }
-  }
-`;
-
-const ViewAllLink = styled(Link)`
-  font-size: 0.75rem;
-  font-weight: 900;
-  color: ${colors.amber[600]};
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  transition: color 0.2s ease;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const TableWrapper = styled.div`
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  width: 100%;
-`;
-
-const Table = styled.table`
-  width: 100%;
-  min-width: 520px;
-  border-collapse: collapse;
-`;
-
-const TableHead = styled.thead`
-  background-color: ${colors.gray[50]}80;
-`;
-
-const TableHeaderCell = styled.th<{ $alignRight?: boolean }>`
-  padding: 1rem 1rem;
-  text-align: ${({ $alignRight }) => ($alignRight ? 'right' : 'left')};
-  font-size: 10px;
-  font-weight: 900;
-  color: ${colors.gray[400]};
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  white-space: nowrap;
-
-  @media (min-width: 640px) {
-    padding: 1.25rem 1.5rem;
-  }
-  @media (min-width: 768px) {
-    padding: 1.25rem 2rem;
-  }
-`;
-
-const TableBody = styled.tbody`
-  & > tr + tr {
-    border-top: 1px solid ${colors.gray[50]};
-  }
-`;
-
-const TableRow = styled.tr`
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: ${colors.gray[50]}80;
-  }
-`;
-
-const TableCell = styled.td<{ $alignRight?: boolean }>`
-  padding: 1rem 1rem;
-  text-align: ${({ $alignRight }) => ($alignRight ? 'right' : 'left')};
-
-  @media (min-width: 640px) {
-    padding: 1.25rem 1.5rem;
-  }
-  @media (min-width: 768px) {
-    padding: 1.5rem 2rem;
-  }
-`;
-
-const StatusPill = styled.span`
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 10px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  background-color: ${colors.green[100]};
-  color: ${colors.green[600]};
-  white-space: nowrap;
-`;
-
-const NotificationsCard = styled.div`
-  background-color: ${colors.white};
-  border: 1px solid ${colors.gray[200]};
-  border-radius: 1rem;
-  padding: 1.125rem 1.25rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  max-height: 440px;
-  min-width: 0;
-  transition: all 0.25s ease;
-
-  &:hover {
-    box-shadow: 0 10px 25px -5px ${colors.amber[100]}80, 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-    border-color: ${colors.amber[200]};
-  }
-
-  @media (min-width: 640px) {
-    padding: 1.5rem;
-  }
-`;
-
-const NotificationsHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-`;
-
-const NotificationsTitle = styled.h4`
-  font-size: 0.875rem;
-  font-weight: 900;
-  color: ${colors.gray[900]};
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  svg {
-    color: ${colors.amber[500]};
-  }
-`;
-
-const NewBadge = styled.span`
-  background-color: ${colors.amber[100]};
-  color: ${colors.amber[600]};
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  margin-left: 0.5rem;
-`;
-
-const NotifList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  overflow-y: auto;
-  padding-right: 0.5rem;
-  flex: 1;
-  margin-right: -0.5rem;
-
-  &::-webkit-scrollbar {
-    width: 0.375rem;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: ${colors.gray[200]};
-    border-radius: 9999px;
-  }
-  &:hover::-webkit-scrollbar-thumb {
-    background-color: ${colors.gray[300]};
-  }
-`;
-
-const NotifItem = styled(Link)`
-  display: flex;
-  gap: 0.875rem;
-  padding: 0.875rem 1rem;
-  border-radius: 0.875rem;
-  cursor: pointer;
-  border: 1px solid ${colors.amber[100]}80;
-  background-color: ${colors.amber[50]}66;
-  text-decoration: none;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background-color: ${colors.amber[50]};
-    border-color: ${colors.amber[200]};
-  }
-`;
-
-const NotifIconBox = styled.div`
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  background-color: ${colors.amber[50]};
-  color: ${colors.amber[600]};
-  border: 1px solid ${colors.amber[200]}80;
-`;
-
-const NotifUnreadDot = styled.div`
-  position: absolute;
-  top: -0.25rem;
-  right: -0.25rem;
-  width: 0.875rem;
-  height: 0.875rem;
-  background-color: ${colors.amber[500]};
-  border-radius: 9999px;
-  border: 3px solid ${colors.white};
-`;
-
-const ViewAllNotifBtn = styled(Link)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0.875rem;
-  border-radius: 1rem;
-  background-color: ${colors.gray[50]};
-  font-size: 10px;
-  font-weight: 900;
-  color: ${colors.gray[900]};
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  text-decoration: none;
-  transition: all 0.2s ease;
-
-  svg {
-    color: ${colors.amber[500]};
-    transition: transform 0.2s ease;
-  }
-
-  &:hover {
-    background-color: ${colors.amber[50]};
-    color: ${colors.amber[600]};
-
-    svg {
-      transform: scale(1.1);
-    }
-  }
-`;
-
 export const TripPartnerDashboard: React.FC<TripPartnerDashboardProps> = ({
   username,
   displayName,
@@ -439,19 +49,19 @@ export const TripPartnerDashboard: React.FC<TripPartnerDashboardProps> = ({
   ];
 
   return (
-    <DashboardRoot>
+    <div className="max-w-[80rem] mx-auto w-full min-w-0 px-3.5 pt-5 pb-10 sm:px-5 sm:pt-6 sm:pb-10 md:px-6 md:pt-6 md:pb-12 font-jakarta">
       {/* Top Banner / Welcome Header */}
-      <BannerWrapper>
+      <div className="flex flex-col md:flex-row md:items-center justify-between items-start mb-5 md:mb-6 gap-5 w-full min-w-0">
         <div>
           <Breadcrumb items={breadcrumbItems} />
 
           <div className="mt-2">
-            <Heading className="text-3xl font-black text-gray-900 tracking-tight uppercase">
-              Hello, <AmberText className="text-amber-500">{effectiveDisplayName}!</AmberText>
-            </Heading>
-            <SubtitleText className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">
+            <h1 className="text-3xl font-black text-gray-900 tracking-tight uppercase leading-9 break-words">
+              Hello, <span className="text-amber-500">{effectiveDisplayName}!</span>
+            </h1>
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">
               Manage your trips and track your growth
-            </SubtitleText>
+            </p>
           </div>
         </div>
 
@@ -466,10 +76,10 @@ export const TripPartnerDashboard: React.FC<TripPartnerDashboardProps> = ({
             </Button>
           </Link>
         </div>
-      </BannerWrapper>
+      </div>
 
       {/* 4 Stat Cards */}
-      <StatsGrid>
+      <div className="grid grid-cols-2 min-[1120px]:grid-cols-4 gap-3 sm:gap-5 mb-5 min-[1120px]:mb-6 w-full min-w-0">
         <TripPartnerStatCard
           label="Total Revenue"
           value={`₹${stats.totalRevenue.toLocaleString()}`}
@@ -494,140 +104,134 @@ export const TripPartnerDashboard: React.FC<TripPartnerDashboardProps> = ({
           trend={{ percentage: 5, text: 'since last month', isPositive: false }}
           icon={Star}
         />
-      </StatsGrid>
+      </div>
 
       {/* Analytics Section: Booking Volume Chart (Left) & Notifications (Right) */}
-      <AnalyticsGrid>
+      <div className="grid grid-cols-1 min-[1120px]:grid-cols-[1.8fr_1.2fr] gap-5 min-[1120px]:gap-6 min-[1120px]:items-stretch mb-6 w-full min-w-0">
         {/* Booking Volume Chart */}
         <TripPartnerBookingChart />
 
         {/* Notifications Card (Right of Graph) */}
-        <NotificationsCard>
-          <NotificationsHeader>
-            <NotificationsTitle>
+        <div className="bg-white border border-gray-200 rounded-2xl p-4.5 sm:p-6 shadow-[0_1px_3px_0_rgba(0,0,0,0.04),0_1px_2px_-1px_rgba(0,0,0,0.02)] flex flex-col h-full max-h-[440px] min-w-0 transition-all duration-250 ease-out hover:shadow-[0_10px_25px_-5px_rgba(255,237,208,0.5),0_8px_10px_-6px_rgba(0,0,0,0.04)] hover:border-amber-200">
+          <div className="flex items-center justify-between mb-6">
+            <h4 className="text-sm font-black text-gray-900 uppercase tracking-wider flex items-center gap-2 [&>svg]:text-amber-500">
               <Bell className="w-5 h-5" /> Notifications
-              {unreadCount > 0 && <NewBadge>{unreadCount} NEW</NewBadge>}
-            </NotificationsTitle>
-          </NotificationsHeader>
+              {unreadCount > 0 && (
+                <span className="bg-amber-100 text-amber-600 py-1 px-3 rounded-full text-[10px] font-black tracking-wider ml-2">
+                  {unreadCount} NEW
+                </span>
+              )}
+            </h4>
+          </div>
 
-          <NotifList>
+          <div className="flex flex-col gap-3 overflow-y-auto pr-2 flex-1 -mr-2">
             {notifications.map((notif) => (
-              <NotifItem
+              <Link
                 key={notif.id}
                 href={`/trip-partner/${username}/notifications`}
+                className="flex gap-3.5 p-3.5 sm:p-4 rounded-xl border border-amber-100/60 bg-amber-50/40 no-underline transition-all duration-200 hover:bg-amber-50 hover:border-amber-200"
               >
                 <div className="flex-shrink-0 relative mt-1">
-                  <NotifIconBox>
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center shadow-xs bg-amber-50 text-amber-600 border border-amber-200/60">
                     <DollarSign className="w-4 h-4" />
-                  </NotifIconBox>
-                  <NotifUnreadDot className="animate-pulse" />
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-amber-500 rounded-full border-2 border-white animate-pulse" />
                 </div>
                 <div className="flex-1 min-w-0 flex flex-col justify-center">
                   <div className="flex justify-between items-start gap-2 mb-1">
-                    <p
-                      className="text-[11px] uppercase tracking-wider truncate font-black"
-                      style={{ color: colors.gray[900] }}
-                    >
+                    <p className="text-[11px] uppercase tracking-wider truncate font-black text-gray-900">
                       {notif.title}
                     </p>
-                    <span
-                      className="text-[9px] font-bold whitespace-nowrap uppercase mt-0.5"
-                      style={{ color: colors.gray[400] }}
-                    >
+                    <span className="text-[9px] font-bold whitespace-nowrap uppercase mt-0.5 text-gray-400">
                       {notif.date}
                     </span>
                   </div>
-                  <p
-                    className="text-xs leading-relaxed line-clamp-2 font-bold"
-                    style={{ color: colors.gray[600] }}
-                  >
+                  <p className="text-xs leading-relaxed line-clamp-2 font-bold text-gray-600">
                     {notif.description}
                   </p>
                 </div>
-              </NotifItem>
+              </Link>
             ))}
-          </NotifList>
-
-          <div
-            className="pt-4 mt-2"
-            style={{ borderTop: `1px solid ${colors.gray[50]}` }}
-          >
-            <ViewAllNotifBtn href={`/trip-partner/${username}/notifications`}>
-              <span>View All Notifications</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </ViewAllNotifBtn>
           </div>
-        </NotificationsCard>
-      </AnalyticsGrid>
+
+          <div className="pt-4 mt-2 border-t border-gray-100">
+            <Link
+              href={`/trip-partner/${username}/notifications`}
+              className="flex items-center justify-center gap-2 w-full p-3.5 rounded-2xl bg-gray-50 text-[10px] font-black text-gray-900 uppercase tracking-widest no-underline transition-all duration-200 hover:bg-amber-50 hover:text-amber-600 group"
+            >
+              <span>View All Notifications</span>
+              <ArrowUpRight className="w-4 h-4 text-amber-500 transition-transform duration-200 group-hover:scale-110" />
+            </Link>
+          </div>
+        </div>
+      </div>
 
       {/* Full-width Recent Bookings Table */}
-      <BookingsCard>
-        <CardHeader>
-          <CardTitle>
+      <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-[0_1px_3px_0_rgba(0,0,0,0.04),0_1px_2px_-1px_rgba(0,0,0,0.02)] transition-all duration-250 ease-out hover:shadow-[0_10px_25px_-5px_rgba(255,237,208,0.5),0_8px_10px_-6px_rgba(0,0,0,0.04)] hover:border-amber-200 mb-10 w-full min-w-0">
+        <div className="p-4.5 sm:px-8 sm:py-6 border-b border-gray-100 flex items-center justify-between">
+          <h3 className="text-lg sm:text-xl font-black text-gray-900 uppercase tracking-tight flex items-center gap-2 sm:gap-3 [&>svg]:text-amber-500 [&>svg]:w-5 [&>svg]:h-5 sm:[&>svg]:w-6 sm:[&>svg]:h-6">
             <TrendingUp className="w-6 h-6" /> Recent Bookings
-          </CardTitle>
-          <ViewAllLink href={`/trip-partner/${username}/bookings`}>
+          </h3>
+          <Link
+            href={`/trip-partner/${username}/bookings`}
+            className="text-xs font-black text-amber-600 uppercase tracking-widest flex items-center gap-1 transition-colors hover:underline"
+          >
             <span>View All</span> <ChevronRight className="w-4 h-4" />
-          </ViewAllLink>
-        </CardHeader>
+          </Link>
+        </div>
 
-        <TableWrapper>
-          <Table>
-            <TableHead>
+        <div className="overflow-x-auto w-full">
+          <table className="w-full min-w-[520px] border-collapse">
+            <thead className="bg-gray-50/80">
               <tr>
-                <TableHeaderCell>Traveler</TableHeaderCell>
-                <TableHeaderCell>Trip</TableHeaderCell>
-                <TableHeaderCell>Status</TableHeaderCell>
-                <TableHeaderCell $alignRight>Amount</TableHeaderCell>
+                <th className="p-4 sm:px-6 sm:py-5 md:px-8 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                  Traveler
+                </th>
+                <th className="p-4 sm:px-6 sm:py-5 md:px-8 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                  Trip
+                </th>
+                <th className="p-4 sm:px-6 sm:py-5 md:px-8 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                  Status
+                </th>
+                <th className="p-4 sm:px-6 sm:py-5 md:px-8 text-right text-[10px] font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                  Amount
+                </th>
               </tr>
-            </TableHead>
-            <TableBody>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
               {bookings.map((booking) => (
-                <TableRow key={booking.id}>
-                  <TableCell>
+                <tr key={booking.id} className="transition-colors hover:bg-gray-50/60">
+                  <td className="p-4 sm:px-6 sm:py-5 md:px-8 text-left">
                     <div className="flex flex-col">
-                      <span
-                        className="text-sm font-black uppercase leading-none"
-                        style={{ color: colors.gray[900] }}
-                      >
+                      <span className="text-sm font-black uppercase leading-none text-gray-900">
                         {booking.travelerName}
                       </span>
-                      <span
-                        className="text-[10px] font-bold mt-1"
-                        style={{ color: colors.gray[400] }}
-                      >
+                      <span className="text-[10px] font-bold mt-1 text-gray-400">
                         {booking.travelerEmail}
                       </span>
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    <span
-                      className="text-sm font-bold"
-                      style={{ color: colors.gray[600] }}
-                    >
+                  </td>
+                  <td className="p-4 sm:px-6 sm:py-5 md:px-8 text-left">
+                    <span className="text-sm font-bold text-gray-600">
                       {booking.tripTitle}
                     </span>
-                  </TableCell>
-                  <TableCell>
-                    <StatusPill>
+                  </td>
+                  <td className="p-4 sm:px-6 sm:py-5 md:px-8 text-left">
+                    <span className="py-1 px-3 rounded-full text-[10px] font-black uppercase tracking-widest bg-green-100 text-green-700 whitespace-nowrap">
                       {booking.status}
-                    </StatusPill>
-                  </TableCell>
-                  <TableCell $alignRight>
-                    <span
-                      className="text-sm font-black"
-                      style={{ color: colors.gray[900] }}
-                    >
+                    </span>
+                  </td>
+                  <td className="p-4 sm:px-6 sm:py-5 md:px-8 text-right">
+                    <span className="text-sm font-black text-gray-900">
                       ₹{booking.amount.toLocaleString()}
                     </span>
-                  </TableCell>
-                </TableRow>
+                  </td>
+                </tr>
               ))}
-            </TableBody>
-          </Table>
-        </TableWrapper>
-      </BookingsCard>
-    </DashboardRoot>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   );
 };
-

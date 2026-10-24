@@ -2,11 +2,6 @@
 
 import React from 'react';
 import { Sparkles } from 'lucide-react';
-import {
-  StepContentArea,
-  FieldLabel,
-  FieldHint,
-} from './styles';
 import { NewTripFormData } from './types';
 import { OccupancyPricingField } from './OccupancyPricingField';
 import { WhatsAppContactField } from './WhatsAppContactField';
@@ -63,11 +58,17 @@ export const StepFinal: React.FC<StepFinalProps> = ({
       }
     }
 
+    const fallbackPrice = Number(formData.price) || 14999;
+    const fallbackOriginal = Number(formData.originalPrice) || 0;
+    const fallbackDiscount =
+      fallbackOriginal > fallbackPrice
+        ? `₹${(fallbackOriginal - fallbackPrice).toLocaleString()} OFF`
+        : formData.discount || '';
+
     return {
-      price: formData.price || 0,
-      originalPrice:
-        formData.originalPrice > formData.price ? formData.originalPrice : 0,
-      discount: formData.discount || '',
+      price: fallbackPrice,
+      originalPrice: fallbackOriginal,
+      discount: fallbackDiscount,
     };
   }, [
     formData.occupancyPricing,
@@ -119,14 +120,14 @@ export const StepFinal: React.FC<StepFinalProps> = ({
 
   const previewTrip: TripItem = React.useMemo(() => {
     const destinationLabel =
-      formData.destinationCity && formData.destinationState
-        ? `${formData.destinationCity}, ${formData.destinationState}`
-        : formData.destination?.trim() || 'Himalayas, India';
+      [formData.destinationCity, formData.destinationState]
+        .filter(Boolean)
+        .join(', ') || formData.destination || 'Himachal Pradesh';
 
     return {
-      id: 'preview-trip-id',
-      slug: 'preview',
-      title: formData.title?.trim() || 'Untitled Journey',
+      id: 'preview-id',
+      slug: 'preview-trip',
+      title: formData.title || 'Your Trip Title Here',
       destination: destinationLabel,
       duration: `${formData.durationNights || 2} nights / ${formData.durationDays || 3} days`,
       image: formData.image || '/trips/zanskar.png',
@@ -161,7 +162,7 @@ export const StepFinal: React.FC<StepFinalProps> = ({
   ]);
 
   return (
-    <StepContentArea>
+    <div className="w-full flex flex-col gap-6 sm:gap-7 font-jakarta">
       {/* Occupancy & Transportation Pricing (with Per-Option Discount) */}
       <OccupancyPricingField
         options={formData.occupancyPricing || []}
@@ -184,13 +185,15 @@ export const StepFinal: React.FC<StepFinalProps> = ({
 
       {/* Live Preview Card */}
       <div className="pt-4 border-t border-gray-100">
-        <FieldLabel>
+        <label className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between">
           <span className="flex items-center gap-1.5 text-gray-800">
             <Sparkles className="w-3.5 h-3.5 text-amber-500" />
             Live Traveler Preview Card
           </span>
-          <FieldHint>How travelers will see your itinerary across TravelDekho</FieldHint>
-        </FieldLabel>
+          <span className="text-[10px] font-bold text-gray-400 normal-case tracking-normal">
+            How travelers will see your itinerary across TravelDekho
+          </span>
+        </label>
 
         <div
           className="mt-3 w-full max-w-[280px] mx-auto sm:mx-0"
@@ -202,8 +205,6 @@ export const StepFinal: React.FC<StepFinalProps> = ({
           <TripCard trip={previewTrip} priority={true} />
         </div>
       </div>
-    </StepContentArea>
+    </div>
   );
 };
-
-

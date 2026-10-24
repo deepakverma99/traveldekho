@@ -16,4 +16,6 @@ export * from './TripPartnerMyTrips';
 export * from './TripPartnerTripCard';
 export * from './TripPartnerNewTrip';
 export * from './TripPartnerBookings';
+export * from './TripPartnerDateRequests';
 export * from './TripPartnerProfile';
+export * from './TripPartnerSettings';

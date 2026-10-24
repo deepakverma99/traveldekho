@@ -1,182 +1,9 @@
 'use client';
 
 import React from 'react';
-import styled from 'styled-components';
-import { colors } from '@/theme/colors';
-import { typography } from '@/theme/typography';
 import { type TripPartnerStatCardProps } from './types/';
 
 export type { TripPartnerStatCardProps };
-
-const CardRoot = styled.div`
-  background-color: ${colors.white};
-  border: 1px solid ${colors.gray[200]};
-  border-radius: 0.875rem;
-  padding: 0.875rem 0.75rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  min-width: 0;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-
-  @media (min-width: 480px) {
-    padding: 1rem 1rem;
-    gap: 0.75rem;
-  }
-
-  @media (min-width: 640px) {
-    border-radius: 1rem;
-    padding: 1.25rem 1.5rem;
-    gap: 1rem;
-  }
-
-  &:hover {
-    box-shadow: 0 10px 25px -5px ${colors.amber[100]}80, 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-    border-color: ${colors.amber[200]};
-    transform: translateY(-2px);
-  }
-`;
-
-const ContentStack = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  min-width: 0;
-  flex: 1;
-
-  @media (min-width: 640px) {
-    gap: 0.375rem;
-  }
-`;
-
-const CardLabel = styled.p`
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: ${colors.gray[500]};
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-  font-family: ${typography.fonts.jakarta};
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  @media (min-width: 640px) {
-    font-size: 0.8125rem;
-  }
-`;
-
-const CardValue = styled.h3`
-  font-size: 1.1875rem;
-  font-weight: 800;
-  color: ${colors.gray[900]};
-  line-height: 1.2;
-  letter-spacing: -0.025em;
-  font-family: ${typography.fonts.jakarta};
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  @media (min-width: 480px) {
-    font-size: 1.375rem;
-  }
-
-  @media (min-width: 640px) {
-    font-size: 1.5rem;
-  }
-`;
-
-const TrendRow = styled.div<{ $isPositive: boolean }>`
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  column-gap: 0.25rem;
-  row-gap: 0.125rem;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: ${({ $isPositive }) => ($isPositive ? colors.green[600] : colors.red[500])};
-  letter-spacing: -0.01em;
-  margin-top: 0.125rem;
-  font-family: ${typography.fonts.jakarta};
-  min-width: 0;
-
-  @media (min-width: 640px) {
-    font-size: 0.75rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-`;
-
-const TrendBadge = styled.span`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.125rem;
-  white-space: nowrap;
-`;
-
-const TrendText = styled.span`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const TrendArrow = styled.span`
-  font-size: 0.75rem;
-  font-weight: 800;
-  line-height: 1;
-
-  @media (min-width: 640px) {
-    font-size: 0.8125rem;
-  }
-`;
-
-const IconCircle = styled.div`
-  width: 2.125rem;
-  height: 2.125rem;
-  border-radius: 9999px;
-  background-color: ${colors.amber[50]};
-  color: ${colors.amber[600]};
-  border: 1px solid ${colors.amber[200]}80;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
-
-  @media (min-width: 480px) {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-
-  @media (min-width: 640px) {
-    width: 3.25rem;
-    height: 3.25rem;
-  }
-
-  ${CardRoot}:hover & {
-    transform: scale(1.08);
-    background-color: ${colors.amber[100]};
-    color: ${colors.amber[700]};
-  }
-
-  svg {
-    width: 1.0625rem;
-    height: 1.0625rem;
-    stroke-width: 2.25px;
-
-    @media (min-width: 480px) {
-      width: 1.25rem;
-      height: 1.25rem;
-    }
-
-    @media (min-width: 640px) {
-      width: 1.5rem;
-      height: 1.5rem;
-    }
-  }
-`;
 
 export const TripPartnerStatCard: React.FC<TripPartnerStatCardProps> = ({
   label,
@@ -184,23 +11,35 @@ export const TripPartnerStatCard: React.FC<TripPartnerStatCardProps> = ({
   trend,
   icon: Icon,
 }) => {
-  return (
-    <CardRoot>
-      <ContentStack>
-        <CardLabel>{label}</CardLabel>
-        <CardValue>{value}</CardValue>
-        <TrendRow $isPositive={trend.isPositive}>
-          <TrendBadge>
-            <TrendArrow aria-hidden="true">{trend.isPositive ? '↑' : '↓'}</TrendArrow>
-            {trend.percentage}%
-          </TrendBadge>
-          <TrendText>{trend.text}</TrendText>
-        </TrendRow>
-      </ContentStack>
+  const isPositive = trend.isPositive;
 
-      <IconCircle>
+  return (
+    <div className="bg-white border border-gray-200 rounded-xl min-[480px]:p-4 sm:p-5 sm:rounded-2xl p-3 flex items-center justify-between gap-2 min-[480px]:gap-3 sm:gap-4 min-w-0 transition-all duration-250 ease-out shadow-[0_1px_3px_0_rgba(0,0,0,0.04),0_1px_2px_-1px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_25px_-5px_rgba(255,237,208,0.5),0_8px_10px_-6px_rgba(0,0,0,0.04)] hover:border-amber-200 hover:-translate-y-0.5 group">
+      <div className="flex flex-col gap-1 sm:gap-1.5 min-w-0 flex-1 font-jakarta">
+        <p className="text-xs sm:text-[13px] font-semibold text-gray-500 leading-tight tracking-tight truncate">
+          {label}
+        </p>
+        <h3 className="text-[19px] min-[480px]:text-[22px] sm:text-2xl font-extrabold text-gray-900 leading-tight tracking-tight truncate">
+          {value}
+        </h3>
+        <div
+          className={`flex items-baseline flex-wrap gap-x-1 gap-y-0.5 text-[11px] sm:text-xs font-semibold tracking-tight mt-0.5 min-w-0 sm:truncate ${
+            isPositive ? 'text-green-600' : 'text-red-500'
+          }`}
+        >
+          <span className="inline-flex items-center gap-0.5 whitespace-nowrap">
+            <span className="text-xs sm:text-[13px] font-extrabold leading-none" aria-hidden="true">
+              {isPositive ? '↑' : '↓'}
+            </span>
+            {trend.percentage}%
+          </span>
+          <span className="whitespace-nowrap truncate">{trend.text}</span>
+        </div>
+      </div>
+
+      <div className="w-[34px] h-[34px] min-[480px]:w-10 min-[480px]:h-10 sm:w-[52px] sm:h-[52px] rounded-full bg-amber-50 text-amber-600 border border-amber-200/50 flex items-center justify-center shrink-0 transition-all duration-250 ease-out group-hover:scale-105 group-hover:bg-amber-100 group-hover:text-amber-700 [&>svg]:w-[17px] [&>svg]:h-[17px] min-[480px]:[&>svg]:w-5 min-[480px]:[&>svg]:h-5 sm:[&>svg]:w-6 sm:[&>svg]:h-6 [&>svg]:stroke-[2.25]">
         <Icon />
-      </IconCircle>
-    </CardRoot>
+      </div>
+    </div>
   );
 };

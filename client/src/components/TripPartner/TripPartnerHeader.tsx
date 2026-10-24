@@ -4,9 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import styled from 'styled-components';
 import { LogOut, Bell, UserCheck, Menu, X } from 'lucide-react';
-import { colors } from '@/theme/colors';
 import { TripPartnerLogoutModal } from './TripPartnerLogoutModal';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import {
@@ -22,241 +20,6 @@ import {
 import { type TripPartnerHeaderProps } from './types/';
 
 export type { TripPartnerHeaderProps };
-
-const HeaderRoot = styled.header`
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  width: 100%;
-  height: 64px;
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid ${colors.gray[200]};
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-  padding: 0 0.875rem;
-
-  @media (min-width: 640px) {
-    height: 72px;
-    padding: 0 1.5rem;
-  }
-
-  @media (min-width: 1024px) {
-    padding: 0 2rem;
-  }
-`;
-
-const HeaderInner = styled.div`
-  max-width: 1600px;
-  height: 100%;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-
-  @media (min-width: 640px) {
-    gap: 1rem;
-  }
-`;
-
-const LeftSection = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  @media (min-width: 640px) {
-    gap: 0.875rem;
-  }
-`;
-
-const MobileMenuToggle = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 0.625rem;
-  border: 1px solid ${colors.gray[200]};
-  background-color: ${colors.white};
-  color: ${colors.gray[700]};
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-
-  &:hover {
-    background-color: ${colors.amber[50]};
-    color: ${colors.amber[600]};
-    border-color: ${colors.amber[300]};
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-
-  @media (min-width: 1024px) {
-    display: none;
-  }
-`;
-
-const LogoContainer = styled(Link)`
-  position: relative;
-  height: 2rem;
-  width: 7.25rem;
-  display: block;
-  transition: transform 0.2s ease;
-  flex-shrink: 0;
-
-  @media (min-width: 480px) {
-    height: 2.25rem;
-    width: 8.5rem;
-  }
-
-  &:hover {
-    transform: scale(1.03);
-  }
-
-  &:active {
-    transform: scale(0.97);
-  }
-
-  @media (min-width: 1024px) {
-    display: none;
-  }
-`;
-
-const PartnerBadge = styled.span`
-  display: none;
-  align-items: center;
-  padding: 0.25rem 0.625rem;
-  background-color: ${colors.amber[500]};
-  color: ${colors.white};
-  font-size: 10px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  border-radius: 9999px;
-  box-shadow: 0 1px 3px 0 rgba(244, 140, 6, 0.35);
-  white-space: nowrap;
-
-  @media (min-width: 640px) {
-    display: inline-flex;
-    padding: 0.25rem 0.75rem;
-    letter-spacing: 0.1em;
-  }
-`;
-
-const RightSection = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-
-  @media (min-width: 640px) {
-    gap: 0.75rem;
-  }
-
-  @media (min-width: 1024px) {
-    gap: 1rem;
-  }
-`;
-
-
-const NotificationButton = styled(Link)`
-  position: relative;
-  padding: 0.5rem;
-  border-radius: 0.75rem;
-  color: ${colors.gray[500]};
-  transition: color 0.2s ease, background-color 0.2s ease;
-
-  &:hover {
-    color: ${colors.gray[900]};
-    background-color: ${colors.amber[100]}80;
-  }
-`;
-
-const NotificationDot = styled.span`
-  position: absolute;
-  top: 0.375rem;
-  right: 0.375rem;
-  width: 0.5rem;
-  height: 0.5rem;
-  background-color: ${colors.amber[500]};
-  border-radius: 9999px;
-`;
-
-const ProfileContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding-left: 0.5rem;
-  border-left: 1px solid ${colors.gray[200]};
-`;
-
-const Avatar = styled.div`
-  width: 2rem;
-  height: 2rem;
-  border-radius: 9999px;
-  background-color: ${colors.amber[400]};
-  color: ${colors.black};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  font-size: 0.75rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  text-transform: uppercase;
-`;
-
-const ProfileInfo = styled.div`
-  display: none;
-  flex-direction: column;
-  text-align: left;
-
-  @media (min-width: 640px) {
-    display: flex;
-  }
-`;
-
-const PartnerName = styled.span`
-  font-size: 0.75rem;
-  font-weight: 900;
-  color: ${colors.gray[900]};
-  line-height: 1.25;
-  text-transform: capitalize;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 120px;
-`;
-
-const VerifiedBadge = styled.span`
-  font-size: 10px;
-  font-weight: 700;
-  color: ${colors.green[600]};
-  display: flex;
-  align-items: center;
-  gap: 0.125rem;
-`;
-
-const LogoutButton = styled.button`
-  padding: 0.5rem;
-  margin-left: 0.25rem;
-  color: ${colors.gray[400]};
-  border-radius: 0.75rem;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s ease, background-color 0.2s ease;
-
-  &:hover {
-    color: ${colors.red[600]};
-    background-color: ${colors.red[50]};
-  }
-`;
 
 export const TripPartnerHeader: React.FC<TripPartnerHeaderProps> = ({
   username,
@@ -286,23 +49,25 @@ export const TripPartnerHeader: React.FC<TripPartnerHeaderProps> = ({
 
   return (
     <>
-      <HeaderRoot>
-        <HeaderInner>
+      <header className="sticky top-0 z-50 w-full h-16 sm:h-[72px] bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-[0_1px_2px_0_rgba(0,0,0,0.03)] px-3.5 sm:px-6 lg:px-8">
+        <div className="max-w-[1600px] h-full mx-auto flex items-center justify-between gap-3 sm:gap-4 font-jakarta">
           {/* Left: Brand & Portal Badge */}
-          <LeftSection>
-            <MobileMenuToggle
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
               type="button"
               onClick={() => dispatch(toggleMobileSidebar())}
               aria-label={isMobileSidebarOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
               title={isMobileSidebarOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
               aria-expanded={isMobileSidebarOpen}
+              className="lg:hidden p-2 rounded-xl text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
             >
               {isMobileSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </MobileMenuToggle>
+            </button>
 
-            <LogoContainer
+            <Link
               href={`/trip-partner/${username}/dashboard`}
               title="Trip Partner Dashboard"
+              className="relative h-10 w-44 hidden sm:block lg:hidden transition-transform hover:scale-[1.02]"
             >
               <Image
                 alt="TravelDekho"
@@ -312,52 +77,54 @@ export const TripPartnerHeader: React.FC<TripPartnerHeaderProps> = ({
                 className="object-contain"
                 sizes="176px"
               />
-            </LogoContainer>
+            </Link>
 
-            <PartnerBadge>
+            <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200/80">
               Trip Partner Portal
-            </PartnerBadge>
-          </LeftSection>
+            </span>
+          </div>
 
           {/* Right: Actions & Partner Profile */}
-          <RightSection>
-
+          <div className="flex items-center gap-2 sm:gap-3">
             {/* Notifications Shortcut */}
-            <NotificationButton
+            <Link
               href={`/trip-partner/${username}/notifications`}
               title="View Notifications"
+              className="relative p-2 rounded-xl text-gray-500 hover:text-amber-600 hover:bg-amber-50/60 transition-colors"
             >
               <Bell className="w-4 h-4" />
-              <NotificationDot className="animate-pulse" />
-            </NotificationButton>
+              <div className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+            </Link>
 
             {/* Profile Pill */}
-            <ProfileContainer>
-              <Avatar>
+            <div className="flex items-center gap-2 p-1 pl-1.5 sm:p-1.5 sm:pl-2 rounded-full border border-gray-200 bg-white shadow-2xs">
+              <div className="w-8 h-8 rounded-full bg-amber-400 text-charcoal flex items-center justify-center font-black text-xs shadow-xs uppercase shrink-0">
                 {effectiveDisplayName.charAt(0) || 'T'}
-              </Avatar>
+              </div>
 
-              <ProfileInfo>
-                <PartnerName>
+              <div className="hidden sm:flex flex-col text-left">
+                <span className="text-xs font-black text-gray-900 leading-tight capitalize truncate max-w-[120px]">
                   {effectiveDisplayName}
-                </PartnerName>
-                <VerifiedBadge>
+                </span>
+                <span className="text-[10px] font-bold text-green-600 flex items-center gap-0.5">
                   <UserCheck className="w-3 h-3" /> Verified Partner
-                </VerifiedBadge>
-              </ProfileInfo>
+                </span>
+              </div>
 
               {/* Logout Button */}
-              <LogoutButton
+              <button
+                type="button"
                 onClick={handleOpenLogout}
                 title="Log Out of Partner Portal"
                 aria-label="Log Out of Partner Portal"
+                className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors cursor-pointer"
               >
                 <LogOut className="w-4 h-4" />
-              </LogoutButton>
-            </ProfileContainer>
-          </RightSection>
-        </HeaderInner>
-      </HeaderRoot>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
 
       {/* Confirmation Modal */}
       <TripPartnerLogoutModal
@@ -369,4 +136,3 @@ export const TripPartnerHeader: React.FC<TripPartnerHeaderProps> = ({
     </>
   );
 };
-

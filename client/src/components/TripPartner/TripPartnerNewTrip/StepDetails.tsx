@@ -3,18 +3,6 @@
 import React, { useState } from 'react';
 import { Plus, X, Tag, Check, ShieldAlert } from 'lucide-react';
 import {
-  StepContentArea,
-  FormGroup,
-  FieldLabel,
-  FieldInput,
-  FieldHint,
-  ChipBadge,
-  RequiredAsterisk,
-  SuggestionChip,
-  SuggestionsContainer,
-  SuggestionsTitle,
-} from './styles';
-import {
   NewTripFormData,
   filterTagInput,
   filterAlphanumeric,
@@ -49,130 +37,117 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
   const [newInclusionInput, setNewInclusionInput] = useState('');
   const [newExclusionInput, setNewExclusionInput] = useState('');
 
-  const addCustomTag = () => {
-    const trimmed = newTagInput.trim();
-    if (trimmed && /[a-zA-Z]/.test(trimmed)) {
-      const cleanTag = trimmed.replace(/^#+/, '').trim();
-      if (cleanTag && !formData.tags.includes(cleanTag)) {
-        updateForm({ tags: [...formData.tags, cleanTag] });
-        setNewTagInput('');
-      }
-    }
-  };
-
-  const removeTag = (tagToRemove: string) => {
-    updateForm({ tags: formData.tags.filter((t) => t !== tagToRemove) });
-  };
-
+  // Handle Tags
   const toggleSuggestedTag = (tag: string) => {
-    if (formData.tags.includes(tag)) {
-      removeTag(tag);
-    } else {
-      updateForm({ tags: [...formData.tags, tag] });
+    const exists = formData.tags.includes(tag);
+    const updated = exists
+      ? formData.tags.filter((t) => t !== tag)
+      : [...formData.tags, tag];
+    updateForm({ tags: updated });
+  };
+
+  const addCustomTag = () => {
+    const trimmed = filterTagInput(newTagInput);
+    if (!trimmed) return;
+    if (!formData.tags.includes(trimmed)) {
+      updateForm({ tags: [...formData.tags, trimmed] });
     }
+    setNewTagInput('');
+  };
+
+  const removeTag = (index: number) => {
+    updateForm({
+      tags: formData.tags.filter((_, idx) => idx !== index),
+    });
+  };
+
+  // Handle Inclusions
+  const toggleSuggestedInclusion = (item: string) => {
+    const exists = formData.inclusions.includes(item);
+    const updated = exists
+      ? formData.inclusions.filter((i) => i !== item)
+      : [...formData.inclusions, item];
+    updateForm({ inclusions: updated });
   };
 
   const addInclusion = () => {
     const trimmed = newInclusionInput.trim();
-    if (trimmed) {
-      if (!formData.inclusions.includes(trimmed)) {
-        updateForm({ inclusions: [...formData.inclusions, trimmed] });
-      }
-      setNewInclusionInput('');
+    if (!trimmed) return;
+    if (!formData.inclusions.includes(trimmed)) {
+      updateForm({ inclusions: [...formData.inclusions, trimmed] });
     }
+    setNewInclusionInput('');
   };
 
   const removeInclusion = (index: number) => {
     updateForm({
-      inclusions: formData.inclusions.filter((_, i) => i !== index),
+      inclusions: formData.inclusions.filter((_, idx) => idx !== index),
     });
   };
 
-  const toggleSuggestedInclusion = (item: string) => {
-    if (formData.inclusions.includes(item)) {
-      updateForm({
-        inclusions: formData.inclusions.filter((inc) => inc !== item),
-      });
-    } else {
-      updateForm({
-        inclusions: [...formData.inclusions, item],
-      });
-    }
+  // Handle Exclusions
+  const toggleSuggestedExclusion = (item: string) => {
+    const exists = formData.exclusions.includes(item);
+    const updated = exists
+      ? formData.exclusions.filter((i) => i !== item)
+      : [...formData.exclusions, item];
+    updateForm({ exclusions: updated });
   };
 
   const addExclusion = () => {
     const trimmed = newExclusionInput.trim();
-    if (trimmed) {
-      if (!formData.exclusions.includes(trimmed)) {
-        updateForm({ exclusions: [...formData.exclusions, trimmed] });
-      }
-      setNewExclusionInput('');
+    if (!trimmed) return;
+    if (!formData.exclusions.includes(trimmed)) {
+      updateForm({ exclusions: [...formData.exclusions, trimmed] });
     }
+    setNewExclusionInput('');
   };
 
   const removeExclusion = (index: number) => {
     updateForm({
-      exclusions: formData.exclusions.filter((_, i) => i !== index),
+      exclusions: formData.exclusions.filter((_, idx) => idx !== index),
     });
   };
 
-  const toggleSuggestedExclusion = (item: string) => {
-    if (formData.exclusions.includes(item)) {
-      updateForm({
-        exclusions: formData.exclusions.filter((exc) => exc !== item),
-      });
-    } else {
-      updateForm({
-        exclusions: [...formData.exclusions, item],
-      });
-    }
-  };
-
   return (
-    <StepContentArea>
-      {/* Trip Tags & Keywords */}
-      <FormGroup>
-        <FieldLabel>
+    <div className="w-full flex flex-col gap-6 sm:gap-7 font-jakarta">
+      {/* Tags Section */}
+      <div className="flex flex-col gap-2 w-full">
+        <label className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between">
           <span className="flex items-center gap-1.5 text-gray-800">
             <Tag className="w-3.5 h-3.5 text-amber-500" />
-            Trip Highlights & Tags <RequiredAsterisk>*</RequiredAsterisk>
+            Trip Tags / Highlights
           </span>
-          <FieldHint>
-            {formData.tags.length > 0
-              ? `${formData.tags.length} selected`
-              : 'At least 1 required • Click to toggle presets'}
-          </FieldHint>
-        </FieldLabel>
+          <span className="text-[10px] font-bold text-gray-400 normal-case tracking-normal">
+            Select or type tags (Press Enter)
+          </span>
+        </label>
 
-        {/* Selected Tags list */}
-        <div className="flex flex-wrap gap-2 p-3 bg-gray-50/60 rounded-2xl min-h-[44px] items-center border border-gray-100">
-          {formData.tags.map((tag) => {
-            const displayTag = tag.startsWith('#') ? tag : `#${tag}`;
-            return (
-              <span
-                key={tag}
-                className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-900 border border-amber-300 rounded-full text-xs font-bold"
+        {/* Selected Tags Display & Custom Input */}
+        <div className="flex flex-wrap items-center gap-1.5 p-2 bg-[#f8fafc] border border-gray-200/80 rounded-2xl min-h-[3.25rem]">
+          {formData.tags.map((tag, idx) => (
+            <span
+              key={idx}
+              className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500 text-charcoal font-black rounded-full text-xs shadow-xs"
+            >
+              #{tag}
+              <button
+                type="button"
+                onClick={() => removeTag(idx)}
+                className="hover:text-red-700 transition-colors cursor-pointer"
+                aria-label={`Remove tag ${tag}`}
               >
-                {displayTag}
-                <button
-                  type="button"
-                  onClick={() => removeTag(tag)}
-                  className="hover:text-red-600 transition-colors cursor-pointer"
-                  aria-label={`Remove tag ${tag}`}
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </span>
-            );
-          })}
+                <X className="w-3 h-3 stroke-[3]" />
+              </button>
+            </span>
+          ))}
 
-          {/* Input to add custom tag */}
-          <div className="inline-flex items-center gap-1 flex-1 min-w-[140px]">
+          <div className="flex-1 min-w-[140px] flex items-center">
             <input
               type="text"
-              placeholder="+ custom tag..."
+              placeholder="Type custom tag..."
               value={newTagInput}
-              onChange={(e) => setNewTagInput(filterTagInput(e.target.value))}
+              onChange={(e) => setNewTagInput(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
@@ -198,30 +173,35 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
           {COMMON_TAG_SUGGESTIONS.map((tag) => {
             const isSelected = formData.tags.includes(tag);
             return (
-              <ChipBadge
+              <button
                 key={tag}
-                $selected={isSelected}
+                type="button"
                 onClick={() => toggleSuggestedTag(tag)}
+                className={`inline-flex items-center gap-1.5 py-1.5 px-3.5 rounded-full text-xs font-bold cursor-pointer transition-all duration-200 ${
+                  isSelected
+                    ? 'bg-amber-100 text-amber-900 border border-amber-400'
+                    : 'bg-gray-100 text-gray-700 border border-transparent hover:bg-amber-50 hover:border-amber-300'
+                }`}
               >
                 <Tag className="w-3 h-3 opacity-60" />
                 {tag}
-              </ChipBadge>
+              </button>
             );
           })}
         </div>
-      </FormGroup>
+      </div>
 
       {/* Inclusions & Exclusions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 pt-2">
         {/* Inclusions */}
         <div className="space-y-3">
-          <FieldLabel>
+          <label className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between">
             <span className="flex items-center gap-1.5 text-green-700 font-extrabold">
               <Check className="w-4 h-4 text-green-600" />
               What&apos;s Included {formData.inclusions.length > 0 ? `(${formData.inclusions.length})` : ''}
             </span>
-            <FieldHint>Optional</FieldHint>
-          </FieldLabel>
+            <span className="text-[10px] font-bold text-gray-400 normal-case tracking-normal">Optional</span>
+          </label>
 
           {/* Active Inclusions List */}
           {formData.inclusions.length > 0 && (
@@ -250,7 +230,7 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
 
           {/* Custom Inclusion Input */}
           <div className="flex gap-2">
-            <FieldInput
+            <input
               type="text"
               placeholder="e.g. Welcome Drinks, Trekking Poles"
               value={newInclusionInput}
@@ -263,6 +243,7 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
                   addInclusion();
                 }
               }}
+              className="w-full rounded-2xl py-3 px-4 sm:py-3.5 sm:px-5 text-sm sm:text-[15px] font-semibold text-gray-900 font-jakarta outline-none transition-all placeholder:text-gray-400 placeholder:font-medium bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25"
             />
             <button
               type="button"
@@ -276,23 +257,26 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
           </div>
 
           {/* Suggested Inclusions */}
-          <SuggestionsContainer>
-            <SuggestionsTitle>
+          <div className="flex flex-col gap-2 mt-2">
+            <div className="flex items-center justify-between text-[11px] font-extrabold uppercase tracking-wide text-gray-500">
               <span>Suggested Inclusions</span>
               <span className="text-[10px] text-gray-400 lowercase font-medium">
                 click to toggle
               </span>
-            </SuggestionsTitle>
+            </div>
             <div className="flex flex-wrap gap-1.5">
               {COMMON_INCLUSION_SUGGESTIONS.map((option) => {
                 const isSelected = formData.inclusions.includes(option);
                 return (
-                  <SuggestionChip
+                  <button
                     key={option}
                     type="button"
-                    $variant="inclusion"
-                    $selected={isSelected}
                     onClick={() => toggleSuggestedInclusion(option)}
+                    className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-bold leading-tight cursor-pointer transition-all duration-150 text-left ${
+                      isSelected
+                        ? 'bg-green-100 text-green-900 border border-green-500 shadow-2xs hover:bg-green-200'
+                        : 'bg-white text-gray-700 border border-gray-200 hover:bg-green-50 hover:border-green-300 hover:text-green-800'
+                    }`}
                   >
                     {isSelected ? (
                       <Check className="w-3 h-3 text-green-600 shrink-0" />
@@ -300,22 +284,22 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
                       <Plus className="w-3 h-3 opacity-60 shrink-0" />
                     )}
                     {option}
-                  </SuggestionChip>
+                  </button>
                 );
               })}
             </div>
-          </SuggestionsContainer>
+          </div>
         </div>
 
         {/* Exclusions */}
         <div className="space-y-3">
-          <FieldLabel>
+          <label className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between">
             <span className="flex items-center gap-1.5 text-red-600 font-extrabold">
               <ShieldAlert className="w-4 h-4 text-red-500" />
               What&apos;s Not Included {formData.exclusions.length > 0 ? `(${formData.exclusions.length})` : ''}
             </span>
-            <FieldHint>Optional</FieldHint>
-          </FieldLabel>
+            <span className="text-[10px] font-bold text-gray-400 normal-case tracking-normal">Optional</span>
+          </label>
 
           {/* Active Exclusions List */}
           {formData.exclusions.length > 0 && (
@@ -344,7 +328,7 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
 
           {/* Custom Exclusion Input */}
           <div className="flex gap-2">
-            <FieldInput
+            <input
               type="text"
               placeholder="e.g. Flight tickets, Extra meals"
               value={newExclusionInput}
@@ -357,6 +341,7 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
                   addExclusion();
                 }
               }}
+              className="w-full rounded-2xl py-3 px-4 sm:py-3.5 sm:px-5 text-sm sm:text-[15px] font-semibold text-gray-900 font-jakarta outline-none transition-all placeholder:text-gray-400 placeholder:font-medium bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25"
             />
             <button
               type="button"
@@ -370,23 +355,26 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
           </div>
 
           {/* Suggested Exclusions */}
-          <SuggestionsContainer>
-            <SuggestionsTitle>
+          <div className="flex flex-col gap-2 mt-2">
+            <div className="flex items-center justify-between text-[11px] font-extrabold uppercase tracking-wide text-gray-500">
               <span>Suggested Exclusions</span>
               <span className="text-[10px] text-gray-400 lowercase font-medium">
                 click to toggle
               </span>
-            </SuggestionsTitle>
+            </div>
             <div className="flex flex-wrap gap-1.5">
               {COMMON_EXCLUSION_SUGGESTIONS.map((option) => {
                 const isSelected = formData.exclusions.includes(option);
                 return (
-                  <SuggestionChip
+                  <button
                     key={option}
                     type="button"
-                    $variant="exclusion"
-                    $selected={isSelected}
                     onClick={() => toggleSuggestedExclusion(option)}
+                    className={`inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-bold leading-tight cursor-pointer transition-all duration-150 text-left ${
+                      isSelected
+                        ? 'bg-red-100 text-red-900 border border-red-400 shadow-2xs hover:bg-red-200'
+                        : 'bg-white text-gray-700 border border-gray-200 hover:bg-red-50 hover:border-red-300 hover:text-red-800'
+                    }`}
                   >
                     {isSelected ? (
                       <Check className="w-3 h-3 text-red-600 shrink-0" />
@@ -394,13 +382,13 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
                       <Plus className="w-3 h-3 opacity-60 shrink-0" />
                     )}
                     {option}
-                  </SuggestionChip>
+                  </button>
                 );
               })}
             </div>
-          </SuggestionsContainer>
+          </div>
         </div>
       </div>
-    </StepContentArea>
+    </div>
   );
 };

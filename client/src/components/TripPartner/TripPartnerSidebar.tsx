@@ -4,7 +4,6 @@ import React, { useState, useEffect, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import Image from 'next/image';
-import styled from 'styled-components';
 import { usePathname } from 'next/navigation';
 import {
   Globe,
@@ -12,7 +11,6 @@ import {
   X,
   UserCheck,
 } from 'lucide-react';
-import { colors } from '@/theme/colors';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import {
   selectIsMobileSidebarOpen,
@@ -24,333 +22,7 @@ import { getPartnerNavItems } from './data';
 
 export type { TripPartnerSidebarProps };
 
-const SidebarRoot = styled.aside`
-  width: 16rem;
-  background-color: ${colors.white};
-  border-right: 1px solid ${colors.gray[200]};
-  height: 100vh;
-  display: none;
-  flex-direction: column;
-  flex-shrink: 0;
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  transition: colors 0.2s ease;
-  box-shadow: 1px 0 10px rgba(0, 0, 0, 0.02);
-
-  @media (min-width: 1024px) {
-    display: flex;
-  }
-`;
-
-const SidebarBrand = styled.div`
-  height: 72px;
-  display: flex;
-  align-items: center;
-  padding: 0 1.25rem;
-  border-bottom: 1px solid ${colors.gray[200]};
-  flex-shrink: 0;
-`;
-
-const LogoContainer = styled(Link)`
-  position: relative;
-  height: 2.5rem;
-  width: 10.5rem;
-  display: block;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: scale(1.03);
-  }
-
-  &:active {
-    transform: scale(0.97);
-  }
-`;
-
-const SidebarBody = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-  overflow-y: auto;
-  min-height: 0;
-`;
-
-
-const NavList = styled.nav`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-  overflow-y: auto;
-  padding-right: 0.25rem;
-  padding-bottom: 1rem;
-
-  &::-webkit-scrollbar {
-    width: 0.375rem;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: ${colors.amber[200]}99;
-    border-radius: 9999px;
-  }
-  &:hover::-webkit-scrollbar-thumb {
-    background-color: ${colors.amber[300]};
-  }
-`;
-
-const NavItemLink = styled(Link) <{ $isActive: boolean }>`
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  position: relative;
-  z-index: 10;
-  text-decoration: none;
-  background-color: ${colors.white};
-  border: 1px solid ${colors.gray[300]}80;
-  user-select: none;
-
-  ${({ $isActive }) =>
-    $isActive
-      ? `
-    color: ${colors.white} !important;
-    font-weight: 900;
-    box-shadow: 0 4px 12px ${colors.amber[500]}40;
-    background: linear-gradient(to right, ${colors.amber[500]}, ${colors.gold});
-    border-color: transparent;
-
-    svg {
-      color: ${colors.white} !important;
-      transition: none !important;
-    }
-
-    span {
-      color: ${colors.white} !important;
-      transition: none !important;
-    }
-  `
-      : `
-    color: ${colors.gray[600]};
-    font-weight: 700;
-    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
-
-    svg {
-      color: ${colors.gray[400]};
-      transition: color 0.15s ease, transform 0.15s ease;
-    }
-
-    &:hover {
-      color: ${colors.gray[950]};
-      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-
-      svg {
-        color: ${colors.amber[500]};
-        transform: scale(1.05);
-      }
-    }
-  `}
-`;
-
-const NavLabel = styled.span`
-  font-size: 0.875rem;
-  letter-spacing: -0.015em;
-  position: relative;
-  z-index: 10;
-  transition: none !important;
-`;
-
-const SidebarFooter = styled.div`
-  padding: 1rem;
-  border-top: 1px solid ${colors.gray[200]};
-  background-color: ${colors.white};
-  flex-shrink: 0;
-`;
-
-const MarketplaceButton = styled(Link)`
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: ${colors.gray[700]};
-  background-color: ${colors.white};
-  border: 1px solid ${colors.gray[200]};
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  text-decoration: none;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-
-  svg.globe-icon {
-    color: ${colors.amber[600]};
-    transition: transform 0.2s ease;
-  }
-
-  svg.arrow-icon {
-    color: ${colors.gray[400]};
-    margin-left: auto;
-    transition: all 0.2s ease;
-  }
-
-  &:hover {
-    background-color: ${colors.amber[50]};
-    border-color: ${colors.amber[300]};
-    color: ${colors.gray[950]};
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-
-    svg.globe-icon {
-      transform: scale(1.1);
-    }
-    svg.arrow-icon {
-      color: ${colors.amber[600]};
-      transform: translate(2px, -2px);
-    }
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-`;
-
-
-const DrawerOverlay = styled.div<{ $isOpen: boolean }>`
-  position: fixed;
-  inset: 0;
-  z-index: 9998;
-  background-color: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
-  pointer-events: ${({ $isOpen }) => ($isOpen ? 'auto' : 'none')};
-  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  @media (min-width: 1024px) {
-    display: none;
-  }
-`;
-
-const DrawerContainer = styled.aside<{ $isOpen: boolean }>`
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 9999;
-  width: 85%;
-  max-width: 20rem;
-  height: 100vh;
-  height: 100dvh;
-  background-color: ${colors.white};
-  box-shadow: 8px 0 36px rgba(0, 0, 0, 0.16);
-  display: flex;
-  flex-direction: column;
-  transform: ${({ $isOpen }) => ($isOpen ? 'translateX(0)' : 'translateX(-100%)')};
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  border-right: 1px solid ${colors.gray[200]};
-
-  @media (min-width: 1024px) {
-    display: none;
-  }
-`;
-
-const DrawerHeader = styled.div`
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 1.25rem;
-  border-bottom: 1px solid ${colors.gray[200]};
-  flex-shrink: 0;
-
-  @media (min-width: 640px) {
-    height: 72px;
-  }
-`;
-
-const DrawerCloseButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 0.625rem;
-  border: 1px solid ${colors.gray[200]};
-  background-color: ${colors.white};
-  color: ${colors.gray[600]};
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-
-  &:hover {
-    background-color: ${colors.amber[100]}80;
-    color: ${colors.gray[900]};
-    border-color: ${colors.amber[300]};
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-`;
-
-const DrawerPartnerCard = styled.div`
-  margin: 1rem 1rem 0.25rem 1rem;
-  padding: 0.875rem 1rem;
-  background-color: ${colors.white};
-  border: 1px solid ${colors.gray[200]};
-  border-radius: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-`;
-
-const DrawerAvatar = styled.div`
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 9999px;
-  background-color: ${colors.amber[400]};
-  color: ${colors.black};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  font-size: 0.875rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  text-transform: uppercase;
-  flex-shrink: 0;
-`;
-
-const DrawerPartnerDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-`;
-
-const DrawerPartnerName = styled.span`
-  font-size: 0.8125rem;
-  font-weight: 800;
-  color: ${colors.gray[900]};
-  line-height: 1.25;
-  text-transform: capitalize;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const DrawerPartnerBadge = styled.span`
-  font-size: 11px;
-  font-weight: 700;
-  color: ${colors.green[600]};
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-`;
-
-const emptySubscribe = () => () => { };
+const emptySubscribe = () => () => {};
 const useIsMounted = () => {
   return useSyncExternalStore(
     emptySubscribe,
@@ -394,19 +66,19 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
   }, [isMobileSidebarOpen, dispatch]);
 
   const effectiveDisplayName = currentPartner?.displayName || username;
-
   const activePathname = optimisticPath ?? pathname;
   const navItems = getPartnerNavItems(username, activePathname);
 
   return (
     <>
       {/* Desktop Persistent Sidebar (>= 1024px) */}
-      <SidebarRoot>
+      <aside className="w-64 bg-white border-r border-gray-200 h-screen hidden lg:flex flex-col shrink-0 sticky top-0 z-40 transition-colors shadow-[1px_0_10px_rgba(0,0,0,0.02)] font-jakarta">
         {/* Top 72px Header with TravelDekho Logo */}
-        <SidebarBrand>
-          <LogoContainer
+        <div className="h-[72px] flex items-center px-5 border-b border-gray-200 shrink-0">
+          <Link
             href={`/trip-partner/${username}/dashboard`}
             title="Trip Partner Dashboard"
+            className="relative h-10 w-[168px] block transition-transform hover:scale-[1.03] active:scale-[0.97]"
           >
             <Image
               alt="TravelDekho"
@@ -416,63 +88,79 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
               className="object-contain"
               sizes="168px"
             />
-          </LogoContainer>
-        </SidebarBrand>
+          </Link>
+        </div>
 
-        <SidebarBody>
+        <div className="flex-1 flex flex-col p-4 overflow-y-auto min-h-0">
           {/* Navigation List */}
-          <NavList>
+          <nav className="flex-1 flex flex-col gap-1.5 overflow-y-auto pr-1 pb-4">
             {navItems.map((item) => {
               const Icon = item.icon;
+              const isActive = !!item.isActive;
               return (
-                <NavItemLink
+                <Link
                   key={item.label}
                   href={item.href}
-                  $isActive={!!item.isActive}
                   onClick={() => setOptimisticPath(item.href)}
+                  className={`flex items-center gap-3.5 px-4 py-3 rounded-xl relative z-10 no-underline select-none border transition-all duration-150 ${
+                    isActive
+                      ? 'text-white font-black shadow-[0_4px_12px_rgba(244,140,6,0.25)] bg-gradient-to-r from-amber-500 to-amber-600 border-transparent'
+                      : 'text-slate-900 font-extrabold bg-white border-gray-200 hover:border-amber-300 hover:text-black hover:shadow-xs'
+                  }`}
                 >
-                  <Icon className="w-5 h-5 shrink-0" aria-hidden="true" />
-                  <NavLabel>{item.label}</NavLabel>
-                </NavItemLink>
+                  <Icon
+                    className={`w-5 h-5 shrink-0 transition-transform ${
+                      isActive ? 'text-white' : 'text-amber-500'
+                    }`}
+                    aria-hidden="true"
+                  />
+                  <span className="text-sm font-extrabold tracking-tight">{item.label}</span>
+                </Link>
               );
             })}
-          </NavList>
-        </SidebarBody>
+          </nav>
+        </div>
 
         {/* Sidebar Bottom Footer: View Marketplace Button */}
-        <SidebarFooter>
-          <MarketplaceButton
+        <div className="p-4 border-t border-gray-200 bg-white shrink-0">
+          <Link
             href="/"
             title="Visit TravelDekho Marketplace"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold text-gray-700 bg-white border border-gray-200 no-underline shadow-xs transition-all duration-200 hover:bg-amber-50 hover:border-amber-300 hover:text-gray-950 group/market"
           >
-            <Globe className="w-4 h-4 shrink-0 globe-icon" aria-hidden="true" />
+            <Globe className="w-4 h-4 shrink-0 text-amber-600 group-hover/market:scale-110 transition-transform" aria-hidden="true" />
             <span>View Marketplace</span>
-            <ArrowUpRight className="w-3.5 h-3.5 shrink-0 arrow-icon" aria-hidden="true" />
-          </MarketplaceButton>
-        </SidebarFooter>
-      </SidebarRoot>
+            <ArrowUpRight className="w-3.5 h-3.5 shrink-0 text-gray-400 group-hover/market:text-amber-600 group-hover/market:translate-x-0.5 group-hover/market:-translate-y-0.5 transition-all ml-auto" aria-hidden="true" />
+          </Link>
+        </div>
+      </aside>
 
       {/* Mobile & Tablet Off-Canvas Drawer (< 1024px, Portaled to body) */}
       {isMounted &&
         createPortal(
           <>
-            <DrawerOverlay
-              $isOpen={isMobileSidebarOpen}
+            <div
+              className={`fixed inset-0 z-[9998] bg-black/45 backdrop-blur-xs lg:hidden transition-opacity duration-300 ${
+                isMobileSidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+              }`}
               onClick={() => dispatch(closeMobileSidebar())}
               aria-hidden="true"
             />
 
-            <DrawerContainer
-              $isOpen={isMobileSidebarOpen}
+            <aside
+              className={`fixed top-0 bottom-0 left-0 z-[9999] w-[85%] max-w-xs h-screen h-[100dvh] bg-white shadow-2xl flex flex-col font-jakarta lg:hidden transition-transform duration-300 ease-out ${
+                isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+              }`}
               role="dialog"
               aria-modal="true"
               aria-label="Partner Navigation"
             >
-              <DrawerHeader>
-                <LogoContainer
+              <div className="h-[72px] flex items-center justify-between px-5 border-b border-gray-200 shrink-0">
+                <Link
                   href={`/trip-partner/${username}/dashboard`}
                   title="Trip Partner Dashboard"
                   onClick={() => dispatch(closeMobileSidebar())}
+                  className="relative h-10 w-[168px] block transition-transform hover:scale-[1.03]"
                 >
                   <Image
                     alt="TravelDekho"
@@ -482,63 +170,78 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
                     className="object-contain"
                     sizes="168px"
                   />
-                </LogoContainer>
+                </Link>
 
-                <DrawerCloseButton
+                <button
+                  type="button"
                   onClick={() => dispatch(closeMobileSidebar())}
                   aria-label="Close navigation menu"
                   title="Close navigation menu"
+                  className="p-2 rounded-xl text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors cursor-pointer"
                 >
                   <X className="w-5 h-5" />
-                </DrawerCloseButton>
-              </DrawerHeader>
+                </button>
+              </div>
 
-              <DrawerPartnerCard>
-                <DrawerAvatar>
+              <div className="m-4 mb-1 p-3.5 px-4 bg-white border border-gray-200 rounded-xl flex items-center gap-3 shadow-xs">
+                <div className="w-9 h-9 rounded-full bg-amber-400 text-charcoal flex items-center justify-center font-black text-sm shadow-xs uppercase shrink-0">
                   {effectiveDisplayName.charAt(0) || 'T'}
-                </DrawerAvatar>
-                <DrawerPartnerDetails>
-                  <DrawerPartnerName>{effectiveDisplayName}</DrawerPartnerName>
-                  <DrawerPartnerBadge>
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-[13px] font-extrabold text-gray-900 leading-tight capitalize truncate">
+                    {effectiveDisplayName}
+                  </span>
+                  <span className="text-[11px] font-bold text-green-600 flex items-center gap-1">
                     <UserCheck className="w-3 h-3 text-green-600" /> Verified Partner
-                  </DrawerPartnerBadge>
-                </DrawerPartnerDetails>
-              </DrawerPartnerCard>
+                  </span>
+                </div>
+              </div>
 
-              <SidebarBody>
-                <NavList>
+              <div className="flex-1 flex flex-col p-4 overflow-y-auto min-h-0">
+                <nav className="flex-1 flex flex-col gap-1.5 overflow-y-auto pr-1 pb-4">
                   {navItems.map((item) => {
                     const Icon = item.icon;
+                    const isActive = !!item.isActive;
                     return (
-                      <NavItemLink
+                      <Link
                         key={item.label}
                         href={item.href}
-                        $isActive={!!item.isActive}
                         onClick={() => {
                           setOptimisticPath(item.href);
                           dispatch(closeMobileSidebar());
                         }}
+                        className={`flex items-center gap-3.5 px-4 py-3 rounded-xl relative z-10 no-underline select-none border transition-all duration-150 ${
+                          isActive
+                            ? 'text-white font-black shadow-[0_4px_12px_rgba(244,140,6,0.25)] bg-gradient-to-r from-amber-500 to-amber-600 border-transparent'
+                            : 'text-slate-900 font-extrabold bg-white border-gray-200 hover:border-amber-300 hover:text-black hover:shadow-xs'
+                        }`}
                       >
-                        <Icon className="w-5 h-5 shrink-0" aria-hidden="true" />
-                        <NavLabel>{item.label}</NavLabel>
-                      </NavItemLink>
+                        <Icon
+                          className={`w-5 h-5 shrink-0 transition-transform ${
+                            isActive ? 'text-white' : 'text-amber-500'
+                          }`}
+                          aria-hidden="true"
+                        />
+                        <span className="text-sm font-extrabold tracking-tight">{item.label}</span>
+                      </Link>
                     );
                   })}
-                </NavList>
-              </SidebarBody>
+                </nav>
+              </div>
 
-              <SidebarFooter>
-                <MarketplaceButton
+              <div className="p-4 border-t border-gray-200 bg-white shrink-0">
+                <Link
                   href="/"
                   title="Visit TravelDekho Marketplace"
                   onClick={() => dispatch(closeMobileSidebar())}
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold text-gray-700 bg-white border border-gray-200 no-underline shadow-xs transition-all duration-200 hover:bg-amber-50 hover:border-amber-300 hover:text-gray-950 group/market"
                 >
-                  <Globe className="w-4 h-4 shrink-0 globe-icon" aria-hidden="true" />
+                  <Globe className="w-4 h-4 shrink-0 text-amber-600 group-hover/market:scale-110 transition-transform" aria-hidden="true" />
                   <span>View Marketplace</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 shrink-0 arrow-icon" aria-hidden="true" />
-                </MarketplaceButton>
-              </SidebarFooter>
-            </DrawerContainer>
+                  <ArrowUpRight className="w-3.5 h-3.5 shrink-0 text-gray-400 group-hover/market:text-amber-600 group-hover/market:translate-x-0.5 group-hover/market:-translate-y-0.5 transition-all ml-auto" aria-hidden="true" />
+                </Link>
+              </div>
+            </aside>
           </>,
           document.body
         )}

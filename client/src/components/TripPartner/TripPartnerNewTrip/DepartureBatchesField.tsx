@@ -2,12 +2,6 @@
 
 import React from 'react';
 import { Calendar, Plus, Trash2 } from 'lucide-react';
-import {
-  FormGroup,
-  FieldLabelRow,
-  ToggleSwitch,
-  AddItemLinkButton,
-} from './styles';
 import { DepartureBatch } from './types';
 
 export interface DepartureBatchesFieldProps {
@@ -58,9 +52,9 @@ export const DepartureBatchesField: React.FC<DepartureBatchesFieldProps> = ({
   };
 
   return (
-    <FormGroup className={className}>
+    <div className={`flex flex-col gap-2 w-full font-jakarta ${className}`}>
       {/* Dates on Request Toggle */}
-      <FieldLabelRow className="pb-1">
+      <div className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between select-none pb-1">
         <label
           htmlFor="dates-on-request-toggle"
           className="flex items-center gap-1.5 text-gray-800 cursor-pointer text-xs font-black uppercase tracking-wider"
@@ -68,39 +62,46 @@ export const DepartureBatchesField: React.FC<DepartureBatchesFieldProps> = ({
           <Calendar className="w-3.5 h-3.5 text-amber-500" />
           Dates on Request
         </label>
-        <ToggleSwitch
+        <button
           id="dates-on-request-toggle"
           type="button"
           role="switch"
           aria-checked={datesOnRequest}
-          $isActive={datesOnRequest}
           onClick={(e) => {
             e.preventDefault();
             onToggleDatesOnRequest(!datesOnRequest);
           }}
           title="Toggle dates on request"
+          className={`relative inline-flex items-center w-8.5 h-4.75 rounded-full p-0.5 cursor-pointer transition-colors duration-200 outline-none shrink-0 ${
+            datesOnRequest ? 'bg-amber-500' : 'bg-gray-300'
+          } focus-visible:ring-2 focus-visible:ring-amber-500`}
         >
-          <span />
-        </ToggleSwitch>
-      </FieldLabelRow>
+          <span
+            className={`block w-3.75 h-3.75 rounded-full bg-white shadow-xs transition-transform duration-200 ${
+              datesOnRequest ? 'translate-x-3.75' : 'translate-x-0'
+            }`}
+          />
+        </button>
+      </div>
 
       {/* Departure Dates Header with + ADD BATCH */}
-      <FieldLabelRow className="pt-2">
+      <div className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between select-none pt-2">
         <span className="flex items-center gap-1.5 text-gray-800 text-xs font-black uppercase tracking-wider">
           <Calendar className="w-3.5 h-3.5 text-amber-500" />
           Departure Dates
         </span>
-        <AddItemLinkButton
+        <button
           type="button"
           onClick={handleAddBatch}
           disabled={datesOnRequest}
           style={{ opacity: datesOnRequest ? 0.35 : 1 }}
           title="Add another departure batch"
+          className="inline-flex items-center gap-1.5 bg-transparent border-none text-amber-500 hover:text-amber-600 text-xs font-black tracking-wider uppercase cursor-pointer transition-all duration-150 hover:-translate-y-0.5 [&>svg]:w-3.5 [&>svg]:h-3.5 [&>svg]:stroke-[2.5]"
         >
           <Plus />
           <span>Add Batch</span>
-        </AddItemLinkButton>
-      </FieldLabelRow>
+        </button>
+      </div>
 
       {/* Batches Container Card */}
       <div
@@ -183,6 +184,6 @@ export const DepartureBatchesField: React.FC<DepartureBatchesFieldProps> = ({
           </div>
         ))}
       </div>
-    </FormGroup>
+    </div>
   );
 };

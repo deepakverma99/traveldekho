@@ -1,5 +1,4 @@
 export * from './types';
-export * from './styles';
 export * from './StepIndicator';
 export * from './StepBasic';
 export * from './StepLogistics';

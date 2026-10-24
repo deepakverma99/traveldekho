@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Phone } from 'lucide-react';
-import { FormGroup, FieldLabel, FieldHint } from './styles';
 import { filterOnlyNumbers } from './types';
 
 export interface WhatsAppContactFieldProps {
@@ -37,14 +36,16 @@ export const WhatsAppContactField: React.FC<WhatsAppContactFieldProps> = ({
   };
 
   return (
-    <FormGroup className={className}>
-      <FieldLabel htmlFor="whatsapp-contact-number">
+    <div className={`flex flex-col gap-2 w-full font-jakarta ${className}`}>
+      <label htmlFor="whatsapp-contact-number" className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between">
         <span className="flex items-center gap-1.5 text-gray-800">
           <Phone className="w-3.5 h-3.5 text-emerald-500" />
           WhatsApp Contact Number
         </span>
-        <FieldHint>Direct inquiry number for travelers</FieldHint>
-      </FieldLabel>
+        <span className="text-[10px] font-bold text-gray-400 normal-case tracking-normal">
+          Direct inquiry number for travelers
+        </span>
+      </label>
 
       <div className="relative flex items-center">
         {/* Country Code Prefix Badge (+91) */}
@@ -68,7 +69,6 @@ export const WhatsAppContactField: React.FC<WhatsAppContactFieldProps> = ({
           className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25 rounded-2xl pl-24 pr-5 py-3.5 text-sm sm:text-base font-bold text-gray-900 placeholder:text-gray-400 placeholder:font-normal outline-none transition-all shadow-2xs"
         />
       </div>
-    </FormGroup>
+    </div>
   );
 };
-
