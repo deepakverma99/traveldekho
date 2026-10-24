@@ -10,10 +10,7 @@ export const HeroBookingCard: React.FC = () => {
   const [pickup, setPickup] = useState<string>('');
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+    <div
       className="relative rounded-2xl p-4 sm:p-6 md:p-8 overflow-hidden font-jakarta shadow-[0_20px_50px_-12px_rgba(244,140,6,0.22),0_8px_24px_-8px_rgba(250,161,46,0.25)]"
       style={{
         background: `linear-gradient(145deg, ${colors.amber[300]} 0%, ${colors.amber[400]} 55%, ${colors.amber[500]} 100%)`,
@@ -29,7 +26,7 @@ export const HeroBookingCard: React.FC = () => {
       />
 
       <div className="relative z-10">
-        <h1 className="text-[24px] sm:text-[34px] md:text-[40px] font-black leading-[1.08] mb-2 sm:mb-3.5 tracking-tight text-charcoal">
+        <h1 className="text-[24px] sm:text-[34px] md:text-[40px] font-black leading-[1.08] mb-2 sm:mb-3.5 tracking-tight text-charcoal font-jakarta">
           Find Your
           <br />
           Dream Trip
@@ -126,6 +123,6 @@ export const HeroBookingCard: React.FC = () => {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };

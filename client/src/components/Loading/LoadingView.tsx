@@ -42,7 +42,6 @@ export const LoadingView: React.FC<LoadingViewProps> = ({
             alt="TravelDekho loading animation"
             width={240}
             height={240}
-            priority
             unoptimized
             className="w-44 h-44 sm:w-56 sm:h-56 object-contain"
           />

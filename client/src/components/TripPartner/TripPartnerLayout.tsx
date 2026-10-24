@@ -32,7 +32,7 @@ export const TripPartnerLayout: React.FC<TripPartnerLayoutProps> = ({
     <div className="min-h-screen bg-white flex w-full relative">
       <FloatingBackground fixed />
       <div className="flex flex-1 w-full min-h-screen relative z-1">
-        <Suspense fallback={<div className="w-64 h-screen hidden lg:flex bg-white border-r border-gray-200 shrink-0 sticky top-0" />}>
+        <Suspense fallback={<div className="w-64 h-screen hidden lg:flex bg-slate-50 border-r border-gray-200 shrink-0 sticky top-0" />}>
           <TripPartnerSidebar username={username} />
         </Suspense>
         <div className="flex flex-col flex-1 min-w-0 w-full min-h-screen">

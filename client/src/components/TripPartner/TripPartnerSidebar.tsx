@@ -72,9 +72,9 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
   return (
     <>
       {/* Desktop Persistent Sidebar (>= 1024px) */}
-      <aside className="w-64 bg-white border-r border-gray-200 h-screen hidden lg:flex flex-col shrink-0 sticky top-0 z-40 transition-colors shadow-[1px_0_10px_rgba(0,0,0,0.02)] font-jakarta">
+      <aside className="w-64 bg-slate-50/95 border-r border-gray-200 h-screen hidden lg:flex flex-col shrink-0 sticky top-0 z-40 transition-colors shadow-[1px_0_10px_rgba(0,0,0,0.02)] font-jakarta">
         {/* Top 72px Header with TravelDekho Logo */}
-        <div className="h-[72px] flex items-center px-5 border-b border-gray-200 shrink-0">
+        <div className="h-[72px] flex items-center px-5 border-b border-gray-200 shrink-0 bg-slate-50/95">
           <Link
             href={`/trip-partner/${username}/dashboard`}
             title="Trip Partner Dashboard"
@@ -122,7 +122,7 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
         </div>
 
         {/* Sidebar Bottom Footer: View Marketplace Button */}
-        <div className="p-4 border-t border-gray-200 bg-white shrink-0">
+        <div className="p-4 border-t border-gray-200 bg-slate-50/95 shrink-0">
           <Link
             href="/"
             title="Visit TravelDekho Marketplace"
@@ -148,14 +148,14 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
             />
 
             <aside
-              className={`fixed top-0 bottom-0 left-0 z-[9999] w-[85%] max-w-xs h-screen h-[100dvh] bg-white shadow-2xl flex flex-col font-jakarta lg:hidden transition-transform duration-300 ease-out ${
+              className={`fixed top-0 bottom-0 left-0 z-[9999] w-[85%] max-w-xs h-screen h-[100dvh] bg-slate-50 shadow-2xl flex flex-col font-jakarta lg:hidden transition-transform duration-300 ease-out ${
                 isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'
               }`}
               role="dialog"
               aria-modal="true"
               aria-label="Partner Navigation"
             >
-              <div className="h-[72px] flex items-center justify-between px-5 border-b border-gray-200 shrink-0">
+              <div className="h-[72px] flex items-center justify-between px-5 border-b border-gray-200 shrink-0 bg-slate-50">
                 <Link
                   href={`/trip-partner/${username}/dashboard`}
                   title="Trip Partner Dashboard"
@@ -229,7 +229,7 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
                 </nav>
               </div>
 
-              <div className="p-4 border-t border-gray-200 bg-white shrink-0">
+              <div className="p-4 border-t border-gray-200 bg-slate-50 shrink-0">
                 <Link
                   href="/"
                   title="Visit TravelDekho Marketplace"

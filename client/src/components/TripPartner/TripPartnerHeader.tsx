@@ -49,7 +49,7 @@ export const TripPartnerHeader: React.FC<TripPartnerHeaderProps> = ({
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full h-16 sm:h-[72px] bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-[0_1px_2px_0_rgba(0,0,0,0.03)] px-3.5 sm:px-6 lg:px-8">
+      <header className="sticky top-0 z-50 w-full h-16 sm:h-[72px] bg-slate-50/95 backdrop-blur-md border-b border-gray-200 shadow-[0_1px_2px_0_rgba(0,0,0,0.03)] px-3.5 sm:px-6 lg:px-8">
         <div className="max-w-[1600px] h-full mx-auto flex items-center justify-between gap-3 sm:gap-4 font-jakarta">
           {/* Left: Brand & Portal Badge */}
           <div className="flex items-center gap-2 sm:gap-3">

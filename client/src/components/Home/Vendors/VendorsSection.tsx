@@ -62,7 +62,7 @@ export const VendorsSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="flex items-center justify-between mb-4 md:mb-8">
-          <h2 className="text-xl sm:text-[28px] md:text-[32px] font-extrabold tracking-tight text-charcoal">
+          <h2 className="text-xl sm:text-[28px] md:text-[32px] font-black tracking-tight text-charcoal font-jakarta">
             Trip Partner
             <span className="ml-1 text-primary">Network</span>
           </h2>

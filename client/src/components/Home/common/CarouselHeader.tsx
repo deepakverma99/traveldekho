@@ -19,7 +19,7 @@ export const CarouselHeader: React.FC<CarouselHeaderProps> = ({
 }) => {
   return (
     <div className="flex items-center justify-between mb-6 md:mb-8">
-      <h2 className="text-xl sm:text-[28px] md:text-[32px] font-black tracking-tight text-charcoal flex items-center">
+      <h2 className="text-xl sm:text-[28px] md:text-[32px] font-black tracking-tight text-charcoal flex items-center font-jakarta">
         {icon}
         <span>{title}</span>
         <span className="ml-1 text-primary">{highlightText}</span>

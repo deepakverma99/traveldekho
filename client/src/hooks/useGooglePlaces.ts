@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { City, State } from 'country-state-city';
 
 const DEFAULT_API_KEY =
   (process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '').trim();
@@ -493,50 +492,6 @@ function matchFallbackPlaces(query: string): PlacePrediction[] {
       }
     }
     if (results.length >= 8) break;
-  }
-
-  // 2. Search Indian cities database
-  if (results.length < 8) {
-    try {
-      const indianCities = City.getCitiesOfCountry('IN') || [];
-      const stateMap = new Map<string, string>();
-
-      for (const city of indianCities) {
-        const cLower = city.name.toLowerCase();
-        let stateName = stateMap.get(city.stateCode);
-        if (!stateName) {
-          const st = State.getStateByCodeAndCountry(city.stateCode, 'IN');
-          stateName = st?.name || city.stateCode;
-          stateMap.set(city.stateCode, stateName);
-        }
-        const stLower = stateName.toLowerCase();
-        const cityCombined = `${cLower} ${stLower}`;
-
-        const isExact = cLower.startsWith(qLower) || cityCombined.includes(qLower);
-        const allTokens =
-          queryTokens.length > 1 && queryTokens.every((tok) => cityCombined.includes(tok));
-        const anyToken = queryTokens.some((tok) => cLower.startsWith(tok) || cLower === tok);
-
-        if (isExact || allTokens || anyToken) {
-          if (!seenKeys.has(cLower)) {
-            seenKeys.add(cLower);
-            results.push({
-              placeId: `city-${city.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${city.stateCode}`,
-              description: `${city.name}, ${stateName}, India`,
-              mainText: city.name,
-              secondaryText: `${stateName}, India`,
-              location:
-                city.latitude && city.longitude
-                  ? { lat: parseFloat(city.latitude), lng: parseFloat(city.longitude) }
-                  : undefined,
-            });
-          }
-        }
-        if (results.length >= 8) break;
-      }
-    } catch (err) {
-      console.warn('[useGooglePlaces] fallback Indian cities error:', err);
-    }
   }
 
   return results;

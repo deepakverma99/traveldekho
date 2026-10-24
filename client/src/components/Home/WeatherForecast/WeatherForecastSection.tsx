@@ -14,7 +14,7 @@ export const WeatherForecastSection: React.FC = () => {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
           <div>
-            <h2 className="font-caveat text-3xl md:text-5xl text-gray-900 font-bold mb-3 leading-tight">
+            <h2 className="text-xl sm:text-[28px] md:text-[32px] font-black tracking-tight text-charcoal mb-3 leading-tight font-jakarta">
               Live Weather <span className="ml-1 text-primary">Forecasts</span>
             </h2>
             <p className="text-gray-500 font-medium text-sm md:text-base max-w-xl leading-relaxed font-jakarta">

@@ -47,7 +47,7 @@ export const NearbyTripsSection: React.FC<NearbyTripsSectionProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header Section */}
         <div className="flex items-center justify-between mb-6 md:mb-8">
-          <h2 className="flex items-center text-xl sm:text-[28px] md:text-[32px] font-black tracking-tight text-charcoal">
+          <h2 className="flex items-center text-xl sm:text-[28px] md:text-[32px] font-black tracking-tight text-charcoal font-jakarta">
             <MapPin className="inline-block text-primary w-6 h-6 mr-2 -mt-1" aria-hidden="true" />
             <span>Trips Near</span>
             <span className="ml-1 text-primary">You</span>

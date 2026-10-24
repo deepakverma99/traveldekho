@@ -13,7 +13,7 @@ export const UpcomingTripsSection: React.FC = () => {
       highlightText="Trips"
       viewAllHref="/search"
       trips={upcomingTripsData}
-      priorityFirstN={4}
+      priorityFirstN={1}
     />
   );
 };

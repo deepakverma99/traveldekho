@@ -8,8 +8,7 @@ export const kausaniTripDetail: TripDetail = {
     'Nestled in the tranquil Himalayas, discover breathtaking panoramic views of snow-capped peaks, serene ashrams, and verdant tea estates on an unforgettable guided getaway.',
   destination: 'Kausani',
   duration: '2 nights / 3 days',
-  heroImage:
-    '/storage/traveldekho-media/traveldekho/trips/thumbnails/e96dd397-e4b9-48ad-b03d-c2a33d374ea1.jpg',
+  heroImage: '/trips/zanskar.png',
   tags: [
     { label: 'Budget Friendly', variant: 'amber' },
     { label: 'Explore Offbeat', variant: 'amber' },
@@ -23,8 +22,7 @@ export const kausaniTripDetail: TripDetail = {
   difficulty: 'moderate',
   about: {
     description: `Nestled in the Himalayas, Kausani is known for its breathtaking panoramic views of the snow-capped Nanda Devi and Trishul peaks. Visit the Anasakti Ashram, where Mahatma Gandhi was inspired to write his 'Anasakti Yoga', and explore the charming local markets to experience the Kumaoni culture and cuisine unique to this tranquil hill station.`,
-    mapImage:
-      '/storage/traveldekho-media/traveldekho/trips/thumbnails/0f93d97d-f35e-497f-b4f1-2f24caca5a26.jpg',
+    mapImage: '/trips/ladakh.png',
   },
   itinerary: [
     {
@@ -83,11 +81,10 @@ export const kausaniTripDetail: TripDetail = {
     },
   ],
   gallery: [
-    '/storage/traveldekho-media/traveldekho/trips/gallery/48ec2772-962d-4aa6-959d-a85efccfeed8.jpg',
-    '/storage/traveldekho-media/traveldekho/trips/gallery/a66a7eab-961a-44f6-9676-26beda48240b.jpg',
-    '/storage/traveldekho-media/traveldekho/trips/gallery/bda2dabb-34e6-44dc-8279-41e3520bc7c9.jpg',
-    '/storage/traveldekho-media/traveldekho/trips/gallery/1836dda1-bfc7-49ee-8f49-5a951da11c6d.webp',
-    '/storage/traveldekho-media/traveldekho/trips/gallery/5e0f158c-a9b4-4033-8725-9b728194c15e.jpg',
+    '/trips/zanskar.png',
+    '/trips/ladakh.png',
+    '/destinations/manali.png',
+    '/mountains.png',
   ],
   destinationsCovered: [
     'Kausani State',
@@ -102,7 +99,7 @@ export const kausaniTripDetail: TripDetail = {
   partner: {
     name: 'Travellr Time',
     slug: 'travellr-times',
-    logo: '/storage/traveldekho-media/traveldekho/vendors/5cc48027-9426-42d5-adc9-39a619643417.webp',
+    logo: '/sm-logo.png',
     isVerified: true,
   },
   pricing: {

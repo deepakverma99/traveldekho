@@ -25,7 +25,6 @@ export const educationalTripsData: TripItem[] = [
     ],
     partner: {
       name: 'travellr time',
-      logo: '/storage/traveldekho-media/traveldekho/vendors/5cc48027-9426-42d5-adc9-39a619643417.webp',
       ratingText: 'New',
     },
   },

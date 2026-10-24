@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { Heart, MapPin, Calendar, Star } from 'lucide-react';
 
 export interface TripTag {
@@ -59,7 +58,7 @@ export const TripCard: React.FC<TripCardProps> = ({
 
   return (
     <Link href={`/trips/${trip.slug}`} id={trip.id} className="contents">
-      <motion.div
+      <div
         className={`bg-white rounded-[0.875rem] sm:rounded-2xl overflow-hidden border border-amber-100/70 shadow-[0_4px_20px_-4px_rgba(115,92,0,0.08),0_1px_3px_0_rgba(0,0,0,0.04)] font-jakarta flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_32px_-6px_rgba(115,92,0,0.14),0_2px_8px_0_rgba(0,0,0,0.06)] group ${
           fullWidth
             ? 'w-full h-full shrink'
@@ -75,7 +74,7 @@ export const TripCard: React.FC<TripCardProps> = ({
             sizes="(max-width: 640px) 235px, 280px"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             priority={priority}
-            loading={priority ? 'eager' : undefined}
+            loading={priority ? 'eager' : 'lazy'}
             unoptimized
           />
 
@@ -208,7 +207,7 @@ export const TripCard: React.FC<TripCardProps> = ({
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </Link>
   );
 };

@@ -13,7 +13,7 @@ import {
   syncItineraryDays,
 } from './types';
 import { TripDifficulty } from '../types/';
-import { useCityState } from '@/hooks';
+import { useCityState } from '@/hooks/useCityState';
 
 interface StepLogisticsProps {
   formData: NewTripFormData;
