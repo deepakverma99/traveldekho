@@ -12,7 +12,7 @@ interface ProfileAccountSectionProps {
 export const ProfileAccountSection: React.FC<ProfileAccountSectionProps> = ({ username }) => {
   return (
     <div
-      className="rounded-2xl p-4 sm:p-6 md:p-8 border shadow-xs transition-all space-y-6 font-jakarta"
+      className="w-full min-w-0 rounded-2xl p-3.5 sm:p-5 md:p-6 lg:p-8 border shadow-xs transition-all space-y-4 sm:space-y-6 font-jakarta"
       style={{
         backgroundColor: partnerColors.surface,
         borderColor: partnerColors.border,
@@ -20,27 +20,27 @@ export const ProfileAccountSection: React.FC<ProfileAccountSectionProps> = ({ us
     >
       {/* Header */}
       <div
-        className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b gap-3"
+        className="flex flex-col sm:flex-row sm:items-center justify-between pb-3.5 sm:pb-4 border-b gap-3"
         style={{ borderColor: partnerColors.borderLight }}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0"
             style={{
               backgroundColor: partnerColors.accentLight,
               color: partnerColors.accent,
             }}
           >
-            <User className="w-5 h-5 stroke-[2.25]" />
+            <User className="w-4.5 h-4.5 sm:w-5 sm:h-5 stroke-[2.25]" />
           </div>
-          <div>
+          <div className="min-w-0 flex-1">
             <h3
-              className="text-base sm:text-lg font-black tracking-tight"
+              className="text-sm sm:text-base md:text-lg font-black tracking-tight"
               style={{ color: partnerColors.dark }}
             >
               Account & Profile Details
             </h3>
-            <p className="text-xs font-semibold" style={{ color: partnerColors.textSecondary }}>
+            <p className="text-[11px] sm:text-xs font-semibold leading-relaxed" style={{ color: partnerColors.textSecondary }}>
               Primary partner credentials, contact points, and public storefront link.
             </p>
           </div>
@@ -48,7 +48,7 @@ export const ProfileAccountSection: React.FC<ProfileAccountSectionProps> = ({ us
 
         <Link
           href={`/trip-partner/${username}/profile`}
-          className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all duration-150 hover:bg-slate-50 cursor-pointer w-full min-[480px]:w-auto self-start sm:self-auto active:scale-95 shadow-2xs shrink-0"
+          className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 sm:py-1.5 rounded-xl text-xs font-bold border transition-all duration-150 hover:bg-slate-50 cursor-pointer w-full sm:w-auto active:scale-95 shadow-2xs shrink-0"
           style={{
             backgroundColor: partnerColors.surface,
             borderColor: partnerColors.border,

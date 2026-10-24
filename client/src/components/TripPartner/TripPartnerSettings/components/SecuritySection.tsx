@@ -43,60 +43,58 @@ export const SecuritySection: React.FC<SecuritySectionProps> = ({
 
   return (
     <div
-      className="rounded-2xl p-4 sm:p-6 md:p-8 border shadow-sm space-y-6"
+      className="w-full min-w-0 rounded-2xl p-3.5 sm:p-5 md:p-6 lg:p-8 border shadow-sm space-y-4 sm:space-y-6"
       style={{
         backgroundColor: partnerColors.surface,
         borderColor: partnerColors.border,
       }}
     >
       {/* Header */}
-      <div className="flex items-center gap-3 pb-4 border-b" style={{ borderColor: partnerColors.borderLight }}>
+      <div className="flex items-center gap-2.5 sm:gap-3 pb-3.5 sm:pb-4 border-b" style={{ borderColor: partnerColors.borderLight }}>
         <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+          className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0"
           style={{
             backgroundColor: partnerColors.accentLight,
             color: partnerColors.accent,
           }}
         >
-          <Shield className="w-5 h-5" />
+          <Shield className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
         </div>
-        <div>
-          <h3 className="text-base sm:text-lg font-black tracking-tight" style={{ color: partnerColors.dark }}>
+        <div className="min-w-0 flex-1">
+          <h3 className="text-sm sm:text-base md:text-lg font-black tracking-tight" style={{ color: partnerColors.dark }}>
             Password & Account Credentials
           </h3>
-          <p className="text-xs font-semibold" style={{ color: partnerColors.textSecondary }}>
+          <p className="text-[11px] sm:text-xs font-semibold leading-relaxed" style={{ color: partnerColors.textSecondary }}>
             Manage partner dashboard login password and credentials.
           </p>
         </div>
       </div>
 
-      <div className="space-y-5">
-
-
+      <div className="space-y-4 sm:space-y-5 w-full">
         {/* Change Password Card */}
         <div
-          className="p-4 sm:p-5 rounded-xl border space-y-4"
+          className="p-3.5 sm:p-5 rounded-xl border space-y-3.5 sm:space-y-4 w-full min-w-0"
           style={{
             backgroundColor: partnerColors.surfaceMuted,
             borderColor: partnerColors.border,
           }}
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
               <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center shrink-0"
                 style={{
                   backgroundColor: partnerColors.surfaceSubtle,
                   color: partnerColors.dark,
                 }}
               >
-                <KeyRound className="w-5 h-5" />
+                <KeyRound className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
               </div>
-              <div>
+              <div className="min-w-0 flex-1">
                 <h4 className="text-xs sm:text-sm font-bold" style={{ color: partnerColors.dark }}>
                   Partner Password
                 </h4>
-                <p className="text-[11px] font-medium" style={{ color: partnerColors.textMuted }}>
+                <p className="text-[10px] sm:text-[11px] font-medium" style={{ color: partnerColors.textMuted }}>
                   Last modified on {security.lastPasswordChange}
                 </p>
               </div>
@@ -105,7 +103,7 @@ export const SecuritySection: React.FC<SecuritySectionProps> = ({
             <button
               type="button"
               onClick={() => setShowPasswordForm(!showPasswordForm)}
-              className="px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer self-start sm:self-auto active:scale-95 hover:opacity-90"
+              className="px-3.5 py-2 sm:py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer w-full sm:w-auto text-center active:scale-95 hover:opacity-90 shrink-0"
               style={{
                 backgroundColor: partnerColors.surface,
                 borderColor: partnerColors.border,

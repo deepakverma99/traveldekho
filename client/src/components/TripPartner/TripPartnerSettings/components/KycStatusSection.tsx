@@ -70,14 +70,14 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
   };
 
   return (
-    <div className="space-y-4 sm:space-y-6 md:space-y-8 font-jakarta">
+    <div className="w-full min-w-0 space-y-4 sm:space-y-6 md:space-y-8 font-jakarta">
       {/* 1. KYC Verification Status Trackline */}
       <KycStatusTrackline kyc={kyc} />
 
-      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 md:space-y-8">
+      <form onSubmit={handleSubmit} className="w-full min-w-0 space-y-4 sm:space-y-6 md:space-y-8">
         {/* 2. Step 1: Registration Type Selection */}
         <div
-          className="rounded-2xl p-4 sm:p-6 md:p-7 border shadow-xs transition-all space-y-3.5 sm:space-y-4"
+          className="w-full min-w-0 rounded-2xl p-3.5 sm:p-5 md:p-6 border shadow-xs transition-all space-y-3 sm:space-y-4"
           style={{
             backgroundColor: partnerColors.surface,
             borderColor: partnerColors.border,
@@ -92,39 +92,39 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
                 1
               </span>
               <h4
-                className="text-sm sm:text-base font-black tracking-tight"
+                className="text-xs sm:text-sm md:text-base font-black tracking-tight"
                 style={{ color: partnerColors.dark }}
               >
                 Your registration type
               </h4>
             </div>
-            <p className="text-xs font-medium text-slate-500 mt-1 pl-7">
+            <p className="text-[11px] sm:text-xs font-medium text-slate-500 mt-1 pl-7 leading-relaxed">
               Select whether you are operating as a registered corporate entity or an individual trip host.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 w-full">
             {/* Option 1: Company */}
             <label
               onClick={() => handleTypeChange('company')}
-              className={`p-3.5 sm:p-4 rounded-xl border flex items-start justify-between gap-2.5 sm:gap-3 cursor-pointer transition-all duration-200 select-none ${
+              className={`p-3 sm:p-3.5 md:p-4 rounded-xl border flex items-start justify-between gap-2.5 sm:gap-3 cursor-pointer transition-all duration-200 select-none w-full min-w-0 ${
                 activeRegistrationType === 'company'
                   ? 'border-amber-400 bg-amber-50/20 shadow-xs'
                   : 'border-slate-200 bg-slate-50/60 hover:bg-slate-50 hover:border-slate-300'
               }`}
             >
-              <div className="flex items-start gap-2.5 sm:gap-3 min-w-0">
+              <div className="flex items-start gap-2.5 sm:gap-3 min-w-0 flex-1">
                 <div
-                  className={`w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center shrink-0 border ${
+                  className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center shrink-0 border ${
                     activeRegistrationType === 'company'
                       ? 'bg-amber-100/80 border-amber-300 text-amber-700'
                       : 'bg-white border-slate-200 text-slate-500'
                   }`}
                 >
-                  <Building2 className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
+                  <Building2 className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
-                <div className="space-y-0.5">
-                  <div className="flex items-center gap-1.5">
+                <div className="space-y-0.5 min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-1 sm:gap-1.5">
                     <span className="text-xs sm:text-sm font-extrabold text-slate-900">
                       Company
                     </span>
@@ -132,7 +132,7 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
                       (Entity)
                     </span>
                   </div>
-                  <p className="text-[11px] font-medium text-slate-500 leading-relaxed">
+                  <p className="text-[10px] sm:text-[11px] font-medium text-slate-500 leading-relaxed">
                     Registered Private Limited, LLP, Partnership, or Sole Proprietorship firm.
                   </p>
                 </div>
@@ -140,14 +140,14 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
 
               {/* Radio Circle */}
               <div
-                className={`w-4.5 h-4.5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
+                className={`w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                   activeRegistrationType === 'company'
                     ? 'border-amber-500 bg-amber-500'
                     : 'border-slate-300 bg-white'
                 }`}
               >
                 {activeRegistrationType === 'company' && (
-                  <div className="w-2 h-2 rounded-full bg-white" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-white" />
                 )}
               </div>
             </label>
@@ -155,24 +155,24 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
             {/* Option 2: Trip Partner */}
             <label
               onClick={() => handleTypeChange('trip_partner')}
-              className={`p-3.5 sm:p-4 rounded-xl border flex items-start justify-between gap-2.5 sm:gap-3 cursor-pointer transition-all duration-200 select-none ${
+              className={`p-3 sm:p-3.5 md:p-4 rounded-xl border flex items-start justify-between gap-2.5 sm:gap-3 cursor-pointer transition-all duration-200 select-none w-full min-w-0 ${
                 activeRegistrationType === 'trip_partner'
                   ? 'border-amber-400 bg-amber-50/20 shadow-xs'
                   : 'border-slate-200 bg-slate-50/60 hover:bg-slate-50 hover:border-slate-300'
               }`}
             >
-              <div className="flex items-start gap-2.5 sm:gap-3 min-w-0">
+              <div className="flex items-start gap-2.5 sm:gap-3 min-w-0 flex-1">
                 <div
-                  className={`w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center shrink-0 border ${
+                  className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center shrink-0 border ${
                     activeRegistrationType === 'trip_partner'
                       ? 'bg-amber-100/80 border-amber-300 text-amber-700'
                       : 'bg-white border-slate-200 text-slate-500'
                   }`}
                 >
-                  <User className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
+                  <User className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
-                <div className="space-y-0.5">
-                  <div className="flex items-center gap-1.5">
+                <div className="space-y-0.5 min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-1 sm:gap-1.5">
                     <span className="text-xs sm:text-sm font-extrabold text-slate-900">
                       Trip Partner
                     </span>
@@ -180,7 +180,7 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
                       (Individual)
                     </span>
                   </div>
-                  <p className="text-[11px] font-medium text-slate-500 leading-relaxed">
+                  <p className="text-[10px] sm:text-[11px] font-medium text-slate-500 leading-relaxed">
                     Independent Tour Host, Certified Trek Leader, or Freelance Mountain Guide.
                   </p>
                 </div>
@@ -188,14 +188,14 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
 
               {/* Radio Circle */}
               <div
-                className={`w-4.5 h-4.5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
+                className={`w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                   activeRegistrationType === 'trip_partner'
                     ? 'border-amber-500 bg-amber-500'
                     : 'border-slate-300 bg-white'
                 }`}
               >
                 {activeRegistrationType === 'trip_partner' && (
-                  <div className="w-2 h-2 rounded-full bg-white" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-white" />
                 )}
               </div>
             </label>
@@ -419,14 +419,14 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
 
         {/* 4. Security & Encryption Guarantee Notice */}
         <div
-          className="rounded-2xl p-4 sm:p-5 border flex items-start gap-3 sm:gap-3.5"
+          className="w-full min-w-0 rounded-2xl p-3.5 sm:p-5 border flex items-start gap-2.5 sm:gap-3.5"
           style={{
             backgroundColor: partnerColors.surfaceMuted,
             borderColor: partnerColors.border,
           }}
         >
-          <Lock className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" />
-          <div className="space-y-0.5 text-xs font-medium text-slate-500 leading-relaxed">
+          <Lock className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-slate-500 shrink-0 mt-0.5" />
+          <div className="space-y-0.5 text-[11px] sm:text-xs font-medium text-slate-500 leading-relaxed min-w-0 flex-1">
             <p className="font-bold text-slate-700">
               Bank-Grade 256-Bit Document Encryption & Privacy Safeguards
             </p>
@@ -438,26 +438,26 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
 
         {/* 5. Bottom Save / Submission Action Bar */}
         <div
-          className="rounded-2xl p-4 sm:p-6 border shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3.5 sm:gap-4 transition-all"
+          className="w-full min-w-0 rounded-2xl p-3.5 sm:p-5 md:p-6 border shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 transition-all"
           style={{
             backgroundColor: partnerColors.surface,
             borderColor: partnerColors.border,
           }}
         >
-          <div className="text-center sm:text-left space-y-0.5">
-            <h4 className="text-sm font-black" style={{ color: partnerColors.dark }}>
+          <div className="text-center sm:text-left space-y-0.5 w-full sm:w-auto min-w-0">
+            <h4 className="text-xs sm:text-sm font-black tracking-tight" style={{ color: partnerColors.dark }}>
               Submit KYC for Compliance Audit?
             </h4>
-            <p className="text-xs font-semibold" style={{ color: partnerColors.textSecondary }}>
+            <p className="text-[11px] sm:text-xs font-semibold leading-relaxed" style={{ color: partnerColors.textSecondary }}>
               Our compliance desk typically reviews and clears submitted records within 24 hours.
             </p>
           </div>
 
-          <div className="flex flex-col min-[480px]:flex-row items-stretch min-[480px]:items-center gap-2.5 sm:gap-3 w-full sm:w-auto justify-end">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end shrink-0">
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 px-4 sm:px-5.5 rounded-xl text-xs sm:text-[13px] font-bold sm:font-extrabold tracking-tight font-jakarta cursor-pointer transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-xs hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 w-full min-[480px]:w-auto group border"
+              className="inline-flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-2.5 px-4.5 sm:px-5.5 rounded-xl text-xs sm:text-[13px] font-bold sm:font-extrabold tracking-tight font-jakarta cursor-pointer transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-xs hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 w-full sm:w-auto group border"
               style={{
                 backgroundColor: partnerColors.dark,
                 borderColor: partnerColors.accentBorder,

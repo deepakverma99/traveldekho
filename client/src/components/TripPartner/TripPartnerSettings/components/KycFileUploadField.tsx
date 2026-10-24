@@ -85,15 +85,15 @@ export const KycFileUploadField: React.FC<KycFileUploadFieldProps> = ({
 
   return (
     <div
-      className="p-4 sm:p-5 rounded-2xl border transition-all space-y-3 font-jakarta flex flex-col justify-between h-full"
+      className="p-3.5 sm:p-5 rounded-2xl border transition-all space-y-3 font-jakarta flex flex-col justify-between h-full w-full min-w-0"
       style={{
         backgroundColor: file ? partnerColors.surface : partnerColors.surfaceMuted,
         borderColor: file ? '#cbd5e1' : partnerColors.border,
       }}
     >
       {/* Title & Step Header */}
-      <div className="flex items-start justify-between gap-3">
-        <div className="space-y-0.5">
+      <div className="flex items-start justify-between gap-2.5 sm:gap-3">
+        <div className="space-y-0.5 min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <span
               className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0"
@@ -105,7 +105,7 @@ export const KycFileUploadField: React.FC<KycFileUploadFieldProps> = ({
               {stepNumber}
             </span>
             <h4
-              className="text-xs sm:text-[13px] font-extrabold tracking-tight"
+              className="text-xs sm:text-[13px] font-extrabold tracking-tight truncate"
               style={{ color: partnerColors.dark }}
             >
               {label}
@@ -113,7 +113,7 @@ export const KycFileUploadField: React.FC<KycFileUploadFieldProps> = ({
             </h4>
           </div>
           {description && (
-            <p className="text-[11px] font-medium text-slate-500 pl-7 leading-relaxed">
+            <p className="text-[10px] sm:text-[11px] font-medium text-slate-500 pl-7 leading-relaxed">
               {description}
             </p>
           )}
@@ -121,14 +121,14 @@ export const KycFileUploadField: React.FC<KycFileUploadFieldProps> = ({
 
         {file && (
           <span
-            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black shrink-0 border"
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black shrink-0 border"
             style={{
               backgroundColor: partnerColors.verifiedBg,
               borderColor: partnerColors.verifiedBorder,
               color: partnerColors.verifiedText,
             }}
           >
-            <CheckCircle2 className="w-3 h-3" />
+            <CheckCircle2 className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
             Uploaded
           </span>
         )}
@@ -145,12 +145,12 @@ export const KycFileUploadField: React.FC<KycFileUploadFieldProps> = ({
 
       {/* Uploaded State Box */}
       {file ? (
-        <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 sm:p-3 rounded-xl border border-slate-200/80 bg-slate-50/80 mt-auto">
-          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1 basis-[150px]">
+        <div className="flex flex-col min-[380px]:flex-row min-[380px]:items-center justify-between gap-2 p-2.5 sm:p-3 rounded-xl border border-slate-200/80 bg-slate-50/80 mt-auto w-full min-w-0">
+          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
             <div className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center shrink-0">
               <FileCheck2 className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-emerald-600" />
             </div>
-            <div className="min-w-0 space-y-0.5">
+            <div className="min-w-0 flex-1 space-y-0.5">
               <p className="text-xs font-bold text-slate-900 truncate font-mono">
                 {file.fileName}
               </p>
@@ -160,11 +160,11 @@ export const KycFileUploadField: React.FC<KycFileUploadFieldProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 ml-auto">
+          <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 self-end min-[380px]:self-auto">
             <button
               type="button"
               onClick={() => setShowPreviewModal(true)}
-              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:text-amber-600 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:text-amber-600 transition-colors cursor-pointer"
             >
               <Eye className="w-3 h-3" />
               <span>Preview</span>
@@ -173,7 +173,7 @@ export const KycFileUploadField: React.FC<KycFileUploadFieldProps> = ({
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:text-blue-600 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:text-blue-600 transition-colors cursor-pointer"
             >
               <RefreshCw className="w-3 h-3" />
               <span>Replace</span>

@@ -38,28 +38,28 @@ export const TripPartnerSettingsView: React.FC<TripPartnerSettingsViewProps> = (
 
   const renderSaveBar = (title: string, subtitle: string) => (
     <div
-      className="rounded-2xl p-4 sm:p-6 border shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3.5 sm:gap-4 transition-all"
+      className="w-full rounded-2xl p-3.5 sm:p-5 md:p-6 border shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 transition-all"
       style={{
         backgroundColor: partnerColors.surface,
         borderColor: partnerColors.border,
       }}
     >
-      <div className="text-center sm:text-left space-y-0.5">
-        <h4 className="text-sm font-black" style={{ color: partnerColors.dark }}>
+      <div className="text-center sm:text-left space-y-0.5 w-full sm:w-auto min-w-0">
+        <h4 className="text-xs sm:text-sm font-black tracking-tight" style={{ color: partnerColors.dark }}>
           {title}
         </h4>
-        <p className="text-xs font-semibold" style={{ color: partnerColors.textSecondary }}>
+        <p className="text-[11px] sm:text-xs font-semibold leading-relaxed" style={{ color: partnerColors.textSecondary }}>
           {subtitle}
         </p>
       </div>
 
-      <div className="flex flex-col min-[480px]:flex-row items-stretch min-[480px]:items-center gap-2.5 sm:gap-3 w-full sm:w-auto justify-end">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end shrink-0">
         {isDirty && (
           <button
             type="button"
             onClick={handleReset}
             disabled={isSaving}
-            className="inline-flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-3.5 sm:px-4.5 rounded-xl text-xs sm:text-[13px] font-bold tracking-tight font-jakarta transition-all border active:scale-95 cursor-pointer w-full min-[480px]:w-auto hover:bg-red-50 hover:text-red-600 hover:border-red-200"
+            className="inline-flex items-center justify-center gap-1.5 py-2.5 sm:py-2 px-4 rounded-xl text-xs sm:text-[13px] font-bold tracking-tight font-jakarta transition-all border active:scale-95 cursor-pointer w-full sm:w-auto hover:bg-red-50 hover:text-red-600 hover:border-red-200"
             style={{
               backgroundColor: partnerColors.surfaceMuted,
               borderColor: partnerColors.border,
@@ -74,7 +74,7 @@ export const TripPartnerSettingsView: React.FC<TripPartnerSettingsViewProps> = (
         <button
           type="submit"
           disabled={isSaving}
-          className="inline-flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 px-4 sm:px-5.5 rounded-xl text-xs sm:text-[13px] font-bold sm:font-extrabold tracking-tight font-jakarta cursor-pointer transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-xs hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 w-full min-[480px]:w-auto group border"
+          className="inline-flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-2.5 px-4.5 sm:px-5.5 rounded-xl text-xs sm:text-[13px] font-bold sm:font-extrabold tracking-tight font-jakarta cursor-pointer transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-xs hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 w-full sm:w-auto group border"
           style={{
             backgroundColor: partnerColors.dark,
             borderColor: partnerColors.accentBorder,
@@ -122,8 +122,9 @@ export const TripPartnerSettingsView: React.FC<TripPartnerSettingsViewProps> = (
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.18 }}
+            className="w-full min-w-0"
           >
-            <form onSubmit={handleSave} className="space-y-4 sm:space-y-6 md:space-y-8">
+            <form onSubmit={handleSave} className="w-full min-w-0 space-y-4 sm:space-y-6 md:space-y-8">
               {/* Partner Account & Profile Summary */}
               <ProfileAccountSection username={username} />
 
@@ -149,8 +150,9 @@ export const TripPartnerSettingsView: React.FC<TripPartnerSettingsViewProps> = (
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.18 }}
+            className="w-full min-w-0"
           >
-            <form onSubmit={handleSave} className="space-y-4 sm:space-y-6 md:space-y-8">
+            <form onSubmit={handleSave} className="w-full min-w-0 space-y-4 sm:space-y-6 md:space-y-8">
               {/* Notification Channels & Broadcasts */}
               <NotificationPreferencesSection
                 notifications={settings.notifications}
@@ -173,6 +175,7 @@ export const TripPartnerSettingsView: React.FC<TripPartnerSettingsViewProps> = (
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.18 }}
+            className="w-full min-w-0"
           >
             <KycStatusSection
               kyc={settings.kyc}
