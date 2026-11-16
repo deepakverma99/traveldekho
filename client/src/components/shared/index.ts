@@ -1,4 +1,5 @@
 export * from './Button';
+export * from './BookingDropdown';
 export * from './SearchBar';
 export * from './WhatsAppButton';
 export * from './FloatingBackground';

@@ -99,7 +99,7 @@ export const TripPartnerLoginForm: React.FC = () => {
         disabled={isLoading}
         whileHover={isLoading ? {} : { scale: 1.01 }}
         whileTap={isLoading ? {} : { scale: 0.98 }}
-        className="w-full rounded-xl flex justify-center items-center p-3.5 text-sm font-black tracking-widest cursor-pointer mt-4 relative overflow-hidden bg-primary text-charcoal border-none font-jakarta transition-all duration-300 hover:bg-neutral-900 hover:text-white hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
+        className="w-full rounded-xl flex justify-center items-center p-3.5 text-sm font-black tracking-widest cursor-pointer mt-4 relative overflow-hidden bg-primary text-white border-none font-jakarta transition-all duration-300 hover:bg-neutral-900 hover:text-white hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
       >
         {isLoading ? (
           <>

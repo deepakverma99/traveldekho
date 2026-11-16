@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import {
   PartnerSettingsData,
   SettingsTabType,
@@ -59,15 +59,15 @@ export const usePartnerSettings = (username: string) => {
 
   const [settings, setSettings] = useState<PartnerSettingsData>(initialData);
   const [initialSnapshot, setInitialSnapshot] = useState<PartnerSettingsData>(initialData);
+  const [prevUsername, setPrevUsername] = useState(username);
+  if (prevUsername !== username) {
+    setPrevUsername(username);
+    setSettings(initialData);
+    setInitialSnapshot(initialData);
+  }
   const [activeTab, setActiveTab] = useState<SettingsTabType>('profile');
   const [isSaving, setIsSaving] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-
-
-  useEffect(() => {
-    setSettings(initialData);
-    setInitialSnapshot(initialData);
-  }, [initialData]);
 
   const showToast = useCallback((msg: string) => {
     setToastMessage(msg);

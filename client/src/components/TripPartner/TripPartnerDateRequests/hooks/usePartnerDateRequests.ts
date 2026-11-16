@@ -7,6 +7,7 @@ import {
   DateRequestItem,
   DateRequestsFilterState,
   DateRequestsStatsData,
+  DateRequestsSortBy,
   AddDateToTripFormValues,
 } from '../types';
 import { INITIAL_DATE_REQUESTS } from '../data';
@@ -112,7 +113,7 @@ export const usePartnerDateRequests = () => {
     setFilters((prev) => ({ ...prev, statusFilter: status }));
   }, []);
 
-  const setSortBy = useCallback((sortBy: any) => {
+  const setSortBy = useCallback((sortBy: DateRequestsSortBy) => {
     setFilters((prev) => ({ ...prev, sortBy }));
   }, []);
 

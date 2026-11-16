@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { colorTokens } from '@/theme';
 import { exploreOffbeatTripsData } from './mockExploreOffbeatTrips';
 import { TripCarouselSection } from '../common';
 
@@ -13,6 +13,7 @@ export const ExploreOffbeatSection: React.FC = () => {
       highlightText="Offbeat"
       viewAllHref="/category/explore-offbeat"
       trips={exploreOffbeatTripsData}
+      backgroundColor={colorTokens.surfacePure}
     />
   );
 };

@@ -28,12 +28,12 @@ export const TripPartnerMobileNav: React.FC<TripPartnerMobileNavProps> = ({ user
                 }`}
               >
                 {active && (
-                  <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-gradient-to-r from-amber-400 to-amber-500 rounded-b-md shadow-2xs" />
+                  <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-[#ff5722] rounded-b-md shadow-2xs" />
                 )}
                 <div
                   className={`p-1.5 rounded-xl transition-all duration-200 shrink-0 relative mt-1 ${
                     active
-                      ? 'bg-amber-100 text-amber-900 shadow-xs'
+                      ? 'bg-orange-100 text-[#ff5722] shadow-xs'
                       : 'bg-transparent text-gray-400'
                   }`}
                 >

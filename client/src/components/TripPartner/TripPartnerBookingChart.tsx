@@ -51,12 +51,12 @@ export const TripPartnerBookingChart: React.FC = () => {
   const areaPath = `${linePath} L ${points[points.length - 1].x},${paddingTop + chartHeight} L ${points[0].x},${paddingTop + chartHeight} Z`;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-4.5 sm:p-6 shadow-[0_1px_3px_0_rgba(0,0,0,0.04),0_1px_2px_-1px_rgba(0,0,0,0.02)] flex flex-col justify-between h-full min-w-0 overflow-hidden transition-all duration-250 ease-out hover:shadow-[0_10px_25px_-5px_rgba(255,237,208,0.5),0_8px_10px_-6px_rgba(0,0,0,0.04)] hover:border-amber-200">
+    <div className="bg-white border border-gray-200 rounded-2xl p-4.5 sm:p-6 shadow-[0_1px_3px_0_rgba(0,0,0,0.04),0_1px_2px_-1px_rgba(0,0,0,0.02)] flex flex-col justify-between h-full min-w-0 overflow-hidden transition-all duration-250 ease-out hover:shadow-[0_10px_25px_-5px_rgba(255,87,34,0.18),0_8px_10px_-6px_rgba(0,0,0,0.04)] hover:border-orange-200">
       {/* Header */}
       <div className="flex flex-col min-[480px]:flex-row min-[480px]:items-center justify-between gap-3 mb-4">
         <div>
           <h3 className="text-lg sm:text-xl font-black uppercase tracking-tight text-gray-900">
-            Booking <span className="text-amber-500">Volume</span>
+            Booking <span className="text-[#ff5722]">Volume</span>
           </h3>
           <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">
             Real-time performance analytics
@@ -67,7 +67,7 @@ export const TripPartnerBookingChart: React.FC = () => {
           <div className="flex items-center gap-2">
             <div
               className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: colors.amber[500] }}
+              style={{ backgroundColor: '#ff5722' }}
             />
             <span className="text-[10px] font-black uppercase tracking-wider text-gray-400">
               Reserved
@@ -96,11 +96,11 @@ export const TripPartnerBookingChart: React.FC = () => {
         >
           <defs>
             <linearGradient id="gradient-bookings" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={colors.amber[500]} stopOpacity="0.35" />
-              <stop offset="95%" stopColor={colors.amber[500]} stopOpacity="0.0" />
+              <stop offset="5%" stopColor="#ff5722" stopOpacity="0.35" />
+              <stop offset="95%" stopColor="#ff5722" stopOpacity="0.0" />
             </linearGradient>
             <filter id="shadow-bookings" height="130%">
-              <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor={colors.amber[500]} floodOpacity="0.25" />
+              <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#ff5722" floodOpacity="0.25" />
             </filter>
           </defs>
 
@@ -139,7 +139,7 @@ export const TripPartnerBookingChart: React.FC = () => {
           <path
             d={linePath}
             fill="none"
-            stroke={colors.amber[500]}
+            stroke="#ff5722"
             strokeWidth="3.5"
             strokeLinecap="round"
             filter="url(#shadow-bookings)"
@@ -164,8 +164,8 @@ export const TripPartnerBookingChart: React.FC = () => {
                     cx={pt.x}
                     cy={pt.y}
                     r="8"
-                    fill={colors.amber[100]}
-                    stroke={colors.amber[500]}
+                    fill="#ffede8"
+                    stroke="#ff5722"
                     strokeWidth="2"
                     className="animate-ping"
                   />
@@ -177,7 +177,7 @@ export const TripPartnerBookingChart: React.FC = () => {
                   cy={pt.y}
                   r={isHovered ? '6' : '4.5'}
                   fill={colors.white}
-                  stroke={colors.amber[500]}
+                  stroke="#ff5722"
                   strokeWidth="3"
                   className="transition-all duration-200"
                 />

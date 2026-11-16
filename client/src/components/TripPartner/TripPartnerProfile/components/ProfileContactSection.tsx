@@ -6,7 +6,6 @@ import {
   Mail,
   MessageCircle,
   MapPin,
-  Building,
   ShieldCheck,
   FileCheck2,
 } from 'lucide-react';

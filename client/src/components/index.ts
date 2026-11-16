@@ -8,3 +8,4 @@ export * from './TripDetail';
 export * from './TripPartner';
 export * from './NotFound';
 export * from './Loading';
+export * from './Profile';

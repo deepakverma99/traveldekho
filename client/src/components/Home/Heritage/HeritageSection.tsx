@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { colorTokens } from '@/theme';
 import { heritageTripsData } from './mockHeritageTrips';
 import { TripCarouselSection } from '../common';
 
@@ -13,6 +13,7 @@ export const HeritageSection: React.FC = () => {
       highlightText="Heritage"
       viewAllHref="/category/heritage"
       trips={heritageTripsData}
+      backgroundColor={colorTokens.background}
     />
   );
 };

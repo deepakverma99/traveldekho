@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { saveAuthSession, clearAuthSession } from '@/lib/authStorage';
 
 export type AuthModalStep = 'phone' | 'otp';
 
@@ -53,7 +54,7 @@ export const authSlice = createSlice({
       state.countryCode = action.payload;
     },
     setMobileNumber: (state, action: PayloadAction<string>) => {
-      const sanitized = action.payload.replace(/\D/g, '').slice(0, 10);
+      const sanitized = action.payload.replace(/\D/g, '').slice(0, 15);
       state.mobileNumber = sanitized;
       state.error = null;
     },
@@ -95,6 +96,16 @@ export const authSlice = createSlice({
       state.step = 'phone';
       state.otp = '';
       state.error = null;
+      saveAuthSession(action.payload.user, action.payload.token);
+    },
+    restoreAuthSession: (
+      state,
+      action: PayloadAction<{ user: AuthUser; token?: string }>
+    ) => {
+      state.isAuthenticated = true;
+      state.user = action.payload.user;
+      state.isLoading = false;
+      state.error = null;
     },
     logout: (state) => {
       state.isAuthenticated = false;
@@ -104,6 +115,7 @@ export const authSlice = createSlice({
       state.mobileNumber = '';
       state.otp = '';
       state.error = null;
+      clearAuthSession();
     },
     resetLoginForm: (state) => {
       state.countryCode = '+91';
@@ -130,6 +142,7 @@ export const {
   requestOtpSuccess,
   requestOtpFailure,
   loginSuccess,
+  restoreAuthSession,
   logout,
   resetLoginForm,
 } = authSlice.actions;
@@ -144,6 +157,13 @@ export const selectMobileNumber = (state: { auth?: AuthState }) =>
   state?.auth?.mobileNumber ?? '';
 export const selectIsMobileComplete = (state: { auth?: AuthState }) =>
   (state?.auth?.mobileNumber?.length ?? 0) === 10;
+export const selectIsMobileValid = (state: { auth?: AuthState }) => {
+  const len = state?.auth?.mobileNumber?.trim()?.length ?? 0;
+  if (process.env.NODE_ENV !== 'production') {
+    return len > 0;
+  }
+  return len === 10;
+};
 export const selectAuthStep = (state: { auth?: AuthState }) =>
   state?.auth?.step ?? 'phone';
 export const selectAuthOtp = (state: { auth?: AuthState }) =>

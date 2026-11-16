@@ -10,7 +10,6 @@ import {
   Send,
   Phone,
   Mail,
-  Lock,
 } from 'lucide-react';
 import {
   useAppDispatch,
@@ -23,7 +22,8 @@ import {
   subscribeStart,
   subscribeSuccess,
 } from '@/redux';
-import { FOOTER_POLICIES, PAYMENT_METHODS, CURRENT_YEAR } from './footerData';
+import { FOOTER_POLICIES, CURRENT_YEAR } from './footerData';
+import { colorTokens } from '@/theme';
 
 const FooterContent: React.FC = () => {
   const pathname = usePathname();
@@ -67,7 +67,8 @@ const FooterContent: React.FC = () => {
                   />
                 </div>
                 <Plane
-                  className="w-4 h-4 text-amber-500 opacity-0 -translate-x-4 group-hover/logo:opacity-100 group-hover/logo:translate-x-0 transition-all duration-500 ease-out"
+                  className="w-4 h-4 opacity-0 -translate-x-4 group-hover/logo:opacity-100 group-hover/logo:translate-x-0 transition-all duration-500 ease-out"
+                  style={{ color: colorTokens.primaryContainer }}
                   aria-hidden="true"
                 />
               </Link>
@@ -118,7 +119,11 @@ const FooterContent: React.FC = () => {
           <div className="lg:col-span-3 flex flex-col justify-start">
             <div className="space-y-6">
               <div className="flex items-center gap-2 mb-2">
-                <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" aria-hidden="true" />
+                <Sparkles
+                  className="w-4 h-4 animate-pulse"
+                  style={{ color: colorTokens.primaryContainer }}
+                  aria-hidden="true"
+                />
                 <h2 className="text-sm font-black text-white uppercase tracking-widest">Exclusive Deals</h2>
               </div>
               <p className="text-[#888888] text-xs font-medium leading-relaxed max-w-[280px]">
@@ -133,12 +138,17 @@ const FooterContent: React.FC = () => {
                     placeholder="ENTER YOUR EMAIL"
                     aria-label="Email address for exclusive deals"
                     required
-                    className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl pl-5 pr-26 text-xs font-black uppercase tracking-wider text-white outline-none transition-all placeholder:text-gray-600 focus:bg-white/10 focus:border-amber-400"
+                    className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl pl-5 pr-26 text-xs font-black uppercase tracking-wider text-white outline-none transition-all placeholder:text-gray-600 focus:bg-white/10 focus:border-[#ff5722] focus:ring-1 focus:ring-[#ff5722]/30"
                   />
                   <button
                     type="submit"
                     disabled={!canSubmit || isLoading}
-                    className="absolute right-2 top-2 h-10 px-6 bg-amber-400 hover:bg-black text-white font-black uppercase tracking-wider text-[10px] rounded-xl border-0 cursor-pointer transition-all shadow-[0_10px_15px_-3px_rgba(251,191,36,0.2)] disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{
+                      backgroundColor: colorTokens.primaryContainer,
+                      color: colorTokens.onPrimary,
+                      boxShadow: '0 4px 16px rgba(255, 87, 34, 0.35)',
+                    }}
+                    className="absolute right-2 top-2 h-10 px-6 hover:brightness-110 active:scale-95 font-black uppercase tracking-wider text-[10px] rounded-xl border-0 cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <div className="flex items-center gap-2">
                       {isLoading ? 'Joining...' : 'Join'}
@@ -147,7 +157,10 @@ const FooterContent: React.FC = () => {
                   </button>
                 </div>
                 {isSubscribed && (
-                  <p className="text-amber-400 text-xs font-semibold mt-2">
+                  <p
+                    className="text-xs font-semibold mt-2"
+                    style={{ color: colorTokens.primaryContainer }}
+                  >
                     Thank you for subscribing!
                   </p>
                 )}
@@ -185,7 +198,10 @@ const FooterContent: React.FC = () => {
                   href="tel:+919899558944"
                   className="flex items-center gap-3.5 group transition-colors"
                 >
-                  <div className="w-9 h-9 rounded-xl bg-white/[0.06] flex items-center justify-center text-amber-500 shrink-0 transition-all group-hover:bg-amber-500 group-hover:text-black [&>svg]:w-4 [&>svg]:h-4">
+                  <div
+                    className="w-9 h-9 rounded-xl bg-white/[0.06] flex items-center justify-center shrink-0 transition-all group-hover:bg-[#ff5722] group-hover:text-white [&>svg]:w-4 [&>svg]:h-4"
+                    style={{ color: colorTokens.primaryContainer }}
+                  >
                     <Phone className="w-4 h-4 shrink-0" aria-hidden="true" />
                   </div>
                   <span className="text-[#888888] text-xs font-bold group-hover:text-white transition-colors flex-1 break-all">
@@ -198,7 +214,10 @@ const FooterContent: React.FC = () => {
                   href="mailto:business.traveldekho@gmail.com"
                   className="flex items-center gap-3.5 group transition-colors"
                 >
-                  <div className="w-9 h-9 rounded-xl bg-white/[0.06] flex items-center justify-center text-amber-500 shrink-0 transition-all group-hover:bg-amber-500 group-hover:text-black [&>svg]:w-4 [&>svg]:h-4">
+                  <div
+                    className="w-9 h-9 rounded-xl bg-white/[0.06] flex items-center justify-center shrink-0 transition-all group-hover:bg-[#ff5722] group-hover:text-white [&>svg]:w-4 [&>svg]:h-4"
+                    style={{ color: colorTokens.primaryContainer }}
+                  >
                     <Mail className="w-4 h-4 shrink-0" aria-hidden="true" />
                   </div>
                   <span className="text-[#888888] text-xs font-bold group-hover:text-white transition-colors flex-1 break-all">
@@ -208,49 +227,15 @@ const FooterContent: React.FC = () => {
               </li>
             </ul>
           </div>
-
-          {/* Bottom Badges Row: 100% Encrypted & Payment Methods */}
-          <div className="col-span-1 md:col-span-2 lg:col-span-12 flex flex-col md:flex-row w-full items-center justify-center md:justify-between gap-5 pt-8">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-[#1A1A1A] border border-green-500/30 rounded-lg shadow-[0_0_10px_rgba(34,197,94,0.1)]">
-              <Lock className="w-3.5 h-3.5 text-green-500" aria-hidden="true" />
-              <span className="text-green-500 text-xs font-black tracking-widest uppercase">
-                100% Encrypted
-              </span>
-            </div>
-
-            <div className="flex items-center gap-5">
-              {PAYMENT_METHODS.map((method) => (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img
-                  key={method.name}
-                  alt={method.name}
-                  loading="lazy"
-                  width={40}
-                  height={20}
-                  decoding="async"
-                  className="h-4 w-auto object-contain md:h-5"
-                  src={method.src}
-                />
-              ))}
-            </div>
-          </div>
         </div>
       </div>
 
       {/* Copyright Sub-footer */}
       <div className="border-t border-gray-800 bg-black w-full py-5 px-6">
-        <div className="max-w-[1240px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-400 text-xs text-center md:text-left">
+        <div className="max-w-[1240px] mx-auto flex items-center justify-center">
+          <p className="text-gray-400 text-xs text-center">
             TravelDekho &copy; <span>{CURRENT_YEAR}</span> All Rights Reserved
           </p>
-          <div className="flex items-center gap-4 text-xs text-gray-500">
-            <Link
-              href="/admin-login"
-              className="hover:text-amber-400 text-gray-400 transition-colors"
-            >
-              Admin Login
-            </Link>
-          </div>
         </div>
       </div>
     </footer>

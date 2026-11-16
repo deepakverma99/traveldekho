@@ -73,7 +73,7 @@ export const NotificationPreferencesSection: React.FC<NotificationPreferencesSec
       {/* Email Notifications Group */}
       <div className="space-y-3 w-full">
         <div className="flex items-center gap-2">
-          <Mail className="w-4 h-4 text-amber-500" />
+          <Mail className="w-4 h-4 text-[#ff5722]" />
           <h4 className="text-xs font-black uppercase tracking-wider" style={{ color: partnerColors.dark }}>
             Email Notifications
           </h4>
@@ -86,7 +86,7 @@ export const NotificationPreferencesSection: React.FC<NotificationPreferencesSec
               <div
                 key={item.key}
                 onClick={() => toggleNotification(item.key)}
-                className="p-3 sm:p-4 rounded-xl border flex items-start justify-between gap-2.5 sm:gap-3 cursor-pointer transition-all hover:border-amber-300 select-none w-full min-w-0"
+                className="p-3 sm:p-4 rounded-xl border flex items-start justify-between gap-2.5 sm:gap-3 cursor-pointer transition-all hover:border-orange-300 select-none w-full min-w-0"
                 style={{
                   backgroundColor: isEnabled
                     ? partnerColors.surface

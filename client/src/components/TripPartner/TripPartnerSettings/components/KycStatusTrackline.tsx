@@ -117,7 +117,7 @@ export const KycStatusTrackline: React.FC<KycStatusTracklineProps> = ({ kyc }) =
                 </>
               ) : isInReview ? (
                 <>
-                  <Clock className="w-3 h-3 text-amber-600 animate-spin" />
+                  <Clock className="w-3 h-3 text-[#ff5722] animate-spin" />
                   <span>Under Review</span>
                 </>
               ) : (
@@ -169,7 +169,7 @@ export const KycStatusTrackline: React.FC<KycStatusTracklineProps> = ({ kyc }) =
                       isCompleted
                         ? 'bg-emerald-500 text-white border-emerald-500 shadow-2xs'
                         : isCurrent
-                        ? 'bg-amber-500 text-white border-amber-500 shadow-[0_0_10px_rgba(244,140,6,0.35)] ring-3 ring-amber-100'
+                        ? 'bg-[#ff5722] text-white border-[#ff5722] shadow-[0_0_10px_rgba(255,87,34,0.35)] ring-3 ring-orange-100'
                         : 'bg-white text-slate-400 border-slate-200'
                     }`}
                   >
@@ -200,7 +200,7 @@ export const KycStatusTrackline: React.FC<KycStatusTracklineProps> = ({ kyc }) =
                       isCompleted
                         ? 'bg-emerald-50 text-emerald-700'
                         : isCurrent
-                        ? 'bg-amber-50 text-amber-700'
+                        ? 'bg-orange-50 text-[#ff5722]'
                         : 'bg-slate-100 text-slate-400'
                     }`}
                   >
@@ -238,7 +238,7 @@ export const KycStatusTrackline: React.FC<KycStatusTracklineProps> = ({ kyc }) =
                   isCompleted
                     ? 'bg-emerald-500 text-white border-emerald-500 shadow-2xs'
                     : isCurrent
-                    ? 'bg-amber-500 text-white border-amber-500 shadow-[0_0_8px_rgba(244,140,6,0.35)] ring-2 ring-amber-100'
+                    ? 'bg-[#ff5722] text-white border-[#ff5722] shadow-[0_0_8px_rgba(255,87,34,0.35)] ring-2 ring-orange-100'
                     : 'bg-white text-slate-400 border-slate-200'
                 }`}
               >
@@ -266,7 +266,7 @@ export const KycStatusTrackline: React.FC<KycStatusTracklineProps> = ({ kyc }) =
                       isCompleted
                         ? 'bg-emerald-50 text-emerald-700'
                         : isCurrent
-                        ? 'bg-amber-50 text-amber-700'
+                        ? 'bg-orange-50 text-[#ff5722]'
                         : 'bg-slate-100 text-slate-400'
                     }`}
                   >

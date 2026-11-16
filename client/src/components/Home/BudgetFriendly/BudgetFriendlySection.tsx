@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { colorTokens } from '@/theme';
 import { budgetTripsData } from './mockBudgetTrips';
 import { TripCarouselSection } from '../common';
 
@@ -13,6 +13,7 @@ export const BudgetFriendlySection: React.FC = () => {
       highlightText="Friendly"
       viewAllHref="/category/budget-friendly"
       trips={budgetTripsData}
+      backgroundColor={colorTokens.background}
     />
   );
 };

@@ -368,7 +368,7 @@ export const ProfileIdentitySection: React.FC<ProfileIdentitySectionProps> = ({
                 >
                   <MapPin className="w-3 h-3" />
                   <span>{region}</span>
-                  {isSelected && <Check className="w-3 h-3 text-amber-600" />}
+                  {isSelected && <Check className="w-3 h-3 text-[#ff5722]" />}
                 </button>
               );
             })}
@@ -390,7 +390,7 @@ export const ProfileIdentitySection: React.FC<ProfileIdentitySectionProps> = ({
                 >
                   <MapPin className="w-3 h-3" />
                   <span>{custom}</span>
-                  <Check className="w-3 h-3 text-amber-600" />
+                  <Check className="w-3 h-3 text-[#ff5722]" />
                 </button>
               ))}
 

@@ -6,7 +6,6 @@ import {
   Award,
   Compass,
   Headphones,
-  CheckCircle,
   AlertCircle,
 } from 'lucide-react';
 import { partnerColors } from '@/theme/colors';
@@ -26,7 +25,7 @@ export const ProfileTrustBadgesSection: React.FC<ProfileTrustBadgesSectionProps>
       case 'ShieldCheck':
         return <ShieldCheck className="w-5 h-5 text-emerald-500" />;
       case 'Award':
-        return <Award className="w-5 h-5 text-amber-500" />;
+        return <Award className="w-5 h-5 text-[#ff5722]" />;
       case 'Compass':
         return <Compass className="w-5 h-5 text-blue-500" />;
       case 'Headphones':

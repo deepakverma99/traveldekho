@@ -29,15 +29,26 @@ import { fetchAutoFill, AVAILABLE_IMAGES } from '@/lib/autoFillService';
 interface StepBasicProps {
   formData: NewTripFormData;
   updateForm: (fields: Partial<NewTripFormData>) => void;
+  invalidFieldId?: string | null;
 }
 
 export const StepBasic: React.FC<StepBasicProps> = ({
   formData,
   updateForm,
+  invalidFieldId,
 }) => {
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
+  const [prevInvalidFieldId, setPrevInvalidFieldId] = useState<string | null>(null);
   const [isAutoFilling, setIsAutoFilling] = useState(false);
   const categoryWrapperRef = useRef<HTMLDivElement>(null);
+
+  // Auto-open category dropdown during render if it was flagged as invalid
+  if (invalidFieldId !== prevInvalidFieldId) {
+    setPrevInvalidFieldId(invalidFieldId ?? null);
+    if (invalidFieldId === 'trip-category') {
+      setIsCategoryDropdownOpen(true);
+    }
+  }
 
   // Sync categories array and single category field
   const selectedCategories = formData.categories || (formData.category ? [formData.category] : []);
@@ -116,7 +127,7 @@ export const StepBasic: React.FC<StepBasicProps> = ({
         <div className="flex flex-col gap-2 w-full">
           <label htmlFor="trip-title" className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between">
             <span className="flex items-center gap-1.5 text-gray-800">
-              <Compass className="w-3.5 h-3.5 text-amber-500" />
+              <Compass className="w-3.5 h-3.5 text-[#ff5722]" />
               Trip Title <span className="text-red-500 ml-1 font-bold inline">*</span>
             </span>
             <span className="text-[10px] font-bold text-gray-400 normal-case tracking-normal">
@@ -133,10 +144,10 @@ export const StepBasic: React.FC<StepBasicProps> = ({
               onChange={(e) =>
                 updateForm({ title: filterAlphanumericDot(e.target.value) })
               }
-              className={`w-full rounded-2xl py-3 px-4 sm:py-3.5 sm:px-5 pr-28 text-sm sm:text-[15px] font-semibold text-gray-900 font-jakarta outline-none transition-all placeholder:text-gray-400 placeholder:font-medium ${
-                !isTitleValid
-                  ? 'bg-red-50 border-2 border-red-400 hover:bg-red-100/50 focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/20'
-                  : 'bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25'
+              className={`w-full rounded-2xl py-3 px-4 sm:py-3.5 sm:px-5 pr-28 text-sm sm:text-[15px] font-semibold text-gray-900 font-jakarta outline-none focus:outline-none focus:ring-0 transition-all placeholder:text-gray-400 placeholder:font-medium ${
+                !isTitleValid || (invalidFieldId === 'trip-title' && !formData.title.trim())
+                  ? 'bg-red-50 border-2 border-red-400 hover:bg-red-100/50 focus:bg-white focus:border-red-500'
+                  : 'bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-[#ff5722]'
               }`}
             />
 
@@ -153,7 +164,7 @@ export const StepBasic: React.FC<StepBasicProps> = ({
                     onClick={handleAutoFill}
                     disabled={isAutoFilling}
                     title="Automatically fill itinerary, highlights, and details using AI"
-                    className="pointer-events-auto inline-flex items-center gap-1.5 py-1.5 px-3.5 bg-amber-500 hover:bg-amber-400 text-white rounded-full text-[11px] font-black tracking-wider uppercase font-jakarta cursor-pointer shadow-[0_2px_8px_rgba(250,203,43,0.45)] hover:shadow-[0_4px_12px_rgba(250,203,43,0.6)] transition-all [&>svg]:w-3.5 [&>svg]:h-3.5 [&>svg]:stroke-[2.5]"
+                    className="pointer-events-auto inline-flex items-center gap-1.5 py-1.5 px-3.5 bg-[#ff5722] hover:bg-[#e04d1f] text-white rounded-full text-[11px] font-black tracking-wider uppercase font-jakarta cursor-pointer shadow-[0_2px_8px_rgba(255,87,34,0.45)] hover:shadow-[0_4px_12px_rgba(255,87,34,0.6)] transition-all [&>svg]:w-3.5 [&>svg]:h-3.5 [&>svg]:stroke-[2.5]"
                   >
                     {isAutoFilling ? (
                       <>
@@ -183,7 +194,7 @@ export const StepBasic: React.FC<StepBasicProps> = ({
         <div className="flex flex-col gap-2 w-full">
           <label htmlFor="trip-category" className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between">
             <span className="flex items-center gap-1.5 text-gray-800">
-              <Layers className="w-3.5 h-3.5 text-amber-500" />
+              <Layers className="w-3.5 h-3.5 text-[#ff5722]" />
               Category <span className="text-red-500 ml-1 font-bold inline">*</span>
             </span>
             {selectedCategories.length > 0 && (
@@ -200,10 +211,13 @@ export const StepBasic: React.FC<StepBasicProps> = ({
               tabIndex={0}
               role="combobox"
               aria-expanded={isCategoryDropdownOpen}
+              aria-controls="trip-category-listbox"
               aria-label="Select categories"
-              className={`w-full h-13.5 rounded-2xl pr-10 pl-3.5 flex items-center cursor-pointer relative overflow-hidden transition-all ${
-                isCategoryDropdownOpen
-                  ? 'bg-white border-2 border-amber-400 ring-4 ring-amber-200/25'
+              className={`w-full h-13.5 rounded-2xl pr-10 pl-3.5 flex items-center cursor-pointer relative overflow-hidden transition-all outline-none focus:outline-none focus:ring-0 ${
+                invalidFieldId === 'trip-category' && selectedCategories.length === 0
+                  ? 'bg-red-50/50 border-2 border-red-400'
+                  : isCategoryDropdownOpen
+                  ? 'bg-white border-2 border-[#ff5722]'
                   : 'bg-[#f8fafc] hover:bg-[#f1f5f9] border-2 border-transparent'
               }`}
             >
@@ -223,7 +237,7 @@ export const StepBasic: React.FC<StepBasicProps> = ({
                   {selectedCategories.map((cat) => (
                     <span
                       key={cat}
-                      className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 py-1 px-2.5 bg-amber-100 text-amber-900 border border-amber-300 rounded-full text-[11px] font-extrabold tracking-wide select-none [&>button]:inline-flex [&>button]:items-center [&>button]:justify-center [&>button]:bg-transparent [&>button]:border-none [&>button]:text-amber-800 hover:[&>button]:text-red-600 [&>button]:cursor-pointer [&>button]:p-0 [&>button>svg]:w-3 [&>button>svg]:h-3"
+                      className="shrink-0 whitespace-nowrap inline-flex items-center gap-1.5 py-1 px-2.5 bg-orange-50 text-orange-950 border border-orange-200 rounded-full text-[11px] font-extrabold tracking-wide select-none [&>button]:inline-flex [&>button]:items-center [&>button]:justify-center [&>button]:bg-transparent [&>button]:border-none [&>button]:text-orange-800 hover:[&>button]:text-red-600 [&>button]:cursor-pointer [&>button]:p-0 [&>button>svg]:w-3 [&>button>svg]:h-3"
                     >
                       <span>{cat}</span>
                       <button
@@ -243,7 +257,7 @@ export const StepBasic: React.FC<StepBasicProps> = ({
 
               <ChevronDown
                 className={`absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 transition-transform duration-200 pointer-events-none ${
-                  isCategoryDropdownOpen ? 'rotate-180 text-amber-500' : ''
+                  isCategoryDropdownOpen ? 'rotate-180 text-[#ff5722]' : ''
                 }`}
               />
             </div>
@@ -252,6 +266,9 @@ export const StepBasic: React.FC<StepBasicProps> = ({
             <AnimatePresence>
               {isCategoryDropdownOpen && (
                 <motion.div
+                  id="trip-category-listbox"
+                  role="listbox"
+                  aria-label="Category options"
                   initial={{ opacity: 0, y: -4, scale: 0.98 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -4, scale: 0.98 }}
@@ -267,15 +284,15 @@ export const StepBasic: React.FC<StepBasicProps> = ({
                           onClick={() => toggleCategory(cat)}
                           className={`flex items-center justify-between py-2.5 px-3.5 rounded-xl text-[13px] font-bold cursor-pointer transition-colors ${
                             isSelected
-                              ? 'bg-amber-50 text-amber-900'
-                              : 'bg-transparent text-gray-800 hover:bg-amber-100 hover:text-amber-900'
+                              ? 'bg-orange-50 text-orange-950'
+                              : 'bg-transparent text-gray-800 hover:bg-orange-50 hover:text-orange-900'
                           }`}
                         >
                           <div className="flex items-center gap-2.5">
                             <div
                               className={`w-4 h-4 rounded-md border flex items-center justify-center transition-all ${
                                 isSelected
-                                  ? 'bg-amber-400 border-amber-500 text-black shadow-xs'
+                                  ? 'bg-[#ff5722] border-[#ff5722] text-white shadow-xs'
                                   : 'border-gray-300 bg-white'
                               }`}
                             >
@@ -286,7 +303,7 @@ export const StepBasic: React.FC<StepBasicProps> = ({
                             </span>
                           </div>
                           {isSelected && (
-                            <span className="text-[10px] font-black uppercase text-amber-700 bg-amber-200/60 px-2 py-0.5 rounded-full">
+                            <span className="text-[10px] font-black uppercase text-orange-800 bg-orange-100 px-2 py-0.5 rounded-full">
                               Selected
                             </span>
                           )}
@@ -315,7 +332,7 @@ export const StepBasic: React.FC<StepBasicProps> = ({
         <div className="flex flex-col gap-2 w-full">
           <label htmlFor="trip-catchphrase" className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between">
             <span className="flex items-center gap-1.5 text-gray-800">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <Sparkles className="w-3.5 h-3.5 text-[#ff5722]" />
               Short Catchphrase <span className="text-red-500 ml-1 font-bold inline">*</span>
             </span>
             <span className="text-[10px] font-bold text-gray-400 normal-case tracking-normal">
@@ -331,10 +348,10 @@ export const StepBasic: React.FC<StepBasicProps> = ({
             onChange={(e) =>
               updateForm({ shortCatchphrase: filterAlphanumericDot(e.target.value) })
             }
-            className={`w-full rounded-2xl p-4 sm:p-5 text-sm sm:text-[15px] font-medium leading-normal text-gray-900 font-jakarta min-h-[5.5rem] resize-y outline-none transition-all placeholder:text-gray-400 placeholder:font-medium ${
-              !isCatchphraseValid
-                ? 'bg-red-50 border-2 border-red-400 hover:bg-red-100/50 focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/20'
-                : 'bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25'
+            className={`w-full rounded-2xl p-4 sm:p-5 text-sm sm:text-[15px] font-medium leading-normal text-gray-900 font-jakarta min-h-[5.5rem] resize-y outline-none focus:outline-none focus:ring-0 transition-all placeholder:text-gray-400 placeholder:font-medium ${
+              !isCatchphraseValid || (invalidFieldId === 'trip-catchphrase' && !formData.shortCatchphrase.trim())
+                ? 'bg-red-50 border-2 border-red-400 hover:bg-red-100/50 focus:bg-white focus:border-red-500'
+                : 'bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-[#ff5722]'
             }`}
           />
           {!isCatchphraseValid && (
@@ -350,7 +367,7 @@ export const StepBasic: React.FC<StepBasicProps> = ({
       <div className="flex flex-col gap-2 w-full">
         <label htmlFor="trip-description" className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between">
           <span className="flex items-center gap-1.5 text-gray-800">
-            <FileText className="w-3.5 h-3.5 text-amber-500" />
+            <FileText className="w-3.5 h-3.5 text-[#ff5722]" />
             Detailed Description <span className="text-red-500 ml-1 font-bold inline">*</span>
           </span>
         </label>
@@ -362,10 +379,10 @@ export const StepBasic: React.FC<StepBasicProps> = ({
           onChange={(e) =>
             updateForm({ description: filterAlphanumericDot(e.target.value) })
           }
-          className={`w-full rounded-2xl py-3.5 px-4 sm:px-5 text-sm sm:text-[15px] font-medium leading-relaxed text-gray-900 font-jakarta outline-none min-h-[7.5rem] sm:min-h-[8.5rem] resize-y transition-all placeholder:text-gray-400 placeholder:font-medium ${
-            !isDescriptionValid
-              ? 'bg-red-50 border-2 border-red-400 hover:bg-red-100/50 focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/20'
-              : 'bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25'
+          className={`w-full rounded-2xl py-3.5 px-4 sm:px-5 text-sm sm:text-[15px] font-medium leading-relaxed text-gray-900 font-jakarta outline-none focus:outline-none focus:ring-0 min-h-[7.5rem] sm:min-h-[8.5rem] resize-y transition-all placeholder:text-gray-400 placeholder:font-medium ${
+            !isDescriptionValid || (invalidFieldId === 'trip-description' && !formData.description.trim())
+              ? 'bg-red-50 border-2 border-red-400 hover:bg-red-100/50 focus:bg-white focus:border-red-500'
+              : 'bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-[#ff5722]'
           }`}
         />
         {!isDescriptionValid && (

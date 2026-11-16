@@ -20,9 +20,9 @@ export const TripPartnerLoginPage: React.FC = () => {
           <Link
             href="/"
             title="Return to TravelDekho Homepage"
-            className="absolute top-5 left-5 sm:top-6 sm:left-7 inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-amber-700 transition-colors cursor-pointer group/back"
+            className="absolute top-5 left-5 sm:top-6 sm:left-7 inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-[#e04d1f] transition-colors cursor-pointer group/back"
           >
-            <ArrowLeft className="w-3.5 h-3.5 text-gray-400 group-hover/back:text-amber-500 group-hover/back:-translate-x-1 transition-all" />
+            <ArrowLeft className="w-3.5 h-3.5 text-gray-400 group-hover/back:text-[#ff5722] group-hover/back:-translate-x-1 transition-all" />
             <span>Back to Home</span>
           </Link>
 

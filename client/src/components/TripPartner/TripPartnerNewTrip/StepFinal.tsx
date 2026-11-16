@@ -120,9 +120,11 @@ export const StepFinal: React.FC<StepFinalProps> = ({
 
   const previewTrip: TripItem = React.useMemo(() => {
     const destinationLabel =
-      [formData.destinationCity, formData.destinationState]
-        .filter(Boolean)
-        .join(', ') || formData.destination || 'Himachal Pradesh';
+      (formData.tripType === 'international'
+        ? [formData.destinationCity, formData.destinationCountry].filter(Boolean).join(', ')
+        : [formData.destinationCity, formData.destinationState].filter(Boolean).join(', ')) ||
+      formData.destination ||
+      (formData.tripType === 'international' ? 'Thailand' : 'Himachal Pradesh');
 
     return {
       id: 'preview-id',
@@ -147,6 +149,8 @@ export const StepFinal: React.FC<StepFinalProps> = ({
       },
     };
   }, [
+    formData.tripType,
+    formData.destinationCountry,
     formData.destinationCity,
     formData.destinationState,
     formData.destination,
@@ -187,7 +191,7 @@ export const StepFinal: React.FC<StepFinalProps> = ({
       <div className="pt-4 border-t border-gray-100">
         <label className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between">
           <span className="flex items-center gap-1.5 text-gray-800">
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <Sparkles className="w-3.5 h-3.5 text-[#ff5722]" />
             Live Traveler Preview Card
           </span>
           <span className="text-[10px] font-bold text-gray-400 normal-case tracking-normal">

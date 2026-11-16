@@ -49,7 +49,7 @@ export const TripPartnerDateRequestsView: React.FC<TripPartnerDateRequestsViewPr
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            className="fixed top-20 right-4 sm:right-8 z-50 flex items-center gap-2.5 bg-[#0b132b] text-white px-4 py-3 rounded-2xl shadow-xl border border-amber-400/30 text-xs sm:text-sm font-bold"
+            className="fixed top-20 right-4 sm:right-8 z-50 flex items-center gap-2.5 bg-[#0b132b] text-white px-4 py-3 rounded-2xl shadow-xl border border-orange-400/30 text-xs sm:text-sm font-bold"
           >
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>{toastMessage}</span>
@@ -65,7 +65,7 @@ export const TripPartnerDateRequestsView: React.FC<TripPartnerDateRequestsViewPr
 
         <div className="mt-2">
           <h1 className="text-2xl min-[400px]:text-[1.75rem] sm:text-3xl font-black text-gray-900 tracking-tight uppercase break-words">
-            Date <span className="text-amber-500">Requests</span>
+            Date <span className="text-[#ff5722]">Requests</span>
           </h1>
           <p className="text-[11px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">
             Custom date inquiries and private group slot requests

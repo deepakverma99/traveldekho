@@ -3,6 +3,7 @@
 import React from 'react';
 import { useCarouselScroll } from '@/redux';
 import { TripCard, TripItem } from '@/components/shared';
+import { colorTokens } from '@/theme';
 import { CarouselHeader } from './CarouselHeader';
 import { CarouselScrollButton } from './CarouselScrollButton';
 import { CarouselEdgeGradient } from './CarouselEdgeGradient';
@@ -15,6 +16,7 @@ interface TripCarouselSectionProps {
   viewAllHref: string;
   trips: TripItem[];
   priorityFirstN?: number;
+  backgroundColor?: string;
 }
 
 export const TripCarouselSection: React.FC<TripCarouselSectionProps> = ({
@@ -25,6 +27,7 @@ export const TripCarouselSection: React.FC<TripCarouselSectionProps> = ({
   viewAllHref,
   trips,
   priorityFirstN = 0,
+  backgroundColor = colorTokens.surfacePure,
 }) => {
   const { trackRef, canScrollLeft, canScrollRight, handleScroll } =
     useCarouselScroll(carouselId);
@@ -32,7 +35,8 @@ export const TripCarouselSection: React.FC<TripCarouselSectionProps> = ({
   return (
     <section
       id={id}
-      className="relative w-full py-12 md:py-16 overflow-hidden bg-transparent font-sans"
+      style={{ backgroundColor }}
+      className="relative w-full py-12 md:py-16 overflow-hidden font-sans z-10"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <CarouselHeader
@@ -58,8 +62,8 @@ export const TripCarouselSection: React.FC<TripCarouselSectionProps> = ({
             ariaLabel={`Scroll ${title} right`}
           />
 
-          <CarouselEdgeGradient side="left" visible={canScrollLeft} />
-          <CarouselEdgeGradient side="right" visible={canScrollRight} />
+          <CarouselEdgeGradient side="left" visible={canScrollLeft} fromColor={backgroundColor} />
+          <CarouselEdgeGradient side="right" visible={canScrollRight} fromColor={backgroundColor} />
 
           <div
             ref={trackRef}

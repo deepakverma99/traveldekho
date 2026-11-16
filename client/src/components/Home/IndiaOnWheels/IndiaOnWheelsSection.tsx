@@ -5,6 +5,7 @@ import { useCarouselScroll } from '@/redux';
 import { DestinationCard } from './DestinationCard';
 import { destinationsData } from './destinationsData';
 import { CarouselScrollButton, CarouselEdgeGradient } from '../common';
+import { colorTokens } from '@/theme';
 
 export const IndiaOnWheelsSection: React.FC = () => {
   const { trackRef, canScrollLeft, canScrollRight, handleScroll } =
@@ -13,14 +14,17 @@ export const IndiaOnWheelsSection: React.FC = () => {
   return (
     <section
       id="india-on-wheels-section"
-      className="relative w-full py-12 md:py-16 overflow-hidden bg-transparent font-sans"
+      style={{ backgroundColor: colorTokens.background }}
+      className="relative w-full py-12 md:py-16 overflow-hidden font-sans z-10"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className="flex items-center justify-between mb-6 md:mb-8">
           <h2 className="text-xl sm:text-[28px] md:text-[32px] font-black tracking-tight text-charcoal font-jakarta">
-            India on
-            <span className="ml-1 text-primary">Wheels</span>
+            <span>India on </span>
+            <span className="ml-1" style={{ color: colorTokens.primaryContainer }}>
+              Wheels
+            </span>
           </h2>
         </div>
 
@@ -45,8 +49,8 @@ export const IndiaOnWheelsSection: React.FC = () => {
           />
 
           {/* Edge Fade Gradients */}
-          <CarouselEdgeGradient side="left" visible={canScrollLeft} />
-          <CarouselEdgeGradient side="right" visible={canScrollRight} />
+          <CarouselEdgeGradient side="left" visible={canScrollLeft} fromColor={colorTokens.background} />
+          <CarouselEdgeGradient side="right" visible={canScrollRight} fromColor={colorTokens.background} />
 
           {/* 2-Row Horizontal Scroll Track */}
           <div

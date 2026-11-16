@@ -9,7 +9,6 @@ import {
   Eye,
   CheckCircle2,
   RefreshCw,
-  ExternalLink,
   X,
 } from 'lucide-react';
 import { partnerColors } from '@/theme/colors';
@@ -109,7 +108,7 @@ export const KycFileUploadField: React.FC<KycFileUploadFieldProps> = ({
               style={{ color: partnerColors.dark }}
             >
               {label}
-              {required && <span className="text-amber-500 ml-1">*</span>}
+              {required && <span className="text-[#ff5722] ml-1">*</span>}
             </h4>
           </div>
           {description && (
@@ -164,7 +163,7 @@ export const KycFileUploadField: React.FC<KycFileUploadFieldProps> = ({
             <button
               type="button"
               onClick={() => setShowPreviewModal(true)}
-              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:text-amber-600 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:text-[#ff5722] transition-colors cursor-pointer"
             >
               <Eye className="w-3 h-3" />
               <span>Preview</span>
@@ -198,17 +197,17 @@ export const KycFileUploadField: React.FC<KycFileUploadFieldProps> = ({
           onClick={() => fileInputRef.current?.click()}
           className={`border-2 border-dashed rounded-xl p-3.5 sm:p-4 flex flex-col items-center justify-center gap-1.5 sm:gap-2 cursor-pointer transition-all duration-200 text-center mt-auto min-h-[90px] sm:min-h-[96px] ${
             isDragging
-              ? 'border-amber-500 bg-amber-50/50 scale-[1.005]'
-              : 'border-slate-200 hover:border-amber-400 hover:bg-slate-50/70'
+              ? 'border-[#ff5722] bg-orange-50/50 scale-[1.005]'
+              : 'border-slate-200 hover:border-orange-400 hover:bg-slate-50/70'
           }`}
         >
           <div className="w-8.5 h-8.5 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
-            <UploadCloud className="w-4.5 h-4.5 text-amber-500" />
+            <UploadCloud className="w-4.5 h-4.5 text-[#ff5722]" />
           </div>
 
           <div className="space-y-0.5">
             <p className="text-xs font-bold text-slate-800">
-              <span className="text-amber-600 hover:underline">Click to upload</span> or drag and drop
+              <span className="text-[#ff5722] hover:underline">Click to upload</span> or drag and drop
             </p>
             <p className="text-[10px] font-medium text-slate-400">
               Supports PDF, PNG, JPG (up to 10 MB)
@@ -229,7 +228,7 @@ export const KycFileUploadField: React.FC<KycFileUploadFieldProps> = ({
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <FileText className="w-5 h-5 text-amber-500" />
+                <FileText className="w-5 h-5 text-[#ff5722]" />
                 <h4 className="text-sm font-black text-slate-900 truncate">
                   {label}
                 </h4>

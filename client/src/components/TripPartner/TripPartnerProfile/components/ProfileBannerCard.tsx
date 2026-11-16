@@ -9,7 +9,6 @@ import {
   Compass,
   Calendar,
   Image as ImageIcon,
-  Check,
   X,
 } from 'lucide-react';
 import { partnerColors } from '@/theme/colors';
@@ -276,7 +275,7 @@ export const ProfileBannerCard: React.FC<ProfileBannerCardProps> = ({
                     onCoverChange(preset.url);
                     setShowCoverModal(false);
                   }}
-                  className="group relative h-20 rounded-xl overflow-hidden border-2 transition-all cursor-pointer hover:border-amber-500"
+                  className="group relative h-20 rounded-xl overflow-hidden border-2 transition-all cursor-pointer hover:border-[#ff5722]"
                   style={{
                     borderColor:
                       profile.coverImage === preset.url
@@ -369,7 +368,7 @@ export const ProfileBannerCard: React.FC<ProfileBannerCardProps> = ({
                     onAvatarChange(preset.url);
                     setShowAvatarModal(false);
                   }}
-                  className="flex items-center gap-2 p-2 rounded-xl border transition-all cursor-pointer hover:border-amber-500"
+                  className="flex items-center gap-2 p-2 rounded-xl border transition-all cursor-pointer hover:border-[#ff5722]"
                   style={{
                     borderColor:
                       profile.avatar === preset.url

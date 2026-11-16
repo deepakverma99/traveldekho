@@ -41,7 +41,7 @@ export const TripBookingsAccordion: React.FC<TripBookingsAccordionProps> = ({
   return (
     <div
       className={`bg-white rounded-2xl border transition-all duration-200 shadow-2xs font-jakarta overflow-hidden ${
-        isOpen ? 'border-amber-200 shadow-md' : 'border-gray-200 hover:border-gray-300'
+        isOpen ? 'border-orange-200 shadow-md' : 'border-gray-200 hover:border-gray-300'
       }`}
     >
       {/* Group Header */}
@@ -57,7 +57,7 @@ export const TripBookingsAccordion: React.FC<TripBookingsAccordionProps> = ({
         }}
         aria-expanded={isOpen}
         className={`p-3.5 sm:p-5 flex flex-col xl:flex-row xl:items-center justify-between gap-3.5 sm:gap-4 cursor-pointer select-none transition-colors ${
-          isOpen ? 'bg-amber-50/20' : 'bg-white hover:bg-gray-50/50'
+          isOpen ? 'bg-orange-50/20' : 'bg-white hover:bg-gray-50/50'
         }`}
       >
         {/* Left: Thumbnail & Trip Info */}
@@ -82,7 +82,7 @@ export const TripBookingsAccordion: React.FC<TripBookingsAccordionProps> = ({
             </h2>
             <div className="flex items-center flex-wrap gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-gray-500 font-medium">
               <span className="inline-flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                <MapPin className="w-3.5 h-3.5 text-[#ff5722] shrink-0" />
                 <span className="truncate max-w-[120px] sm:max-w-none">{group.tripLocation}</span>
               </span>
               <span className="text-gray-300">•</span>
@@ -91,8 +91,8 @@ export const TripBookingsAccordion: React.FC<TripBookingsAccordionProps> = ({
                 <span>{group.tripDuration}</span>
               </span>
               <span className="text-gray-300 hidden min-[400px]:inline">•</span>
-              <span className="inline-flex items-center gap-1 text-amber-700 font-bold bg-amber-50 px-2 py-0.5 rounded-full text-[10px] sm:text-xs">
-                <Users className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+              <span className="inline-flex items-center gap-1 text-[#ff5722] font-bold bg-orange-50 px-2 py-0.5 rounded-full text-[10px] sm:text-xs">
+                <Users className="w-3.5 h-3.5 text-[#ff5722] shrink-0" />
                 <span>
                   {totalGuests} {totalGuests === 1 ? 'Traveler' : 'Travelers'}
                 </span>
@@ -113,7 +113,7 @@ export const TripBookingsAccordion: React.FC<TripBookingsAccordionProps> = ({
           <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-500 ${
-                paidPercent === 100 ? 'bg-emerald-500' : 'bg-amber-500'
+                paidPercent === 100 ? 'bg-emerald-500' : 'bg-[#ff5722]'
               }`}
               style={{ width: `${paidPercent}%` }}
             />
@@ -124,8 +124,8 @@ export const TripBookingsAccordion: React.FC<TripBookingsAccordionProps> = ({
               <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" /> ₹{paidRevenue.toLocaleString('en-IN')} Paid
             </span>
             {group.unpaidCount > 0 ? (
-              <span className="text-amber-700 flex items-center gap-1">
-                <AlertCircle className="w-3 h-3 text-amber-500 shrink-0" /> ₹{unpaidRevenue.toLocaleString('en-IN')} Pending
+              <span className="text-[#ff5722] flex items-center gap-1">
+                <AlertCircle className="w-3 h-3 text-[#ff5722] shrink-0" /> ₹{unpaidRevenue.toLocaleString('en-IN')} Pending
               </span>
             ) : (
               <span className="text-emerald-600 font-bold">All Settled</span>
@@ -155,15 +155,15 @@ export const TripBookingsAccordion: React.FC<TripBookingsAccordionProps> = ({
             <div
               className={`flex flex-col items-center justify-center px-1.5 sm:px-3 py-1.5 rounded-xl border text-center min-w-0 sm:min-w-[75px] ${
                 group.unpaidCount > 0
-                  ? 'border-amber-100 bg-amber-50/80 text-amber-800'
+                  ? 'border-orange-100 bg-orange-50/80 text-orange-900'
                   : 'border-gray-100 bg-gray-50 text-gray-600'
               }`}
             >
               <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-0.5 truncate max-w-full">Unpaid</span>
               <span className="text-xs sm:text-sm font-black">
                 {group.unpaidCount > 0 ? (
-                  <span className="flex items-center justify-center gap-1 text-amber-800">
-                    <span className="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-500 animate-pulse shrink-0" />
+                  <span className="flex items-center justify-center gap-1 text-orange-900">
+                    <span className="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#ff5722] animate-pulse shrink-0" />
                     <span>{group.unpaidCount}</span>
                   </span>
                 ) : (
@@ -183,7 +183,7 @@ export const TripBookingsAccordion: React.FC<TripBookingsAccordionProps> = ({
             aria-label={isOpen ? 'Collapse trip bookings' : 'Expand trip bookings'}
             className={`inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-black uppercase tracking-wider border cursor-pointer transition-all duration-150 shrink-0 ${
               isOpen
-                ? 'bg-amber-500 text-white border-amber-500 shadow-xs'
+                ? 'bg-[#ff5722] hover:bg-[#e04d1f] text-white border-[#ff5722] shadow-xs'
                 : 'bg-white hover:bg-gray-50 text-gray-700 border-gray-200'
             }`}
           >
@@ -212,7 +212,7 @@ export const TripBookingsAccordion: React.FC<TripBookingsAccordionProps> = ({
                   <span className="text-xs font-black uppercase tracking-wider text-gray-800">
                     Passenger Manifest
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-black">
+                  <span className="px-2.5 py-0.5 rounded-full bg-orange-100 text-[#ff5722] text-[10px] font-black">
                     {group.bookings.length} {group.bookings.length === 1 ? 'Booking' : 'Bookings'}
                   </span>
                 </div>

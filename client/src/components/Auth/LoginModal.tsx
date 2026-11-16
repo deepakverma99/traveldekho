@@ -5,27 +5,19 @@ import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Button } from '@/components/shared';
 import {
   useAppDispatch,
   useAppSelector,
   selectIsLoginModalOpen,
   selectCountryCode,
   selectMobileNumber,
-  selectIsMobileComplete,
   selectAuthStep,
-  selectAuthOtp,
-  selectAuthLoading,
-  selectAuthError,
-  setCountryCode,
-  setMobileNumber,
-  setOtp,
   setStep,
   closeLoginModal,
-  requestOtpStart,
-  requestOtpSuccess,
-  loginSuccess,
   resetLoginForm,
 } from '@/redux';
+import { useLoginForm } from './hooks';
 
 export interface LoginModalProps {
   isOpen?: boolean;
@@ -39,55 +31,24 @@ interface LoginFormProps {
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSubmitOtp }) => {
-  const dispatch = useAppDispatch();
-  const countryCode = useAppSelector(selectCountryCode);
-  const mobileNumber = useAppSelector(selectMobileNumber);
-  const isMobileComplete = useAppSelector(selectIsMobileComplete);
-  const step = useAppSelector(selectAuthStep);
-  const otp = useAppSelector(selectAuthOtp);
-  const isLoading = useAppSelector(selectAuthLoading);
-  const error = useAppSelector(selectAuthError);
-
-  const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setMobileNumber(e.target.value));
-  };
-
-  const handleCountryCodeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(setCountryCode(e.target.value));
-  };
-
-  const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setOtp(e.target.value));
-  };
-
-  const handlePhoneSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isMobileComplete) return;
-
-    dispatch(requestOtpStart());
-    onSubmitOtp?.({ countryCode, mobileNumber });
-    dispatch(requestOtpSuccess());
-  };
-
-  const handleOtpSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (otp.length < 4) return;
-
-    dispatch(
-      loginSuccess({
-        user: {
-          id: `usr_${Date.now()}`,
-          mobileNumber: `${countryCode}${mobileNumber}`,
-          name: 'Traveler',
-        },
-      })
-    );
-    onClose?.();
-  };
+  const {
+    countryCode,
+    mobileNumber,
+    step,
+    otp,
+    isLoading,
+    error,
+    isMobileValid,
+    isOtpValid,
+    handleMobileChange,
+    handleCountryCodeChange,
+    handleOtpChange,
+    handlePhoneSubmit,
+    handleOtpSubmit,
+    handleResendOtp,
+  } = useLoginForm({ onClose, onSubmitOtp });
 
   if (step === 'otp') {
-    const isOtpValid = otp.length >= 4;
-
     return (
       <form className="space-y-4" onSubmit={handleOtpSubmit}>
         <div className="flex flex-col items-center">
@@ -104,7 +65,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSubmitOtp }) => {
           />
           <button
             type="button"
-            onClick={() => dispatch(requestOtpSuccess())}
+            onClick={handleResendOtp}
             className="bg-transparent border-none text-xs font-bold text-amber-700 cursor-pointer mt-3 transition-colors hover:text-amber-900 hover:underline"
           >
             Resend OTP
@@ -117,18 +78,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSubmitOtp }) => {
           </p>
         )}
 
-        <motion.button
+        <Button
           type="submit"
+          variant="primary"
+          size="lg"
+          isFullWidth
           disabled={!isOtpValid || isLoading}
-          whileHover={isOtpValid ? { scale: 1.01 } : {}}
-          whileTap={isOtpValid ? { scale: 0.98 } : {}}
-          className="w-full rounded-xl flex justify-center items-center p-3.5 text-sm font-extrabold tracking-widest cursor-pointer mt-5 relative overflow-hidden bg-primary text-charcoal border-none font-jakarta transition-all duration-300 before:content-[''] before:absolute before:inset-0 before:bg-black before:scale-x-0 before:origin-left before:transition-transform before:duration-500 before:ease-out before:z-0 hover:not-disabled:text-white hover:not-disabled:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.3)] hover:not-disabled:before:scale-x-100 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed disabled:opacity-80"
+          leftIcon={<CheckCircle2 className="w-4 h-4" />}
+          className="mt-5"
         >
-          <span className="relative z-10 inline-flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4" />
-            {isLoading ? 'VERIFYING...' : 'VERIFY & LOGIN'}
-          </span>
-        </motion.button>
+          {isLoading ? 'VERIFYING...' : 'VERIFY & LOGIN'}
+        </Button>
       </form>
     );
   }
@@ -148,7 +108,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSubmitOtp }) => {
 
         <input
           placeholder="Mobile Number"
-          maxLength={10}
+          maxLength={15}
           required
           type="tel"
           value={mobileNumber}
@@ -165,17 +125,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSubmitOtp }) => {
         </p>
       )}
 
-      <motion.button
+      <Button
         type="submit"
-        disabled={!isMobileComplete || isLoading}
-        whileHover={isMobileComplete ? { scale: 1.01 } : {}}
-        whileTap={isMobileComplete ? { scale: 0.98 } : {}}
-        className="w-full rounded-xl flex justify-center items-center p-3.5 text-sm font-extrabold tracking-widest cursor-pointer mt-5 relative overflow-hidden bg-primary text-charcoal border-none font-jakarta transition-all duration-300 before:content-[''] before:absolute before:inset-0 before:bg-black before:scale-x-0 before:origin-left before:transition-transform before:duration-500 before:ease-out before:z-0 hover:not-disabled:text-white hover:not-disabled:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.3)] hover:not-disabled:before:scale-x-100 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed disabled:opacity-80"
+        variant="primary"
+        size="lg"
+        isFullWidth
+        disabled={!isMobileValid || isLoading}
+        className="mt-5"
       >
-        <span className="relative z-10">
-          {isLoading ? 'SENDING OTP...' : 'GET OTP'}
-        </span>
-      </motion.button>
+        {isLoading ? 'SENDING OTP...' : 'GET OTP'}
+      </Button>
 
       <div className="text-center mt-6 pt-1">
         <p className="text-xs sm:text-sm font-semibold text-gray-500">

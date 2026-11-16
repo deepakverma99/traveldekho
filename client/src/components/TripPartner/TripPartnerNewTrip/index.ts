@@ -12,4 +12,8 @@ export * from './TripDisclaimerField';
 export * from './WhatsAppContactField';
 export * from './DepartureBatchesField';
 export * from './OccupancyPricingField';
+export * from './components/TripScopeTabs';
+export * from './constants/destinations';
 export * from './TripPartnerNewTripForm';
+export * from './hooks';
+export * from './utils';

@@ -42,7 +42,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
                 aria-label={`Step ${step.number}: ${step.label}`}
                 className={`w-8 h-8 min-[480px]:w-9 min-[480px]:h-9 sm:w-10.5 sm:h-10.5 rounded-full flex items-center justify-center font-black text-xs min-[480px]:text-[13px] sm:text-[15px] transition-all duration-200 border ${
                   isActive
-                    ? 'bg-amber-500 text-white border-amber-500 shadow-[0_6px_16px_-2px_rgba(250,203,43,0.45)]'
+                    ? 'bg-[#ff5722] text-white border-[#ff5722] shadow-[0_6px_16px_-2px_rgba(255,87,34,0.45)]'
                     : isCompleted
                     ? 'bg-gray-900 text-white border-gray-900 shadow-xs'
                     : 'bg-white text-gray-300 border-gray-200 shadow-xs'
@@ -63,7 +63,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
             {idx < TRIP_STEPS.length - 1 && (
               <div
                 className={`flex-1 h-0.5 mx-1 sm:mx-2 mb-4.5 sm:mb-6 transition-colors duration-300 ${
-                  step.number < currentStep ? 'bg-amber-500' : 'bg-gray-200'
+                  step.number < currentStep ? 'bg-[#ff5722]' : 'bg-gray-200'
                 }`}
               />
             )}

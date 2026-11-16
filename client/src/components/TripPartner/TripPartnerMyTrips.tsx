@@ -154,7 +154,7 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
 
           <div className="mt-2">
             <h1 className="text-3xl font-black text-gray-900 tracking-tight uppercase break-words">
-              My <span className="text-amber-500">Trips</span>
+              My <span className="text-[#ff5722]">Trips</span>
             </h1>
             <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">
               Manage and track all your Active Trips, Upcoming Departures, and Published Itineraries
@@ -264,7 +264,7 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
               type="button"
               onClick={handleResetFilters}
               title="Reset all filters"
-              className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3.5 bg-amber-50 hover:bg-amber-100 text-amber-800 hover:text-amber-900 border border-amber-200 hover:border-amber-300 rounded-xl text-[13px] font-bold font-jakarta cursor-pointer transition-all duration-200 whitespace-nowrap shrink-0"
+              className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3.5 bg-orange-50 hover:bg-orange-100 text-[#ff5722] hover:text-orange-700 border border-orange-200 hover:border-orange-300 rounded-xl text-[13px] font-bold font-jakarta cursor-pointer transition-all duration-200 whitespace-nowrap shrink-0"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset</span>
@@ -273,9 +273,9 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
           <button
             type="button"
             onClick={handleExport}
-            className="inline-flex items-center justify-center gap-2 py-2.5 px-4.5 bg-[#0b132b] hover:bg-[#1c2541] text-white hover:text-amber-300 rounded-xl text-[13px] font-extrabold tracking-tight font-jakarta border border-amber-400/20 hover:border-amber-400/40 cursor-pointer transition-all duration-200 shrink-0 w-full sm:w-auto hover:-translate-y-0.5 active:translate-y-0 shadow-xs hover:shadow-md"
+            className="inline-flex items-center justify-center gap-2 py-2.5 px-4.5 bg-[#0b132b] hover:bg-[#1c2541] text-white hover:text-orange-300 rounded-xl text-[13px] font-extrabold tracking-tight font-jakarta border border-orange-400/20 hover:border-orange-400/40 cursor-pointer transition-all duration-200 shrink-0 w-full sm:w-auto hover:-translate-y-0.5 active:translate-y-0 shadow-xs hover:shadow-md"
           >
-            <Download className="w-3.5 h-3.5 text-amber-400 stroke-[2.25]" />
+            <Download className="w-3.5 h-3.5 text-[#ff5722] stroke-[2.25]" />
             <span>Export Trips</span>
           </button>
         </div>
@@ -298,7 +298,7 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
         </div>
       ) : (
         <div className="bg-white border border-dashed border-gray-300 rounded-2.5xl py-14 px-6 text-center flex flex-col items-center justify-center gap-4">
-          <div className="w-14 h-14 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
+          <div className="w-14 h-14 rounded-full bg-orange-50 flex items-center justify-center text-[#ff5722]">
             <AlertCircle className="w-7 h-7" />
           </div>
           <div>
@@ -322,7 +322,7 @@ export const TripPartnerMyTrips: React.FC<TripPartnerMyTripsProps> = ({ username
       {/* Toast Notification */}
       {toastText && (
         <div className="fixed bottom-8 right-8 z-[100] flex items-center gap-2.5 py-3 px-5 bg-[#0b132b] text-white rounded-xl shadow-xl text-[13px] font-bold font-jakarta animate-bounce">
-          <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
+          <CheckCircle2 className="w-4 h-4 text-[#ff5722] shrink-0" />
           <span>{toastText}</span>
         </div>
       )}

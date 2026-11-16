@@ -1,14 +1,12 @@
 import dynamic from 'next/dynamic';
 import {
   HeroSection,
-  UpcomingTripsSection,
+  TopRankedTripsSection,
+  ExploreBharatSection,
+  DiscoverBharatSection,
   NearbyTripsSection,
 } from "@/components/Home";
-import { FloatingBackground } from "@/components/shared";
 
-const WeatherForecastSection = dynamic(
-  () => import('@/components/Home/WeatherForecast').then((mod) => mod.WeatherForecastSection)
-);
 const IndiaOnWheelsSection = dynamic(
   () => import('@/components/Home/IndiaOnWheels').then((mod) => mod.IndiaOnWheelsSection)
 );
@@ -43,11 +41,11 @@ const VendorsSection = dynamic(
 export default function Home() {
   return (
     <main className="relative flex-1 w-full bg-white overflow-x-hidden min-h-screen">
-      <FloatingBackground fixed />
       <HeroSection />
-      <UpcomingTripsSection />
+      <TopRankedTripsSection />
+      <ExploreBharatSection />
+      <DiscoverBharatSection />
       <NearbyTripsSection />
-      <WeatherForecastSection />
       <IndiaOnWheelsSection />
       <DestinationsSection />
       <BudgetFriendlySection />
@@ -61,4 +59,3 @@ export default function Home() {
     </main>
   );
 }
-

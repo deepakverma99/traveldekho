@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { PartnerCard } from './PartnerCard';
 import { mockPartnersData } from './mockPartners';
+import { colorTokens } from '@/theme';
 
 export const VendorsSection: React.FC = () => {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -57,14 +58,17 @@ export const VendorsSection: React.FC = () => {
   return (
     <section
       id="vendors"
-      className="py-10 md:py-16 mb-12 md:mb-16 relative overflow-hidden bg-transparent font-sans selection:bg-amber-400 selection:text-black"
+      style={{ backgroundColor: colorTokens.surfacePure }}
+      className="py-10 md:py-16 mb-12 md:mb-16 relative overflow-hidden font-sans selection:bg-amber-400 selection:text-black z-10"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="flex items-center justify-between mb-4 md:mb-8">
           <h2 className="text-xl sm:text-[28px] md:text-[32px] font-black tracking-tight text-charcoal font-jakarta">
-            Trip Partner
-            <span className="ml-1 text-primary">Network</span>
+            <span>Trip Partner </span>
+            <span className="ml-1" style={{ color: colorTokens.primaryContainer }}>
+              Network
+            </span>
           </h2>
         </div>
 

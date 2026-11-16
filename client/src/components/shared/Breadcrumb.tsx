@@ -35,14 +35,14 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
               )}
 
               {isLast || !item.href ? (
-                <span aria-current="page" className="font-bold text-amber-600 inline-flex items-center gap-1.5 [&>svg]:w-3.5 [&>svg]:h-3.5 [&>svg]:text-amber-600">
+                <span aria-current="page" className="font-bold text-[#ff5722] inline-flex items-center gap-1.5 [&>svg]:w-3.5 [&>svg]:h-3.5 [&>svg]:text-[#ff5722]">
                   {isHome && (item.icon || <Home />)}
                   <span>{item.label}</span>
                 </span>
               ) : (
                 <Link
                   href={item.href}
-                  className="font-medium text-gray-500 inline-flex items-center gap-1.5 transition-colors no-underline hover:text-amber-600 [&>svg]:w-3.5 [&>svg]:h-3.5 [&>svg]:text-gray-400 [&:hover>svg]:text-amber-600"
+                  className="font-medium text-gray-500 inline-flex items-center gap-1.5 transition-colors no-underline hover:text-[#ff5722] [&>svg]:w-3.5 [&>svg]:h-3.5 [&>svg]:text-gray-400 [&:hover>svg]:text-[#ff5722]"
                 >
                   {isHome && (item.icon || <Home />)}
                   <span>{item.label}</span>

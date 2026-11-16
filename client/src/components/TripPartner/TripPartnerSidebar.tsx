@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useSyncExternalStore } from 'react';
+import React, { useEffect, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -38,12 +38,9 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
   const currentPartner = useAppSelector(selectCurrentPartner);
   const isMounted = useIsMounted();
 
-  const [optimisticPath, setOptimisticPath] = useState<string | null>(null);
-
-  // Close on route navigation and clear optimistic path
+  // Close mobile sidebar on route navigation
   useEffect(() => {
     dispatch(closeMobileSidebar());
-    setOptimisticPath(null);
   }, [pathname, dispatch]);
 
   // Lock scroll & handle Escape key
@@ -66,8 +63,7 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
   }, [isMobileSidebarOpen, dispatch]);
 
   const effectiveDisplayName = currentPartner?.displayName || username;
-  const activePathname = optimisticPath ?? pathname;
-  const navItems = getPartnerNavItems(username, activePathname);
+  const navItems = getPartnerNavItems(username, pathname);
 
   return (
     <>
@@ -101,16 +97,15 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
                 <Link
                   key={item.label}
                   href={item.href}
-                  onClick={() => setOptimisticPath(item.href)}
                   className={`flex items-center gap-3.5 px-4 py-3 rounded-xl relative z-10 no-underline select-none border transition-all duration-150 ${
                     isActive
-                      ? 'text-white font-black shadow-[0_4px_12px_rgba(244,140,6,0.25)] bg-gradient-to-r from-amber-500 to-amber-600 border-transparent'
-                      : 'text-slate-900 font-extrabold bg-white border-gray-200 hover:border-amber-300 hover:text-black hover:shadow-xs'
+                      ? 'text-white font-black shadow-[0_4px_15px_rgba(255,87,34,0.35)] bg-[#ff5722] border-transparent'
+                      : 'text-slate-900 font-extrabold bg-white border-gray-200 hover:border-orange-300 hover:text-[#ff5722] hover:shadow-xs'
                   }`}
                 >
                   <Icon
                     className={`w-5 h-5 shrink-0 transition-transform ${
-                      isActive ? 'text-white' : 'text-amber-500'
+                      isActive ? 'text-white' : 'text-[#ff5722]'
                     }`}
                     aria-hidden="true"
                   />
@@ -126,11 +121,11 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
           <Link
             href="/"
             title="Visit TravelDekho Marketplace"
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold text-gray-700 bg-white border border-gray-200 no-underline shadow-xs transition-all duration-200 hover:bg-amber-50 hover:border-amber-300 hover:text-gray-950 group/market"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold text-gray-700 bg-white border border-gray-200 no-underline shadow-xs transition-all duration-200 hover:bg-orange-50 hover:border-orange-300 hover:text-gray-950 group/market"
           >
-            <Globe className="w-4 h-4 shrink-0 text-amber-600 group-hover/market:scale-110 transition-transform" aria-hidden="true" />
+            <Globe className="w-4 h-4 shrink-0 text-[#ff5722] group-hover/market:scale-110 transition-transform" aria-hidden="true" />
             <span>View Marketplace</span>
-            <ArrowUpRight className="w-3.5 h-3.5 shrink-0 text-gray-400 group-hover/market:text-amber-600 group-hover/market:translate-x-0.5 group-hover/market:-translate-y-0.5 transition-all ml-auto" aria-hidden="true" />
+            <ArrowUpRight className="w-3.5 h-3.5 shrink-0 text-gray-400 group-hover/market:text-[#ff5722] group-hover/market:translate-x-0.5 group-hover/market:-translate-y-0.5 transition-all ml-auto" aria-hidden="true" />
           </Link>
         </div>
       </aside>
@@ -184,7 +179,7 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
               </div>
 
               <div className="m-4 mb-1 p-3.5 px-4 bg-white border border-gray-200 rounded-xl flex items-center gap-3 shadow-xs">
-                <div className="w-9 h-9 rounded-full bg-amber-400 text-charcoal flex items-center justify-center font-black text-sm shadow-xs uppercase shrink-0">
+                <div className="w-9 h-9 rounded-full bg-[#ff5722] text-white flex items-center justify-center font-black text-sm shadow-xs uppercase shrink-0">
                   {effectiveDisplayName.charAt(0) || 'T'}
                 </div>
                 <div className="flex flex-col min-w-0">
@@ -207,18 +202,17 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
                         key={item.label}
                         href={item.href}
                         onClick={() => {
-                          setOptimisticPath(item.href);
                           dispatch(closeMobileSidebar());
                         }}
                         className={`flex items-center gap-3.5 px-4 py-3 rounded-xl relative z-10 no-underline select-none border transition-all duration-150 ${
                           isActive
-                            ? 'text-white font-black shadow-[0_4px_12px_rgba(244,140,6,0.25)] bg-gradient-to-r from-amber-500 to-amber-600 border-transparent'
-                            : 'text-slate-900 font-extrabold bg-white border-gray-200 hover:border-amber-300 hover:text-black hover:shadow-xs'
+                            ? 'text-white font-black shadow-[0_4px_15px_rgba(255,87,34,0.35)] bg-[#ff5722] border-transparent'
+                            : 'text-slate-900 font-extrabold bg-white border-gray-200 hover:border-orange-300 hover:text-[#ff5722] hover:shadow-xs'
                         }`}
                       >
                         <Icon
                           className={`w-5 h-5 shrink-0 transition-transform ${
-                            isActive ? 'text-white' : 'text-amber-500'
+                            isActive ? 'text-white' : 'text-[#ff5722]'
                           }`}
                           aria-hidden="true"
                         />
@@ -234,11 +228,11 @@ export const TripPartnerSidebar: React.FC<TripPartnerSidebarProps> = ({ username
                   href="/"
                   title="Visit TravelDekho Marketplace"
                   onClick={() => dispatch(closeMobileSidebar())}
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold text-gray-700 bg-white border border-gray-200 no-underline shadow-xs transition-all duration-200 hover:bg-amber-50 hover:border-amber-300 hover:text-gray-950 group/market"
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold text-gray-700 bg-white border border-gray-200 no-underline shadow-xs transition-all duration-200 hover:bg-orange-50 hover:border-orange-300 hover:text-gray-950 group/market"
                 >
-                  <Globe className="w-4 h-4 shrink-0 text-amber-600 group-hover/market:scale-110 transition-transform" aria-hidden="true" />
+                  <Globe className="w-4 h-4 shrink-0 text-[#ff5722] group-hover/market:scale-110 transition-transform" aria-hidden="true" />
                   <span>View Marketplace</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 shrink-0 text-gray-400 group-hover/market:text-amber-600 group-hover/market:translate-x-0.5 group-hover/market:-translate-y-0.5 transition-all ml-auto" aria-hidden="true" />
+                  <ArrowUpRight className="w-3.5 h-3.5 shrink-0 text-gray-400 group-hover/market:text-[#ff5722] group-hover/market:translate-x-0.5 group-hover/market:-translate-y-0.5 transition-all ml-auto" aria-hidden="true" />
                 </Link>
               </div>
             </aside>

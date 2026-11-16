@@ -9,7 +9,6 @@ import {
   Eye,
   EyeOff,
   Lock,
-  Calendar,
   Sparkles,
 } from 'lucide-react';
 import { partnerColors } from '@/theme/colors';
@@ -286,7 +285,7 @@ export const PayoutBankSection: React.FC<PayoutBankSectionProps> = ({
                       >
                         {option.label}
                       </span>
-                      {isSelected && <Sparkles className="w-3.5 h-3.5 text-amber-600" />}
+                      {isSelected && <Sparkles className="w-3.5 h-3.5 text-[#ff5722]" />}
                     </div>
                     <p
                       className="text-[11px] font-medium leading-relaxed"

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/redux/hooks';
 import { setPartnerSession } from '@/redux/slices/tripPartnerSlice';
@@ -46,13 +46,14 @@ export const usePartnerProfile = (username: string) => {
 
   const [formData, setFormData] = useState<PartnerProfileData>(initialData);
   const [initialSnapshot, setInitialSnapshot] = useState<PartnerProfileData>(initialData);
-  const [isSaving, setIsSaving] = useState(false);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
-
-  useEffect(() => {
+  const [prevUsername, setPrevUsername] = useState(username);
+  if (prevUsername !== username) {
+    setPrevUsername(username);
     setFormData(initialData);
     setInitialSnapshot(initialData);
-  }, [initialData]);
+  }
+  const [isSaving, setIsSaving] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = useCallback((msg: string) => {
     setToastMessage(msg);

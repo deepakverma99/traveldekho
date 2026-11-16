@@ -171,10 +171,10 @@ export const PlaceAutocompleteInput: React.FC<PlaceAutocompleteInputProps> = ({
   return (
     <div ref={containerRef} className="relative w-full flex flex-col gap-1">
       <div
-        className={`relative flex items-center w-full rounded-2xl transition-all duration-200 border-2 ${
+        className={`relative flex items-center w-full rounded-2xl transition-all duration-200 border-2 outline-none focus-within:outline-none ${
           hasError
-            ? 'bg-red-50 border-red-400 hover:bg-red-100/50 focus-within:bg-white focus-within:border-red-500 focus-within:ring-4 focus-within:ring-red-500/20'
-            : 'bg-slate-50 border-transparent hover:bg-slate-100/70 focus-within:bg-white focus-within:border-amber-400 focus-within:ring-4 focus-within:ring-amber-400/20'
+            ? 'bg-red-50 border-red-400 hover:bg-red-100/50 focus-within:bg-white focus-within:border-red-500'
+            : 'bg-slate-50 border-transparent hover:bg-slate-100/70 focus-within:bg-white focus-within:border-[#ff5722]'
         }`}
       >
         <input

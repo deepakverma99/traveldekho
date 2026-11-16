@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { colorTokens } from '@/theme';
 import { hikeTripsData } from './mockHikeTrips';
 import { TripCarouselSection } from '../common';
 
@@ -13,6 +13,7 @@ export const HikeSection: React.FC = () => {
       highlightText="Hike"
       viewAllHref="/category/hike"
       trips={hikeTripsData}
+      backgroundColor={colorTokens.surfacePure}
     />
   );
 };

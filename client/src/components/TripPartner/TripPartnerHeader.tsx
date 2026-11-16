@@ -79,7 +79,7 @@ export const TripPartnerHeader: React.FC<TripPartnerHeaderProps> = ({
               />
             </Link>
 
-            <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200/80">
+            <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-orange-50 text-[#ff5722] border border-orange-200/80">
               Trip Partner Portal
             </span>
           </div>
@@ -90,15 +90,15 @@ export const TripPartnerHeader: React.FC<TripPartnerHeaderProps> = ({
             <Link
               href={`/trip-partner/${username}/notifications`}
               title="View Notifications"
-              className="relative p-2 rounded-xl text-gray-500 hover:text-amber-600 hover:bg-amber-50/60 transition-colors"
+              className="relative p-2 rounded-xl text-gray-500 hover:text-[#ff5722] hover:bg-orange-50/60 transition-colors"
             >
               <Bell className="w-4 h-4" />
-              <div className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+              <div className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#ff5722] animate-pulse" />
             </Link>
 
             {/* Profile Pill */}
             <div className="flex items-center gap-2 p-1 pl-1.5 sm:p-1.5 sm:pl-2 rounded-full border border-gray-200 bg-white shadow-2xs">
-              <div className="w-8 h-8 rounded-full bg-amber-400 text-charcoal flex items-center justify-center font-black text-xs shadow-xs uppercase shrink-0">
+              <div className="w-8 h-8 rounded-full bg-[#ff5722] text-white flex items-center justify-center font-black text-xs shadow-xs uppercase shrink-0">
                 {effectiveDisplayName.charAt(0) || 'T'}
               </div>
 

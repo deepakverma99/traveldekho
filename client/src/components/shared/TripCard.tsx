@@ -35,6 +35,8 @@ export interface TripCardProps {
   priority?: boolean;
   fullWidth?: boolean;
   className?: string;
+  isWishlisted?: boolean;
+  onWishlistToggle?: (trip: TripItem) => void;
 }
 
 export const TripCard: React.FC<TripCardProps> = ({
@@ -42,8 +44,21 @@ export const TripCard: React.FC<TripCardProps> = ({
   priority = false,
   fullWidth = false,
   className = '',
+  isWishlisted,
+  onWishlistToggle,
 }) => {
-  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [internalLiked, setInternalLiked] = useState<boolean>(false);
+  const isLiked = isWishlisted !== undefined ? isWishlisted : internalLiked;
+
+  const handleWishlistClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onWishlistToggle) {
+      onWishlistToggle(trip);
+    } else {
+      setInternalLiked(!internalLiked);
+    }
+  };
 
   const getTagClasses = (variant?: 'amber' | 'blue' | 'gray') => {
     switch (variant) {
@@ -90,12 +105,8 @@ export const TripCard: React.FC<TripCardProps> = ({
           <button
             type="button"
             aria-label="Toggle Wishlist"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIsLiked(!isLiked);
-            }}
-            className="absolute top-1.5 sm:top-3 right-1.5 sm:right-3 p-1 sm:p-2 rounded-full transition-all duration-300 backdrop-blur-md z-10 cursor-pointer bg-black/20 text-white"
+            onClick={handleWishlistClick}
+            className="absolute top-1.5 sm:top-3 right-1.5 sm:right-3 p-1 sm:p-2 rounded-full transition-all duration-300 backdrop-blur-md z-10 cursor-pointer bg-black/20 text-white hover:bg-black/40 active:scale-90"
           >
             <Heart
               className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-colors ${

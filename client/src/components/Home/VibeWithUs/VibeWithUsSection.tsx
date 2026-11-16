@@ -5,6 +5,7 @@ import { useCarouselScroll } from '@/redux';
 import { VibeCard } from './VibeCard';
 import { mockVibeData } from './mockVibeData';
 import { CarouselScrollButton } from '../common';
+import { colorTokens } from '@/theme';
 
 export const VibeWithUsSection: React.FC = () => {
   const { trackRef, canScrollLeft, canScrollRight, handleScroll } =
@@ -13,14 +14,17 @@ export const VibeWithUsSection: React.FC = () => {
   return (
     <section
       id="vibe-with-us-section"
-      className="relative w-full py-12 md:py-16 overflow-hidden bg-transparent font-sans"
+      style={{ backgroundColor: colorTokens.background }}
+      className="relative w-full py-12 md:py-16 overflow-hidden font-sans z-10"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className="flex items-center justify-between mb-6 md:mb-8">
           <h2 className="text-xl sm:text-[28px] md:text-[32px] font-black tracking-tight text-charcoal font-jakarta">
-            Vibe with
-            <span className="ml-1 text-primary">Us</span>
+            <span>Vibe with </span>
+            <span className="ml-1" style={{ color: colorTokens.primaryContainer }}>
+              Us
+            </span>
           </h2>
         </div>
 

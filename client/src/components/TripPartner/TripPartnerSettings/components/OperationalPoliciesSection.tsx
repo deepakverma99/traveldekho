@@ -5,9 +5,7 @@ import {
   SlidersHorizontal,
   Zap,
   Clock,
-  ShieldAlert,
   Sparkles,
-  CalendarCheck,
 } from 'lucide-react';
 import { partnerColors } from '@/theme/colors';
 import { PartnerBookingPolicies } from '../types';
@@ -159,7 +157,7 @@ export const OperationalPoliciesSection: React.FC<OperationalPoliciesSectionProp
                     <Clock className="w-3.5 h-3.5" />
                     <span>{opt.label}</span>
                   </div>
-                  {isSelected && <Sparkles className="w-3.5 h-3.5 text-amber-600" />}
+                  {isSelected && <Sparkles className="w-3.5 h-3.5 text-[#ff5722]" />}
                 </button>
               );
             })}
@@ -190,7 +188,7 @@ export const OperationalPoliciesSection: React.FC<OperationalPoliciesSectionProp
                 <div
                   key={cp.id}
                   onClick={() => updatePolicy('cancellationPolicy', cp.id)}
-                  className="p-4 rounded-xl border cursor-pointer transition-all flex flex-col justify-between hover:border-amber-400 select-none"
+                  className="p-4 rounded-xl border cursor-pointer transition-all flex flex-col justify-between hover:border-orange-400 select-none"
                   style={{
                     backgroundColor: isSelected
                       ? partnerColors.accentLight
@@ -239,7 +237,7 @@ export const OperationalPoliciesSection: React.FC<OperationalPoliciesSectionProp
                       name="cancellationPolicy"
                       checked={isSelected}
                       onChange={() => updatePolicy('cancellationPolicy', cp.id)}
-                      className="accent-amber-500 cursor-pointer"
+                      className="accent-[#ff5722] cursor-pointer"
                     />
                   </div>
                 </div>

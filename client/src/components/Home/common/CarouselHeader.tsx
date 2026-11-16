@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { colorTokens } from '@/theme';
 
 interface CarouselHeaderProps {
   title: string;
@@ -22,7 +23,9 @@ export const CarouselHeader: React.FC<CarouselHeaderProps> = ({
       <h2 className="text-xl sm:text-[28px] md:text-[32px] font-black tracking-tight text-charcoal flex items-center font-jakarta">
         {icon}
         <span>{title}</span>
-        <span className="ml-1 text-primary">{highlightText}</span>
+        <span className="ml-1" style={{ color: colorTokens.primaryContainer }}>
+          {highlightText}
+        </span>
       </h2>
 
       {viewAllHref && (

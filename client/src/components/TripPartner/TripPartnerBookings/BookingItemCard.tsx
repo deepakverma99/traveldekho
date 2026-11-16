@@ -30,12 +30,12 @@ export const BookingItemCard: React.FC<BookingItemCardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 p-3 sm:p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 hover:border-amber-200 transition-colors shadow-2xs font-jakarta min-w-0">
+    <div className="bg-white rounded-xl border border-gray-100 p-3 sm:p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 hover:border-orange-200 transition-colors shadow-2xs font-jakarta min-w-0">
       {/* Left: Avatar & Traveler Details */}
       <div className="flex items-start sm:items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
         <div
           title={booking.travelerName}
-          className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-amber-500/10 text-amber-700 font-extrabold text-xs sm:text-sm flex items-center justify-center shrink-0 border border-amber-200"
+          className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-orange-500/10 text-[#ff5722] font-extrabold text-xs sm:text-sm flex items-center justify-center shrink-0 border border-orange-200"
         >
           {getInitials(booking.travelerName)}
         </div>
@@ -64,7 +64,7 @@ export const BookingItemCard: React.FC<BookingItemCardProps> = ({
 
           <p className="flex items-center gap-2 text-[10px] font-bold text-gray-600 tracking-wide uppercase flex-wrap">
             <span className="flex items-center gap-1">
-              <Users className="w-3 h-3 text-amber-500 shrink-0" />
+              <Users className="w-3 h-3 text-[#ff5722] shrink-0" />
               {guests} {guests > 1 ? 'GUESTS' : 'GUEST'}
             </span>
             <span>•</span>
@@ -107,7 +107,7 @@ export const BookingItemCard: React.FC<BookingItemCardProps> = ({
             type="button"
             onClick={() => onMarkPaid(booking.id)}
             title="Click to mark this booking as paid"
-            className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-[11px] sm:text-xs font-black uppercase tracking-wider cursor-pointer transition-colors shrink-0"
+            className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-lg bg-orange-50 hover:bg-orange-100 text-[#ff5722] hover:text-orange-700 border border-orange-200 hover:border-orange-300 text-[11px] sm:text-xs font-black uppercase tracking-wider cursor-pointer transition-colors shrink-0"
           >
             <span>💰</span>
             <span>MARK PAID</span>

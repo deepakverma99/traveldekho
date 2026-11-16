@@ -3,14 +3,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ShieldCheck,
   Building2,
   User,
   CheckCircle2,
-  FileText,
   Lock,
   Save,
-  RotateCcw,
 } from 'lucide-react';
 import { partnerColors } from '@/theme/colors';
 import { PartnerKycData, KycRegistrationType, KycUploadFile } from '../types';
@@ -109,7 +106,7 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
               onClick={() => handleTypeChange('company')}
               className={`p-3 sm:p-3.5 md:p-4 rounded-xl border flex items-start justify-between gap-2.5 sm:gap-3 cursor-pointer transition-all duration-200 select-none w-full min-w-0 ${
                 activeRegistrationType === 'company'
-                  ? 'border-amber-400 bg-amber-50/20 shadow-xs'
+                  ? 'border-orange-400 bg-orange-50/20 shadow-xs'
                   : 'border-slate-200 bg-slate-50/60 hover:bg-slate-50 hover:border-slate-300'
               }`}
             >
@@ -117,7 +114,7 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
                 <div
                   className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center shrink-0 border ${
                     activeRegistrationType === 'company'
-                      ? 'bg-amber-100/80 border-amber-300 text-amber-700'
+                      ? 'bg-orange-100/80 border-orange-300 text-[#ff5722]'
                       : 'bg-white border-slate-200 text-slate-500'
                   }`}
                 >
@@ -142,7 +139,7 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
               <div
                 className={`w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                   activeRegistrationType === 'company'
-                    ? 'border-amber-500 bg-amber-500'
+                    ? 'border-[#ff5722] bg-[#ff5722]'
                     : 'border-slate-300 bg-white'
                 }`}
               >
@@ -157,7 +154,7 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
               onClick={() => handleTypeChange('trip_partner')}
               className={`p-3 sm:p-3.5 md:p-4 rounded-xl border flex items-start justify-between gap-2.5 sm:gap-3 cursor-pointer transition-all duration-200 select-none w-full min-w-0 ${
                 activeRegistrationType === 'trip_partner'
-                  ? 'border-amber-400 bg-amber-50/20 shadow-xs'
+                  ? 'border-orange-400 bg-orange-50/20 shadow-xs'
                   : 'border-slate-200 bg-slate-50/60 hover:bg-slate-50 hover:border-slate-300'
               }`}
             >
@@ -165,7 +162,7 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
                 <div
                   className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center shrink-0 border ${
                     activeRegistrationType === 'trip_partner'
-                      ? 'bg-amber-100/80 border-amber-300 text-amber-700'
+                      ? 'bg-orange-100/80 border-orange-300 text-[#ff5722]'
                       : 'bg-white border-slate-200 text-slate-500'
                   }`}
                 >
@@ -190,7 +187,7 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
               <div
                 className={`w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                   activeRegistrationType === 'trip_partner'
-                    ? 'border-amber-500 bg-amber-500'
+                    ? 'border-[#ff5722] bg-[#ff5722]'
                     : 'border-slate-300 bg-white'
                 }`}
               >
@@ -267,7 +264,7 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
                           style={{ color: partnerColors.dark }}
                         >
                           Company GST Number
-                          <span className="text-amber-500 ml-1">*</span>
+                          <span className="text-[#ff5722] ml-1">*</span>
                         </h4>
                       </div>
 
@@ -299,7 +296,7 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
                         onChange={handleGstChange}
                         placeholder="e.g. 02AAACW1234F1Z5"
                         maxLength={15}
-                        className="w-full px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-slate-200 bg-slate-50/80 font-mono font-bold text-xs sm:text-sm text-slate-800 tracking-wider uppercase outline-none focus:border-amber-500 focus:bg-white transition-all shadow-2xs"
+                        className="w-full px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-slate-200 bg-slate-50/80 font-mono font-bold text-xs sm:text-sm text-slate-800 tracking-wider uppercase outline-none focus:border-[#ff5722] focus:bg-white transition-all shadow-2xs"
                       />
                       <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400 font-bold">
                         {localGst.length}/15
@@ -466,8 +463,8 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
             >
               {isSubmitting ? (
                 <>
-                  <span className="w-3.5 h-3.5 border-2 border-amber-400/30 border-t-amber-400 rounded-full animate-spin" />
-                  <span className="text-amber-300">Submitting Documents...</span>
+                  <span className="w-3.5 h-3.5 border-2 border-orange-400/30 border-t-[#ff5722] rounded-full animate-spin" />
+                  <span className="text-orange-300">Submitting Documents...</span>
                 </>
               ) : (
                 <>
@@ -475,7 +472,7 @@ export const KycStatusSection: React.FC<KycStatusSectionProps> = ({
                     className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.25] transition-colors group-hover:scale-105"
                     style={{ color: partnerColors.accent }}
                   />
-                  <span className="group-hover:text-amber-300 transition-colors">
+                  <span className="group-hover:text-orange-300 transition-colors">
                     Submit KYC Documents
                   </span>
                 </>

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { UserCog, Bell, ShieldCheck, CheckCircle2 } from 'lucide-react';
-import { partnerColors, colors } from '@/theme/colors';
+import { partnerColors } from '@/theme/colors';
 import { SettingsTabType } from '../types';
 import { SETTINGS_TABS } from '../data';
 
@@ -56,12 +56,12 @@ export const SettingsTabBar: React.FC<SettingsTabBarProps> = ({
               onClick={() => onTabChange(tab.id)}
               className={`group relative flex flex-col sm:flex-row items-center justify-center sm:justify-start lg:justify-center gap-1 sm:gap-2 md:gap-2.5 px-1.5 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 rounded-xl text-center sm:text-left cursor-pointer transition-all duration-200 border w-full min-w-0 ${
                 isActive
-                  ? 'shadow-[0_4px_18px_rgba(244,140,6,0.38)] font-black'
+                  ? 'shadow-[0_4px_18px_rgba(255,87,34,0.38)] font-black'
                   : 'hover:bg-slate-200/60 font-bold'
               }`}
               style={{
-                backgroundColor: isActive ? colors.primary : partnerColors.surfaceSubtle,
-                borderColor: isActive ? colors.primary : partnerColors.borderLight,
+                backgroundColor: isActive ? partnerColors.accent : partnerColors.surfaceSubtle,
+                borderColor: isActive ? partnerColors.accent : partnerColors.borderLight,
                 color: isActive ? '#ffffff' : partnerColors.textPrimary,
               }}
             >
@@ -98,7 +98,7 @@ export const SettingsTabBar: React.FC<SettingsTabBarProps> = ({
                   </div>
                   <span
                     className={`hidden lg:block text-[10px] sm:text-[11px] truncate mt-0.5 font-medium ${
-                      isActive ? 'text-amber-50' : 'text-slate-500'
+                      isActive ? 'text-white/80' : 'text-slate-500'
                     }`}
                   >
                     {tab.subtitle}

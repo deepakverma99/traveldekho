@@ -82,7 +82,7 @@ export const TripReelsField: React.FC<TripReelsFieldProps> = ({
     <div className={`flex flex-col gap-2 w-full font-jakarta ${className}`}>
       <label htmlFor="trip-reels-input" className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between">
         <span className="flex items-center gap-1.5 text-gray-800">
-          <Video className="w-3.5 h-3.5 text-amber-500" />
+          <Video className="w-3.5 h-3.5 text-[#ff5722]" />
           Trip Reels (Max {maxReels} Short Videos)
         </span>
         <span className="text-[10px] font-bold text-gray-400 normal-case tracking-normal">
@@ -114,7 +114,7 @@ export const TripReelsField: React.FC<TripReelsFieldProps> = ({
             handleAddReel();
           }
         }}
-        className="w-full bg-[#f8fafc] hover:bg-[#f1f5f9] focus:bg-white border-2 border-transparent focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25 rounded-2xl p-4 sm:p-5 text-sm sm:text-[15px] font-medium text-gray-900 font-jakarta min-h-[5.5rem] resize-y outline-none transition-all placeholder:text-gray-400 placeholder:font-medium disabled:opacity-50"
+        className="w-full bg-[#f8fafc] hover:bg-[#f1f5f9] focus:bg-white border-2 border-transparent focus:border-[#ff5722] rounded-2xl p-4 sm:p-5 text-sm sm:text-[15px] font-medium text-gray-900 font-jakarta min-h-[5.5rem] resize-y outline-none focus:outline-none focus:ring-0 transition-all placeholder:text-gray-400 placeholder:font-medium disabled:opacity-50"
       />
 
       {/* Single Upload Reels Button */}
@@ -123,7 +123,7 @@ export const TripReelsField: React.FC<TripReelsFieldProps> = ({
         onClick={handleUploadClick}
         disabled={isFull}
         title="Upload short videos / reels from your device"
-        className="inline-flex items-center justify-center gap-1.5 h-9 px-3.5 bg-white text-amber-600 border-[1.5px] border-amber-500 rounded-full text-[13px] font-bold tracking-tight font-jakarta cursor-pointer transition-all duration-200 shadow-2xs min-w-0 w-auto self-start hover:bg-amber-50 hover:border-amber-600 hover:text-amber-700 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-55 disabled:cursor-not-allowed disabled:border-gray-300 disabled:text-gray-400 disabled:shadow-none [&>span]:whitespace-nowrap [&>span]:overflow-hidden [&>span]:text-ellipsis [&>svg]:w-3.75 [&>svg]:h-3.75 [&>svg]:text-amber-500 disabled:[&>svg]:text-gray-400"
+        className="inline-flex items-center justify-center gap-1.5 h-9 px-3.5 bg-white text-[#ff5722] border-[1.5px] border-[#ff5722] rounded-full text-[13px] font-bold tracking-tight font-jakarta cursor-pointer transition-all duration-200 shadow-2xs min-w-0 w-auto self-start hover:bg-orange-50 hover:border-[#e04d1f] hover:text-[#e04d1f] hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-55 disabled:cursor-not-allowed disabled:border-gray-300 disabled:text-gray-400 disabled:shadow-none [&>span]:whitespace-nowrap [&>span]:overflow-hidden [&>span]:text-ellipsis [&>svg]:w-3.75 [&>svg]:h-3.75 [&>svg]:text-[#ff5722] disabled:[&>svg]:text-gray-400"
       >
         <UploadCloud className="w-4 h-4 stroke-[2.2]" />
         <span>Upload Reels</span>
@@ -142,7 +142,7 @@ export const TripReelsField: React.FC<TripReelsFieldProps> = ({
             return (
               <div
                 key={idx}
-                className="relative aspect-[9/16] rounded-2xl overflow-hidden border border-gray-200 hover:border-amber-400 bg-gray-900 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+                className="relative aspect-[9/16] rounded-2xl overflow-hidden border border-gray-200 hover:border-[#ff5722] bg-gray-900 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
               >
                 {isDirectVideo ? (
                   <video
@@ -157,7 +157,7 @@ export const TripReelsField: React.FC<TripReelsFieldProps> = ({
                   />
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center bg-gray-900 text-white p-3 text-center">
-                    <Film className="w-8 h-8 text-amber-400 mb-2 opacity-80" />
+                    <Film className="w-8 h-8 text-[#ff5722] mb-2 opacity-80" />
                     <span className="text-[10px] font-mono text-gray-400 truncate max-w-full">
                       External Reel
                     </span>
@@ -187,10 +187,10 @@ export const TripReelsField: React.FC<TripReelsFieldProps> = ({
               type="button"
               onClick={handleUploadClick}
               title="Add more video reels"
-              className="flex flex-col items-center justify-center gap-1.5 aspect-[9/16] rounded-2xl border-2 border-dashed border-amber-400 bg-amber-50/50 hover:bg-amber-100/50 hover:border-amber-500 cursor-pointer hover:-translate-y-0.5 transition-all duration-200 text-amber-700"
+              className="flex flex-col items-center justify-center gap-1.5 aspect-[9/16] rounded-2xl border-2 border-dashed border-orange-300 bg-orange-50/50 hover:bg-orange-100/50 hover:border-[#ff5722] cursor-pointer hover:-translate-y-0.5 transition-all duration-200 text-[#ff5722]"
             >
-              <Plus className="w-6 h-6 text-amber-500 stroke-[2.5]" />
-              <span className="text-[10px] font-black uppercase tracking-wider text-amber-700">
+              <Plus className="w-6 h-6 text-[#ff5722] stroke-[2.5]" />
+              <span className="text-[10px] font-black uppercase tracking-wider text-orange-950">
                 Add Reel
               </span>
             </button>

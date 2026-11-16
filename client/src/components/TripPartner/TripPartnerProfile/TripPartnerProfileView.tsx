@@ -114,8 +114,8 @@ export const TripPartnerProfileView: React.FC<TripPartnerProfileViewProps> = ({ 
             >
               {isSaving ? (
                 <>
-                  <span className="w-3.5 h-3.5 border-2 border-amber-400/30 border-t-amber-400 rounded-full animate-spin" />
-                  <span className="text-amber-300">Saving Updates...</span>
+                  <span className="w-3.5 h-3.5 border-2 border-orange-400/30 border-t-[#ff5722] rounded-full animate-spin" />
+                  <span className="text-orange-300">Saving Updates...</span>
                 </>
               ) : (
                 <>
@@ -123,7 +123,7 @@ export const TripPartnerProfileView: React.FC<TripPartnerProfileViewProps> = ({ 
                     className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.25] transition-colors group-hover:scale-105"
                     style={{ color: partnerColors.accent }}
                   />
-                  <span className="group-hover:text-amber-300 transition-colors">Save Changes</span>
+                  <span className="group-hover:text-orange-300 transition-colors">Save Changes</span>
                 </>
               )}
             </button>

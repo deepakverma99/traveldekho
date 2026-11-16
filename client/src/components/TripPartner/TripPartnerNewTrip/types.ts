@@ -31,6 +31,19 @@ export interface DepartureBatch {
   endDate: string;
 }
 
+export type TripType = 'domestic' | 'international';
+
+export const VISA_POLICY_OPTIONS = [
+  'Visa on Arrival',
+  'Visa Free',
+  'E-Visa Required',
+  'Sticker / Embassy Visa Required',
+  'Visa Assistance Included',
+  'Not Required',
+] as const;
+
+export type VisaPolicy = (typeof VISA_POLICY_OPTIONS)[number];
+
 export interface NewTripFormData {
   // Step 1: Basic
   title: string;
@@ -42,9 +55,13 @@ export interface NewTripFormData {
   reels: string[];
 
   // Step 2: Logistics
+  tripType?: TripType;
+  destinationCountry?: string;
+  destinationCountryCode?: string;
   destination: string;
   destinationCity: string;
   destinationState: string;
+  visaPolicy?: string;
   showDifficulty?: boolean;
   durationNights: number | string;
   durationDays: number | string;
@@ -282,9 +299,13 @@ export const INITIAL_FORM_DATA: NewTripFormData = {
   disclaimer: '',
   reels: [],
 
+  tripType: 'domestic',
+  destinationCountry: 'India',
+  destinationCountryCode: 'IN',
   destination: '',
   destinationCity: '',
   destinationState: '',
+  visaPolicy: 'Not Required',
   showDifficulty: true,
   durationNights: 2,
   durationDays: 3,

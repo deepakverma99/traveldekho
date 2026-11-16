@@ -15,7 +15,6 @@ import {
   Plus,
 } from 'lucide-react';
 import { Button, Breadcrumb, BreadcrumbItem } from '@/components/shared';
-import { colors } from '@/theme/colors';
 import { TripPartnerBookingChart } from './TripPartnerBookingChart';
 import { TripPartnerStatCard } from './TripPartnerStatCard';
 import { useAppSelector } from '@/redux/hooks';
@@ -57,7 +56,7 @@ export const TripPartnerDashboard: React.FC<TripPartnerDashboardProps> = ({
 
           <div className="mt-2">
             <h1 className="text-3xl font-black text-gray-900 tracking-tight uppercase leading-9 break-words">
-              Hello, <span className="text-amber-500">{effectiveDisplayName}!</span>
+              Hello, <span className="text-[#ff5722]">{effectiveDisplayName}!</span>
             </h1>
             <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">
               Manage your trips and track your growth
@@ -112,12 +111,12 @@ export const TripPartnerDashboard: React.FC<TripPartnerDashboardProps> = ({
         <TripPartnerBookingChart />
 
         {/* Notifications Card (Right of Graph) */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-4.5 sm:p-6 shadow-[0_1px_3px_0_rgba(0,0,0,0.04),0_1px_2px_-1px_rgba(0,0,0,0.02)] flex flex-col h-full max-h-[440px] min-w-0 transition-all duration-250 ease-out hover:shadow-[0_10px_25px_-5px_rgba(255,237,208,0.5),0_8px_10px_-6px_rgba(0,0,0,0.04)] hover:border-amber-200">
+        <div className="bg-white border border-gray-200 rounded-2xl p-4.5 sm:p-6 shadow-[0_1px_3px_0_rgba(0,0,0,0.04),0_1px_2px_-1px_rgba(0,0,0,0.02)] flex flex-col h-full max-h-[440px] min-w-0 transition-all duration-250 ease-out hover:shadow-[0_10px_25px_-5px_rgba(255,87,34,0.18),0_8px_10px_-6px_rgba(0,0,0,0.04)] hover:border-orange-200">
           <div className="flex items-center justify-between mb-6">
-            <h4 className="text-sm font-black text-gray-900 uppercase tracking-wider flex items-center gap-2 [&>svg]:text-amber-500">
+            <h4 className="text-sm font-black text-gray-900 uppercase tracking-wider flex items-center gap-2 [&>svg]:text-[#ff5722]">
               <Bell className="w-5 h-5" /> Notifications
               {unreadCount > 0 && (
-                <span className="bg-amber-100 text-amber-600 py-1 px-3 rounded-full text-[10px] font-black tracking-wider ml-2">
+                <span className="bg-orange-100 text-[#ff5722] py-1 px-3 rounded-full text-[10px] font-black tracking-wider ml-2">
                   {unreadCount} NEW
                 </span>
               )}
@@ -129,13 +128,13 @@ export const TripPartnerDashboard: React.FC<TripPartnerDashboardProps> = ({
               <Link
                 key={notif.id}
                 href={`/trip-partner/${username}/notifications`}
-                className="flex gap-3.5 p-3.5 sm:p-4 rounded-xl border border-amber-100/60 bg-amber-50/40 no-underline transition-all duration-200 hover:bg-amber-50 hover:border-amber-200"
+                className="flex gap-3.5 p-3.5 sm:p-4 rounded-xl border border-orange-100/60 bg-orange-50/40 no-underline transition-all duration-200 hover:bg-orange-50 hover:border-orange-200"
               >
                 <div className="flex-shrink-0 relative mt-1">
-                  <div className="w-9 h-9 rounded-full flex items-center justify-center shadow-xs bg-amber-50 text-amber-600 border border-amber-200/60">
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center shadow-xs bg-orange-50 text-[#ff5722] border border-orange-200/60">
                     <DollarSign className="w-4 h-4" />
                   </div>
-                  <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-amber-500 rounded-full border-2 border-white animate-pulse" />
+                  <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-[#ff5722] rounded-full border-2 border-white animate-pulse" />
                 </div>
                 <div className="flex-1 min-w-0 flex flex-col justify-center">
                   <div className="flex justify-between items-start gap-2 mb-1">
@@ -157,24 +156,24 @@ export const TripPartnerDashboard: React.FC<TripPartnerDashboardProps> = ({
           <div className="pt-4 mt-2 border-t border-gray-100">
             <Link
               href={`/trip-partner/${username}/notifications`}
-              className="flex items-center justify-center gap-2 w-full p-3.5 rounded-2xl bg-gray-50 text-[10px] font-black text-gray-900 uppercase tracking-widest no-underline transition-all duration-200 hover:bg-amber-50 hover:text-amber-600 group"
+              className="flex items-center justify-center gap-2 w-full p-3.5 rounded-2xl bg-gray-50 text-[10px] font-black text-gray-900 uppercase tracking-widest no-underline transition-all duration-200 hover:bg-orange-50 hover:text-[#ff5722] group"
             >
               <span>View All Notifications</span>
-              <ArrowUpRight className="w-4 h-4 text-amber-500 transition-transform duration-200 group-hover:scale-110" />
+              <ArrowUpRight className="w-4 h-4 text-[#ff5722] transition-transform duration-200 group-hover:scale-110" />
             </Link>
           </div>
         </div>
       </div>
 
       {/* Full-width Recent Bookings Table */}
-      <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-[0_1px_3px_0_rgba(0,0,0,0.04),0_1px_2px_-1px_rgba(0,0,0,0.02)] transition-all duration-250 ease-out hover:shadow-[0_10px_25px_-5px_rgba(255,237,208,0.5),0_8px_10px_-6px_rgba(0,0,0,0.04)] hover:border-amber-200 mb-10 w-full min-w-0">
+      <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-[0_1px_3px_0_rgba(0,0,0,0.04),0_1px_2px_-1px_rgba(0,0,0,0.02)] transition-all duration-250 ease-out hover:shadow-[0_10px_25px_-5px_rgba(255,87,34,0.18),0_8px_10px_-6px_rgba(0,0,0,0.04)] hover:border-orange-200 mb-10 w-full min-w-0">
         <div className="p-4.5 sm:px-8 sm:py-6 border-b border-gray-100 flex items-center justify-between">
-          <h3 className="text-lg sm:text-xl font-black text-gray-900 uppercase tracking-tight flex items-center gap-2 sm:gap-3 [&>svg]:text-amber-500 [&>svg]:w-5 [&>svg]:h-5 sm:[&>svg]:w-6 sm:[&>svg]:h-6">
+          <h3 className="text-lg sm:text-xl font-black text-gray-900 uppercase tracking-tight flex items-center gap-2 sm:gap-3 [&>svg]:text-[#ff5722] [&>svg]:w-5 [&>svg]:h-5 sm:[&>svg]:w-6 sm:[&>svg]:h-6">
             <TrendingUp className="w-6 h-6" /> Recent Bookings
           </h3>
           <Link
             href={`/trip-partner/${username}/bookings`}
-            className="text-xs font-black text-amber-600 uppercase tracking-widest flex items-center gap-1 transition-colors hover:underline"
+            className="text-xs font-black text-[#ff5722] uppercase tracking-widest flex items-center gap-1 transition-colors hover:underline hover:text-orange-700"
           >
             <span>View All</span> <ChevronRight className="w-4 h-4" />
           </Link>

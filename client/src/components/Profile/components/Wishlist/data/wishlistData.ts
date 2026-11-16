@@ -1,0 +1,91 @@
+import { WishlistItem } from '../types';
+
+export const INITIAL_WISHLIST_ITEMS: WishlistItem[] = [
+  {
+    id: 'wishlist-spiti-1',
+    slug: 'spiti-valley-high-passes-monasteries',
+    title: 'Spiti Valley High Passes & Monasteries',
+    destination: 'Spiti, Himachal Pradesh',
+    duration: '9 Days / 8 Nights',
+    image: '/trips/spiti.png',
+    price: 22999,
+    originalPrice: 28999,
+    discount: '20% OFF',
+    date: '15 May - 23 May 2026',
+    freeGoodies: true,
+    tags: [
+      { label: 'High Altitude', variant: 'amber' },
+      { label: 'Scout Verified', variant: 'blue' },
+    ],
+    partner: {
+      name: 'WildEarth Tours',
+      ratingText: '4.9',
+    },
+    pickupHub: 'Delhi',
+  },
+  {
+    id: 'wishlist-ladakh-2',
+    slug: 'leh-ladakh-pangong-nubra-expedition',
+    title: 'Leh Ladakh Pangong & Nubra Valley Expedition',
+    destination: 'Leh Ladakh, Jammu & Kashmir',
+    duration: '6 Days / 5 Nights',
+    image: '/trips/ladakh.png',
+    price: 24999,
+    originalPrice: 31999,
+    discount: '22% OFF',
+    date: '10 Jun - 16 Jun 2026',
+    freeGoodies: true,
+    tags: [
+      { label: 'Biker Friendly', variant: 'amber' },
+      { label: 'Scout Verified', variant: 'blue' },
+    ],
+    partner: {
+      name: 'Himalayan Roamers',
+      ratingText: '4.8',
+    },
+    pickupHub: 'Leh',
+  },
+  {
+    id: 'wishlist-himachal-3',
+    slug: 'kasol-kheerganga-starlit-camp',
+    title: 'Kasol & Kheerganga Starlit Hot Springs Trek',
+    destination: 'Parvati Valley, Himachal Pradesh',
+    duration: '3 Days / 2 Nights',
+    image: '/destinations/himachal-pradesh.png',
+    price: 6499,
+    originalPrice: 8999,
+    discount: '28% OFF',
+    date: 'Every Weekend',
+    tags: [
+      { label: 'Hot Springs', variant: 'blue' },
+      { label: 'Camping', variant: 'gray' },
+    ],
+    partner: {
+      name: 'Nomad Trails',
+      ratingText: '4.9',
+    },
+    pickupHub: 'Delhi / Chandigarh',
+  },
+  {
+    id: 'wishlist-goa-4',
+    slug: 'goa-coastal-cruise-water-sports',
+    title: 'South Goa Hidden Beaches & Heritage Cruise',
+    destination: 'Palolem & Agonda, Goa',
+    duration: '4 Days / 3 Nights',
+    image: '/destinations/gokarna.png',
+    price: 11999,
+    originalPrice: 15499,
+    discount: '23% OFF',
+    date: 'Daily Departures',
+    tags: [
+      { label: 'Beach Vibes', variant: 'amber' },
+      { label: 'Sunset Cruise', variant: 'blue' },
+    ],
+    partner: {
+      name: 'Coastline Explorers',
+      ratingText: '4.7',
+    },
+    pickupHub: 'Goa (Dabolim/Mopa)',
+  },
+];
+

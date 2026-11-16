@@ -15,8 +15,6 @@ import {
   Star,
   Check,
 } from 'lucide-react';
-import { typography } from '@/theme/typography';
-import { colors } from '@/theme/colors';
 import {
   type TripPartnerCardStatus,
   type PartnerTripItem,
@@ -31,7 +29,7 @@ const getStatusBadgeStyle = (status: TripPartnerCardStatus) => {
       return 'bg-emerald-600/95 text-white border-white/40';
     case 'Pending Review':
     case 'Pending':
-      return 'bg-amber-500/95 text-white border-white/40';
+      return 'bg-[#ff5722]/95 text-white border-white/40';
     case 'Expired':
       return 'bg-red-500/92 text-white border-white/35';
     case 'Draft':
@@ -107,7 +105,7 @@ export const TripPartnerTripCard: React.FC<TripPartnerTripCardProps> = ({
 
   return (
     <motion.div
-      className="group relative flex flex-col w-full h-full bg-white rounded-2xl border border-amber-100/70 shadow-[0_4px_20px_-4px_rgba(115,92,0,0.08),0_1px_3px_0_rgba(0,0,0,0.04)] sm:shadow-[0_4px_24px_-4px_rgba(115,92,0,0.08),0_1px_4px_0_rgba(0,0,0,0.04)] transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_12px_32px_-6px_rgba(115,92,0,0.14),0_2px_8px_0_rgba(0,0,0,0.06)] font-jakarta overflow-visible"
+      className="group relative flex flex-col w-full h-full bg-white rounded-2xl border border-orange-100/70 shadow-[0_4px_20px_-4px_rgba(255,87,34,0.08),0_1px_3px_0_rgba(0,0,0,0.04)] sm:shadow-[0_4px_24px_-4px_rgba(255,87,34,0.08),0_1px_4px_0_rgba(0,0,0,0.04)] transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_12px_32px_-6px_rgba(255,87,34,0.14),0_2px_8px_0_rgba(0,0,0,0.06)] font-jakarta overflow-visible"
     >
       {/* Media Thumbnail Container */}
       <div className="relative w-full aspect-[4/3] bg-gray-100">
@@ -182,7 +180,7 @@ export const TripPartnerTripCard: React.FC<TripPartnerTripCardProps> = ({
                   onClick={handleArchive}
                   className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[11.5px] font-bold text-gray-700 hover:bg-gray-100 hover:text-gray-900 text-left transition-colors cursor-pointer"
                 >
-                  <Archive className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                  <Archive className="w-3.5 h-3.5 text-[#ff5722] shrink-0" />
                   <span>Archive Trip</span>
                 </button>
 
@@ -220,7 +218,7 @@ export const TripPartnerTripCard: React.FC<TripPartnerTripCardProps> = ({
 
           {/* Destination */}
           <div className="h-[16px] sm:h-[20px] mb-1 sm:mb-2.5 flex items-center overflow-hidden">
-            <div className="flex items-center gap-1 text-[9.5px] sm:text-[11px] font-bold truncate text-amber-600">
+            <div className="flex items-center gap-1 text-[9.5px] sm:text-[11px] font-bold truncate text-[#ff5722]">
               <MapPin className="w-2.5 h-2.5 sm:w-3 sm:h-3 shrink-0" />
               <span className="truncate">{trip.destination}</span>
             </div>
@@ -232,7 +230,7 @@ export const TripPartnerTripCard: React.FC<TripPartnerTripCardProps> = ({
               {trip.tags.map((tag, idx) => (
                 <span
                   key={idx}
-                  className="shrink-0 px-1.5 py-0.5 sm:px-2 sm:py-0.5 text-[8px] sm:text-[9px] font-extrabold sm:font-black uppercase tracking-wider rounded-full whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-100"
+                  className="shrink-0 px-1.5 py-0.5 sm:px-2 sm:py-0.5 text-[8px] sm:text-[9px] font-extrabold sm:font-black uppercase tracking-wider rounded-full whitespace-nowrap bg-orange-50 text-[#ff5722] border border-orange-100"
                 >
                   {tag}
                 </span>
@@ -251,7 +249,7 @@ export const TripPartnerTripCard: React.FC<TripPartnerTripCardProps> = ({
               </span>
             )}
             {trip.discount && (
-              <span className="text-[8.5px] sm:text-[11px] font-bold shrink-0 text-amber-700">
+              <span className="text-[8.5px] sm:text-[11px] font-bold shrink-0 text-[#ff5722]">
                 {trip.discount}
               </span>
             )}
@@ -267,7 +265,7 @@ export const TripPartnerTripCard: React.FC<TripPartnerTripCardProps> = ({
           <div className="mt-1.5 sm:mt-3 pt-1.5 sm:pt-3 border-t border-gray-100">
             <div className="flex items-center justify-between w-full px-1.5 sm:px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl border border-transparent bg-gray-50/80">
               <div className="flex items-center gap-1 sm:gap-1.5 overflow-hidden flex-1 min-w-0 pr-1">
-                <div className="shrink-0 w-3.5 h-3.5 sm:w-5 sm:h-5 rounded-full font-black text-[7.5px] sm:text-[9px] flex items-center justify-center shadow-xs bg-amber-500 text-white">
+                <div className="shrink-0 w-3.5 h-3.5 sm:w-5 sm:h-5 rounded-full font-black text-[7.5px] sm:text-[9px] flex items-center justify-center shadow-xs bg-[#ff5722] text-white">
                   {trip.partner.name.charAt(0).toUpperCase()}
                 </div>
                 <span className="text-[8.5px] sm:text-[11px] truncate min-w-0 font-jakarta text-gray-500">

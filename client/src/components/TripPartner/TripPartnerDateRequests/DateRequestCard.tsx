@@ -56,7 +56,7 @@ export const DateRequestCard: React.FC<DateRequestCardProps> = ({
     <div
       className={`bg-white rounded-2xl border transition-all duration-200 shadow-2xs font-jakarta overflow-hidden ${
         isPending
-          ? 'border-amber-200 hover:border-amber-300 hover:shadow-md'
+          ? 'border-orange-200 hover:border-orange-300 hover:shadow-md'
           : isAccepted
           ? 'border-emerald-200 hover:border-emerald-300'
           : 'border-gray-200 hover:border-gray-300 opacity-90'
@@ -88,7 +88,7 @@ export const DateRequestCard: React.FC<DateRequestCardProps> = ({
             </div>
             <div className="flex items-center gap-2 text-[11px] text-gray-500 font-medium mt-0.5">
               <span className="inline-flex items-center gap-1">
-                <MapPin className="w-3 h-3 text-amber-500 shrink-0" />
+                <MapPin className="w-3 h-3 text-[#ff5722] shrink-0" />
                 <span className="truncate">{request.tripLocation}</span>
               </span>
               <span className="text-gray-300">•</span>
@@ -100,8 +100,8 @@ export const DateRequestCard: React.FC<DateRequestCardProps> = ({
         {/* Status Tag */}
         <div className="shrink-0 flex items-center self-start sm:self-auto gap-2">
           {isPending && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-black uppercase tracking-wider">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-50 text-[#ff5722] border border-orange-200 text-[11px] font-black uppercase tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff5722] animate-pulse" />
               Pending Review
             </span>
           )}
@@ -127,7 +127,7 @@ export const DateRequestCard: React.FC<DateRequestCardProps> = ({
           <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
             <div
               title={request.travelerName}
-              className="w-10 h-10 rounded-full bg-amber-500/10 text-amber-700 font-extrabold text-xs sm:text-sm flex items-center justify-center shrink-0 border border-amber-200"
+              className="w-10 h-10 rounded-full bg-orange-500/10 text-[#ff5722] font-extrabold text-xs sm:text-sm flex items-center justify-center shrink-0 border border-orange-200"
             >
               {getInitials(request.travelerName)}
             </div>
@@ -139,7 +139,7 @@ export const DateRequestCard: React.FC<DateRequestCardProps> = ({
               <div className="flex items-center flex-wrap gap-2 text-[11px] text-gray-500 font-medium">
                 <a
                   href={`tel:${request.travelerPhone}`}
-                  className="hover:text-amber-600 inline-flex items-center gap-1"
+                  className="hover:text-[#ff5722] inline-flex items-center gap-1"
                 >
                   <Phone className="w-3 h-3 text-gray-400 shrink-0" />
                   <span>{request.travelerPhone}</span>
@@ -147,7 +147,7 @@ export const DateRequestCard: React.FC<DateRequestCardProps> = ({
                 <span className="text-gray-300">•</span>
                 <a
                   href={`mailto:${request.travelerEmail}`}
-                  className="hover:text-amber-600 inline-flex items-center gap-1 truncate max-w-[180px] sm:max-w-none"
+                  className="hover:text-[#ff5722] inline-flex items-center gap-1 truncate max-w-[180px] sm:max-w-none"
                 >
                   <Mail className="w-3 h-3 text-gray-400 shrink-0" />
                   <span className="truncate">{request.travelerEmail}</span>
@@ -160,10 +160,10 @@ export const DateRequestCard: React.FC<DateRequestCardProps> = ({
           <div className="flex items-center flex-wrap gap-2 sm:gap-2.5">
             {/* Requested Dates */}
             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-50 border border-gray-200 text-xs font-bold text-gray-800">
-              <Calendar className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+              <Calendar className="w-3.5 h-3.5 text-[#ff5722] shrink-0" />
               <span>{formatDateRange(request.requestedStartDate, request.requestedEndDate)}</span>
               {request.flexibleDates && (
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-amber-100 text-amber-800 ml-1">
+                <span className="px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-orange-100 text-[#ff5722] ml-1">
                   Flexible
                 </span>
               )}
@@ -230,7 +230,7 @@ export const DateRequestCard: React.FC<DateRequestCardProps> = ({
                   <button
                     type="button"
                     onClick={() => onAddDate(request)}
-                    className="ml-1 inline-flex items-center gap-1 text-[11px] font-extrabold text-emerald-900 hover:text-amber-600 underline cursor-pointer"
+                    className="ml-1 inline-flex items-center gap-1 text-[11px] font-extrabold text-emerald-900 hover:text-[#ff5722] underline cursor-pointer"
                     title="Edit scheduled dates"
                   >
                     <Pencil className="w-2.5 h-2.5" />
@@ -246,9 +246,9 @@ export const DateRequestCard: React.FC<DateRequestCardProps> = ({
                   <button
                     type="button"
                     onClick={() => onAddDate(request)}
-                    className="inline-flex items-center justify-center gap-1.5 py-1.5 sm:py-2 px-3 sm:px-4 bg-[#0b132b] hover:bg-[#1c2541] text-white hover:text-amber-300 rounded-xl text-xs sm:text-[13px] font-bold cursor-pointer transition-all shadow-xs hover:shadow-md border border-amber-400/20 hover:border-amber-400/40"
+                    className="inline-flex items-center justify-center gap-1.5 py-1.5 sm:py-2 px-3 sm:px-4 bg-[#0b132b] hover:bg-[#1c2541] text-white hover:text-orange-300 rounded-xl text-xs sm:text-[13px] font-bold cursor-pointer transition-all shadow-xs hover:shadow-md border border-orange-400/20 hover:border-orange-400/40"
                   >
-                    <CalendarPlus className="w-3.5 h-3.5 text-amber-400 stroke-[2.25]" />
+                    <CalendarPlus className="w-3.5 h-3.5 text-[#ff5722] stroke-[2.25]" />
                     <span>Add Date to Trip</span>
                   </button>
                 </div>

@@ -2,11 +2,12 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { MapPin, ChevronRight, CheckCircle2, RotateCcw } from 'lucide-react';
+import { ChevronRight, CheckCircle2, RotateCcw } from 'lucide-react';
 import { LocationPermissionCard } from './LocationPermissionCard';
 import { LocationPermissionState, NearbyTripsSectionProps } from './types';
 import { mockNearbyTripsData } from './mockNearbyTrips';
 import { TripCard } from '@/components/shared';
+import { colorTokens } from '@/theme';
 
 export const NearbyTripsSection: React.FC<NearbyTripsSectionProps> = ({
   initialState = 'denied',
@@ -42,15 +43,15 @@ export const NearbyTripsSection: React.FC<NearbyTripsSectionProps> = ({
   return (
     <section
       id="nearby-trips-section"
-      className="relative w-full py-12 md:py-16 overflow-hidden bg-transparent font-sans"
+      style={{ backgroundColor: colorTokens.surfacePure }}
+      className="relative w-full py-12 md:py-16 overflow-hidden font-sans z-10"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header Section */}
         <div className="flex items-center justify-between mb-6 md:mb-8">
-          <h2 className="flex items-center text-xl sm:text-[28px] md:text-[32px] font-black tracking-tight text-charcoal font-jakarta">
-            <MapPin className="inline-block text-primary w-6 h-6 mr-2 -mt-1" aria-hidden="true" />
-            <span>Trips Near</span>
-            <span className="ml-1 text-primary">You</span>
+          <h2 className="text-xl sm:text-[28px] md:text-[32px] font-black tracking-tight text-charcoal font-jakarta">
+            <span>Trips Near </span>
+            <span className="ml-1" style={{ color: colorTokens.primaryContainer }}>You</span>
           </h2>
 
           <Link

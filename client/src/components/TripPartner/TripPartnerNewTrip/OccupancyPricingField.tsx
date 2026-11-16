@@ -121,7 +121,7 @@ export const OccupancyPricingField: React.FC<OccupancyPricingFieldProps> = ({
       {/* Header: OCCUPANCY & TRANSPORTATION PRICING with + ADD OPTION */}
       <div className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between select-none pb-1">
         <span className="flex items-center gap-1.5 text-gray-800 text-xs font-black uppercase tracking-wider">
-          <BedDouble className="w-3.5 h-3.5 text-amber-500" />
+          <BedDouble className="w-3.5 h-3.5 text-[#ff5722]" />
           Occupancy & Transportation Pricing
         </span>
         {canAddOption && (
@@ -129,7 +129,7 @@ export const OccupancyPricingField: React.FC<OccupancyPricingFieldProps> = ({
             type="button"
             onClick={handleAddOption}
             title="Add another occupancy sharing option"
-            className="inline-flex items-center gap-1.5 bg-transparent border-none text-amber-500 hover:text-amber-600 text-xs font-black tracking-wider uppercase cursor-pointer transition-all duration-150 hover:-translate-y-0.5 [&>svg]:w-3.5 [&>svg]:h-3.5 [&>svg]:stroke-[2.5]"
+            className="inline-flex items-center gap-1.5 bg-transparent border-none text-[#ff5722] hover:text-[#e04d1f] text-xs font-black tracking-wider uppercase cursor-pointer transition-all duration-150 hover:-translate-y-0.5 [&>svg]:w-3.5 [&>svg]:h-3.5 [&>svg]:stroke-[2.5]"
           >
             <Plus />
             <span>Add Option</span>
@@ -162,7 +162,7 @@ export const OccupancyPricingField: React.FC<OccupancyPricingFieldProps> = ({
                     onChange={(e) =>
                       handleUpdateOption(option.id, { sharingType: e.target.value })
                     }
-                    className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25 rounded-2xl pl-4 sm:pl-5 pr-10 py-3 sm:py-3.5 text-sm sm:text-base font-bold text-gray-900 outline-none transition-all shadow-2xs appearance-none cursor-pointer"
+                    className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-[#ff5722] rounded-2xl pl-4 sm:pl-5 pr-10 py-3 sm:py-3.5 text-sm sm:text-base font-bold text-gray-900 outline-none focus:outline-none focus:ring-0 transition-all shadow-2xs appearance-none cursor-pointer"
                   >
                     {ROOM_SHARING_OPTIONS.map((type) => (
                       <option
@@ -201,7 +201,7 @@ export const OccupancyPricingField: React.FC<OccupancyPricingFieldProps> = ({
                         price: filtered === '' ? '' : Number(filtered),
                       });
                     }}
-                    className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25 rounded-2xl px-4 sm:px-5 py-3 sm:py-3.5 text-sm sm:text-base font-bold text-gray-900 placeholder:text-gray-400 placeholder:font-normal outline-none transition-all shadow-2xs"
+                    className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-[#ff5722] rounded-2xl px-4 sm:px-5 py-3 sm:py-3.5 text-sm sm:text-base font-bold text-gray-900 placeholder:text-gray-400 placeholder:font-normal outline-none focus:outline-none focus:ring-0 transition-all shadow-2xs"
                   />
                 </div>
 
@@ -258,7 +258,7 @@ export const OccupancyPricingField: React.FC<OccupancyPricingFieldProps> = ({
               >
                 {/* Sharing Type Title + Base Price */}
                 <div className="flex items-center gap-1.5 min-w-0">
-                  <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
+                  <span className="w-2 h-2 rounded-full bg-[#ff5722] shrink-0" />
                   <span className="font-extrabold text-sm text-gray-900 truncate">
                     {displayTitle}
                   </span>
@@ -288,7 +288,7 @@ export const OccupancyPricingField: React.FC<OccupancyPricingFieldProps> = ({
                             : Math.min(100, Math.max(0, Number(filtered)));
                         handleUpdateOption(option.id, { discountPercent: val });
                       }}
-                      className="w-14 h-8 text-center font-bold text-xs text-gray-900 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:bg-white focus:border-amber-400 focus:ring-2 focus:ring-amber-100 transition-all"
+                      className="w-14 h-8 text-center font-bold text-xs text-gray-900 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:outline-none focus:ring-0 focus:bg-white focus:border-[#ff5722] transition-all"
                     />
                     <span className="text-xs font-bold text-gray-400">%</span>
                   </div>
@@ -305,14 +305,14 @@ export const OccupancyPricingField: React.FC<OccupancyPricingFieldProps> = ({
         </div>
 
         {/* Single Total Trip Amount Display (Least price of all sharing types) */}
-        <div className="mt-3.5 p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-amber-400/5 to-transparent border border-amber-300/60 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="mt-3.5 p-4 rounded-2xl bg-gradient-to-r from-orange-500/10 via-orange-400/5 to-transparent border border-orange-200 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="space-y-0.5">
             <div className="flex items-center gap-2">
               <span className="text-xs font-black uppercase tracking-wider text-gray-900">
                 Total Trip Amount
               </span>
               {leastPriceInfo.sharingType && leastPriceInfo.leastPrice > 0 && (
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-400/25 text-amber-950 border border-amber-300/60">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-100 text-orange-950 border border-orange-200">
                   Lowest ({leastPriceInfo.sharingType})
                 </span>
               )}

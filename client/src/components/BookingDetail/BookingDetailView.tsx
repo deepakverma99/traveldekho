@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ArrowLeft, Download, Share2, Check } from 'lucide-react';
+import { ArrowLeft, Share2, Check } from 'lucide-react';
 import { FloatingBackground } from '@/components/shared';
 import { useBookingDetail } from './hooks/useBookingDetail';
 import { BookingDetailHero } from './components/BookingDetailHero';

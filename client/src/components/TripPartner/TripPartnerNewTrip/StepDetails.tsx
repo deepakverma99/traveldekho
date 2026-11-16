@@ -13,6 +13,7 @@ import {
 interface StepDetailsProps {
   formData: NewTripFormData;
   updateForm: (fields: Partial<NewTripFormData>) => void;
+  invalidFieldId?: string | null;
 }
 
 const COMMON_TAG_SUGGESTIONS = [
@@ -32,6 +33,7 @@ const COMMON_TAG_SUGGESTIONS = [
 export const StepDetails: React.FC<StepDetailsProps> = ({
   formData,
   updateForm,
+  invalidFieldId,
 }) => {
   const [newTagInput, setNewTagInput] = useState('');
   const [newInclusionInput, setNewInclusionInput] = useState('');
@@ -115,7 +117,7 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
       <div className="flex flex-col gap-2 w-full">
         <label className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between">
           <span className="flex items-center gap-1.5 text-gray-800">
-            <Tag className="w-3.5 h-3.5 text-amber-500" />
+            <Tag className="w-3.5 h-3.5 text-[#ff5722]" />
             Trip Tags / Highlights
           </span>
           <span className="text-[10px] font-bold text-gray-400 normal-case tracking-normal">
@@ -124,11 +126,18 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
         </label>
 
         {/* Selected Tags Display & Custom Input */}
-        <div className="flex flex-wrap items-center gap-1.5 p-2 bg-[#f8fafc] border border-gray-200/80 rounded-2xl min-h-[3.25rem]">
+        <div
+          id="trip-tags-container"
+          className={`flex flex-wrap items-center gap-1.5 p-2 rounded-2xl min-h-[3.25rem] transition-all outline-none focus:outline-none focus:ring-0 ${
+            invalidFieldId === 'trip-tags-container' && formData.tags.length === 0
+              ? 'bg-red-50/50 border-2 border-red-400'
+              : 'bg-[#f8fafc] border border-gray-200/80'
+          }`}
+        >
           {formData.tags.map((tag, idx) => (
             <span
               key={idx}
-              className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500 text-charcoal font-black rounded-full text-xs shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#ff5722] text-white font-extrabold rounded-full text-xs shadow-xs"
             >
               #{tag}
               <button
@@ -144,6 +153,7 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
 
           <div className="flex-1 min-w-[140px] flex items-center">
             <input
+              id="trip-custom-tag"
               type="text"
               placeholder="Type custom tag..."
               value={newTagInput}
@@ -160,7 +170,7 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
               <button
                 type="button"
                 onClick={addCustomTag}
-                className="text-xs font-black text-amber-600 px-2 py-0.5 rounded bg-amber-100 cursor-pointer"
+                className="text-xs font-black text-[#ff5722] px-2 py-0.5 rounded bg-orange-50 cursor-pointer"
               >
                 Add
               </button>
@@ -179,8 +189,8 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
                 onClick={() => toggleSuggestedTag(tag)}
                 className={`inline-flex items-center gap-1.5 py-1.5 px-3.5 rounded-full text-xs font-bold cursor-pointer transition-all duration-200 ${
                   isSelected
-                    ? 'bg-amber-100 text-amber-900 border border-amber-400'
-                    : 'bg-gray-100 text-gray-700 border border-transparent hover:bg-amber-50 hover:border-amber-300'
+                    ? 'bg-orange-50 text-orange-950 border border-orange-300'
+                    : 'bg-gray-100 text-gray-700 border border-transparent hover:bg-orange-50/50 hover:border-orange-200'
                 }`}
               >
                 <Tag className="w-3 h-3 opacity-60" />
@@ -231,6 +241,7 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
           {/* Custom Inclusion Input */}
           <div className="flex gap-2">
             <input
+              id="trip-inclusion-input"
               type="text"
               placeholder="e.g. Welcome Drinks, Trekking Poles"
               value={newInclusionInput}
@@ -243,7 +254,7 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
                   addInclusion();
                 }
               }}
-              className="w-full rounded-2xl py-3 px-4 sm:py-3.5 sm:px-5 text-sm sm:text-[15px] font-semibold text-gray-900 font-jakarta outline-none transition-all placeholder:text-gray-400 placeholder:font-medium bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25"
+              className="w-full rounded-2xl py-3 px-4 sm:py-3.5 sm:px-5 text-sm sm:text-[15px] font-semibold text-gray-900 font-jakarta outline-none focus:outline-none focus:ring-0 transition-all placeholder:text-gray-400 placeholder:font-medium bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-[#ff5722]"
             />
             <button
               type="button"
@@ -329,6 +340,7 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
           {/* Custom Exclusion Input */}
           <div className="flex gap-2">
             <input
+              id="trip-exclusion-input"
               type="text"
               placeholder="e.g. Flight tickets, Extra meals"
               value={newExclusionInput}
@@ -341,7 +353,7 @@ export const StepDetails: React.FC<StepDetailsProps> = ({
                   addExclusion();
                 }
               }}
-              className="w-full rounded-2xl py-3 px-4 sm:py-3.5 sm:px-5 text-sm sm:text-[15px] font-semibold text-gray-900 font-jakarta outline-none transition-all placeholder:text-gray-400 placeholder:font-medium bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25"
+              className="w-full rounded-2xl py-3 px-4 sm:py-3.5 sm:px-5 text-sm sm:text-[15px] font-semibold text-gray-900 font-jakarta outline-none focus:outline-none focus:ring-0 transition-all placeholder:text-gray-400 placeholder:font-medium bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-[#ff5722]"
             />
             <button
               type="button"

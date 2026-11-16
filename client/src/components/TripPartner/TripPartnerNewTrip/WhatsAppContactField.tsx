@@ -66,7 +66,7 @@ export const WhatsAppContactField: React.FC<WhatsAppContactFieldProps> = ({
           maxLength={10}
           value={displayDigits}
           onChange={handleNumberChange}
-          className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25 rounded-2xl pl-24 pr-5 py-3.5 text-sm sm:text-base font-bold text-gray-900 placeholder:text-gray-400 placeholder:font-normal outline-none transition-all shadow-2xs"
+          className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-[#ff5722] rounded-2xl pl-24 pr-5 py-3.5 text-sm sm:text-base font-bold text-gray-900 placeholder:text-gray-400 placeholder:font-normal outline-none focus:outline-none focus:ring-0 transition-all shadow-2xs"
         />
       </div>
     </div>

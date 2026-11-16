@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Skeleton, TripCardSkeleton, FloatingBackground } from '@/components/shared';
+import { Skeleton, TripCardSkeleton } from '@/components/shared';
 
 export const HomeSkeleton: React.FC = () => {
   return (
@@ -10,8 +10,6 @@ export const HomeSkeleton: React.FC = () => {
       aria-label="Loading homepage content"
       className="min-h-screen w-full bg-cream relative overflow-hidden"
     >
-      {/* Floating Ambient Background */}
-      <FloatingBackground />
 
       {/* 1. Hero Section Skeleton */}
       <section className="relative w-full overflow-hidden pt-8 pb-10 md:pt-14 md:pb-20">

@@ -59,7 +59,7 @@ export const DepartureBatchesField: React.FC<DepartureBatchesFieldProps> = ({
           htmlFor="dates-on-request-toggle"
           className="flex items-center gap-1.5 text-gray-800 cursor-pointer text-xs font-black uppercase tracking-wider"
         >
-          <Calendar className="w-3.5 h-3.5 text-amber-500" />
+          <Calendar className="w-3.5 h-3.5 text-[#ff5722]" />
           Dates on Request
         </label>
         <button
@@ -73,8 +73,8 @@ export const DepartureBatchesField: React.FC<DepartureBatchesFieldProps> = ({
           }}
           title="Toggle dates on request"
           className={`relative inline-flex items-center w-8.5 h-4.75 rounded-full p-0.5 cursor-pointer transition-colors duration-200 outline-none shrink-0 ${
-            datesOnRequest ? 'bg-amber-500' : 'bg-gray-300'
-          } focus-visible:ring-2 focus-visible:ring-amber-500`}
+            datesOnRequest ? 'bg-[#ff5722]' : 'bg-gray-300'
+          } focus-visible:ring-2 focus-visible:ring-[#ff5722]`}
         >
           <span
             className={`block w-3.75 h-3.75 rounded-full bg-white shadow-xs transition-transform duration-200 ${
@@ -87,7 +87,7 @@ export const DepartureBatchesField: React.FC<DepartureBatchesFieldProps> = ({
       {/* Departure Dates Header with + ADD BATCH */}
       <div className="text-[11.5px] font-black uppercase tracking-wider text-gray-700 flex items-center justify-between select-none pt-2">
         <span className="flex items-center gap-1.5 text-gray-800 text-xs font-black uppercase tracking-wider">
-          <Calendar className="w-3.5 h-3.5 text-amber-500" />
+          <Calendar className="w-3.5 h-3.5 text-[#ff5722]" />
           Departure Dates
         </span>
         <button
@@ -96,7 +96,7 @@ export const DepartureBatchesField: React.FC<DepartureBatchesFieldProps> = ({
           disabled={datesOnRequest}
           style={{ opacity: datesOnRequest ? 0.35 : 1 }}
           title="Add another departure batch"
-          className="inline-flex items-center gap-1.5 bg-transparent border-none text-amber-500 hover:text-amber-600 text-xs font-black tracking-wider uppercase cursor-pointer transition-all duration-150 hover:-translate-y-0.5 [&>svg]:w-3.5 [&>svg]:h-3.5 [&>svg]:stroke-[2.5]"
+          className="inline-flex items-center gap-1.5 bg-transparent border-none text-[#ff5722] hover:text-[#e04d1f] text-xs font-black tracking-wider uppercase cursor-pointer transition-all duration-150 hover:-translate-y-0.5 [&>svg]:w-3.5 [&>svg]:h-3.5 [&>svg]:stroke-[2.5]"
         >
           <Plus />
           <span>Add Batch</span>
@@ -130,7 +130,7 @@ export const DepartureBatchesField: React.FC<DepartureBatchesFieldProps> = ({
                   onChange={(e) =>
                     handleUpdateBatch(batch.id, { startDate: e.target.value })
                   }
-                  className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25 rounded-2xl px-4 py-3 text-sm font-semibold text-gray-900 outline-none transition-all shadow-2xs cursor-pointer"
+                  className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-[#ff5722] rounded-2xl px-4 py-3 text-sm font-semibold text-gray-900 outline-none focus:outline-none focus:ring-0 transition-all shadow-2xs cursor-pointer"
                 />
               </div>
             </div>
@@ -152,7 +152,7 @@ export const DepartureBatchesField: React.FC<DepartureBatchesFieldProps> = ({
                     onChange={(e) =>
                       handleUpdateBatch(batch.id, { endDate: e.target.value })
                     }
-                    className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-200/25 rounded-2xl px-4 py-3 text-sm font-semibold text-gray-900 outline-none transition-all shadow-2xs cursor-pointer"
+                    className="w-full bg-[#f8fafc] border-2 border-transparent hover:bg-[#f1f5f9] focus:bg-white focus:border-[#ff5722] rounded-2xl px-4 py-3 text-sm font-semibold text-gray-900 outline-none focus:outline-none focus:ring-0 transition-all shadow-2xs cursor-pointer"
                   />
                 </div>
               </div>

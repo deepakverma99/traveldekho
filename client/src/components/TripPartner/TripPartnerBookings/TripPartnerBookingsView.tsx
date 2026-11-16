@@ -47,7 +47,7 @@ export const TripPartnerBookingsView: React.FC<TripPartnerBookingsViewProps> = (
 
           <div className="mt-2">
             <h1 className="text-2xl min-[400px]:text-[1.75rem] sm:text-3xl font-black text-gray-900 tracking-tight uppercase break-words">
-              All <span className="text-amber-500">Bookings</span>
+              All <span className="text-[#ff5722]">Bookings</span>
             </h1>
             <p className="text-[11px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">
               Real-time traveler bookings & payment status
@@ -60,9 +60,9 @@ export const TripPartnerBookingsView: React.FC<TripPartnerBookingsViewProps> = (
             type="button"
             onClick={handleExportCSV}
             title="Export all visible bookings to CSV"
-            className="inline-flex items-center justify-center gap-1.5 sm:gap-2 py-1.5 sm:py-2.5 px-3 sm:px-4.5 bg-[#0b132b] hover:bg-[#1c2541] text-white hover:text-amber-300 rounded-lg sm:rounded-xl text-[11px] sm:text-[13px] font-bold sm:font-extrabold tracking-tight font-jakarta border border-amber-400/20 hover:border-amber-400/40 cursor-pointer transition-all duration-200 shrink-0 w-auto hover:-translate-y-0.5 active:translate-y-0 shadow-xs hover:shadow-md"
+            className="inline-flex items-center justify-center gap-1.5 sm:gap-2 py-1.5 sm:py-2.5 px-3 sm:px-4.5 bg-[#0b132b] hover:bg-[#1c2541] text-white hover:text-orange-300 rounded-lg sm:rounded-xl text-[11px] sm:text-[13px] font-bold sm:font-extrabold tracking-tight font-jakarta border border-orange-400/20 hover:border-orange-400/40 cursor-pointer transition-all duration-200 shrink-0 w-auto hover:-translate-y-0.5 active:translate-y-0 shadow-xs hover:shadow-md"
           >
-            <Download className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400 stroke-[2.25]" />
+            <Download className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#ff5722] stroke-[2.25]" />
             <span>Export Bookings</span>
           </button>
         </div>

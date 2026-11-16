@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { colorTokens } from '@/theme';
 import { WeatherCard } from './WeatherCard';
 import { mockWeatherData } from './mockWeatherData';
 
@@ -15,7 +16,7 @@ export const WeatherForecastSection: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
           <div>
             <h2 className="text-xl sm:text-[28px] md:text-[32px] font-black tracking-tight text-charcoal mb-3 leading-tight font-jakarta">
-              Live Weather <span className="ml-1 text-primary">Forecasts</span>
+              Live Weather <span className="ml-1" style={{ color: colorTokens.primaryContainer }}>Forecasts</span>
             </h2>
             <p className="text-gray-500 font-medium text-sm md:text-base max-w-xl leading-relaxed font-jakarta">
               Check the live weather and upcoming 3-day forecast for some of our
