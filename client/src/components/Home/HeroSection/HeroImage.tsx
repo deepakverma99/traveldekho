@@ -5,8 +5,8 @@ import Image from 'next/image';
 
 export const HeroImage: React.FC = () => {
   return (
-    <div className="hidden md:flex flex-1 w-full relative mt-2 lg:mt-0 items-center justify-center lg:justify-end xl:justify-center">
-      <div className="relative w-full max-w-[480px] lg:max-w-[530px] xl:max-w-[560px] aspect-[888/729]">
+    <div className="hidden md:flex flex-1 w-full relative mt-2 lg:mt-0 items-center justify-center lg:justify-end">
+      <div className="relative w-full max-w-[520px] lg:max-w-[620px] xl:max-w-[690px] 2xl:max-w-[740px] aspect-[816/753] lg:-translate-x-2 xl:-translate-x-5">
         <div className="relative w-full h-full">
           <Image
             alt="Search for your next adventure"
@@ -14,8 +14,8 @@ export const HeroImage: React.FC = () => {
             fill
             priority
             loading="eager"
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 560px"
-            className="object-contain object-center select-none mix-blend-multiply"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 690px, 740px"
+            className="object-contain object-right select-none mix-blend-multiply"
           />
 
           {/* Soft Dissolve Overlays: Seamlessly blends raw PNG shadow boundaries into pure white background */}
